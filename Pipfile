@@ -16,4 +16,5 @@ python-stdnum = "*"
 datasette = "*"
 
 [requires]
-python_version = "3.5"
+# Can't require "3.5 or 3.6" here, so just removing. See pipenv github issues.
+#python_version = "3.5"
