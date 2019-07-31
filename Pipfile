@@ -13,6 +13,7 @@ tldextract = "*"
 pycountry = "*"
 pytest = "*"
 python-stdnum = "*"
+datasette = "*"
 
 [requires]
 python_version = "3.5"
