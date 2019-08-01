@@ -15,6 +15,7 @@ Commands:
     init_db
     summarize
     export
+    export_fatcat
 
     index_doaj
     index_road
@@ -34,7 +35,6 @@ Commands:
 
 Future commands:
 
-    fatcat_edits
     index_jurn
     index_datacite
     preserve_kbart --keeper SLUG
@@ -1275,6 +1275,53 @@ class ChoculaDatabase():
             print(json.dumps(row))
             counts['total'] += 1
 
+    def export_fatcat(self, args):
+        counts = Counter()
+        self.db.row_factory = sqlite3.Row
+        self.c = self.db.cursor()
+        for row in self.c.execute('SELECT * FROM journal'):
+            counts['total'] += 1
+
+            if not row['name']:
+                counts['empty-name'] += 1
+                continue
+
+            out = dict(
+                issnl=row['issnl'],
+                wikidata_qid=row['wikidata_qid'],
+                ident=row['fatcat_ident'],
+                publisher=row['publisher'],
+                name=row['name'])
+
+            extra = dict(
+                issnp=row['issnp'],
+                issne=row['issne'],
+                country=row['country'],
+                lang=row['lang'],
+            )
+            if row['sherpa_color']:
+                extra['sherpa'] = dict(color=row['sherpa_color'])
+
+            urls = []
+            cur = self.db.execute("SELECT * FROM homepage WHERE issnl = ?;", [row['issnl']])
+            for hrow in cur:
+                if not row['any_live_homepage'] and hrow['gwb_url_success_dt'] and hrow['gwb_url_success_dt'] != 'error':
+                    urls.append("https://web.archive.org/web/{}/{}".format(hrow['gwb_url_success_dt'], hrow['url']))
+                    continue
+                if hrow['blocked']:
+                    urls.append(hrow['url'])
+                    continue
+                if hrow['terminal_status_code'] == 200:
+                    if hrow['terminal_url'] == hrow['url'].replace('http://', 'https://') or hrow['terminal_url'] == hrow['url'] + "/":
+                        # check for trivial redirects; use post-redirect URL in those cases
+                        urls.append(hrow['terminal_url'])
+                    else:
+                        urls.append(hrow['url'])
+                    continue
+            extra['urls'] = urls
+            out['extra'] = extra
+            print(json.dumps(out))
+
     def init_db(self, args):
         print("### Creating Database...")
         self.db.executescript("""
@@ -1311,6 +1358,9 @@ def main():
 
     sub = subparsers.add_parser('export')
     sub.set_defaults(func='export')
+
+    sub = subparsers.add_parser('export_fatcat')
+    sub.set_defaults(func='export_fatcat')
 
     # TODO: 'jurn'
     for ind in ('doaj', 'road', 'crossref', 'entrez', 'norwegian', 'szczepanski', 'ezb', 'gold_oa', 'wikidata', 'openapc'):
