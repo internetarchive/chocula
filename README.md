@@ -1,12 +1,42 @@
 
-This folder contains scripts to merge journal metadat from multiple sources and
-provide a snapshot for bulk importing into fatcat.
+Chocula is a python script to parse and merge journal-level metadata from
+various sources into a consistent sqlite3 database file for analysis.
 
-Specific bots will probably be needed to do continous updates; that's out of
-scope for this first import.
+See `chocula_schema.sql` for the output schema.
+
+## History / Name
+
+This is the 3rd or 4th iteration of open access journal metadata munging as
+part of the fatcat project; earlier attempts were crude ISSN spreadsheet
+munging, then the `oa-journals-analysis` repo (Jupyter notebook and a web
+interface), then the `fatcat:extra/journal_metadata/` script for bootstrapping
+fatcat container metadata. This repo started as the fatcat `journal_metadata`
+directory and retains the git history of that folder.
+
+The name "chocula" comes from a half-baked pun on Count Chocula... something
+something counting, serials, cereal.
+[Read more about Count Chocula](https://teamyacht.com/ernstchoukula.com/Ernst-Choukula.html).
+
+## ISSN-L Munging
+
+Unfortunately, there seem to be plenty of legitimate ISSNs that don't end up in
+the ISSN-L table. On the portal.issn.org public site, these are listed as:
+
+    "This provisional record has been produced before publication of the
+    resource.  The published resource has not yet been checked by the ISSN
+    Network.It is only available to subscribing users."
+
+For example:
+
+- 2199-3246/2199-3254: Digital Experiences in Mathematics Education
+
+Previously these were allowed through into fatcat, so some 2000+ entries exist.
+This allowed through at least 110 totally bogus ISSNs. Currently, chocula
+filters out "unknown" ISSN-Ls unless they are coming from existing fatcat
+entities.
 
 
-## Sources
+## Sources (out of date)
 
 The `./data/fetch.sh` script will fetch mirrored snapshots of all these
 datasets.
@@ -59,22 +89,6 @@ General form here is to build a huge python dict in memory, keyed by the
 ISSN-L, then write out to disk as JSON. Then the journal-metadata importer
 takes a subset of fields and inserts to fatcat. Lastly, the elasticsearch
 transformer takes a subset/combination of 
-
-## ISSN-L Munging
-
-Unfortunately, there seem to be plenty of legitimate ISSNs that don't end up in
-the ISSN-L table. On the portal.issn.org public site, these are listed as:
-
-    "This provisional record has been produced before publication of the
-    resource.  The published resource has not yet been checked by the ISSN
-    Network.It is only available to subscribing users."
-
-For example:
-
-- 2199-3246/2199-3254: Digital Experiences in Mathematics Education
-
-Instead of just dropping these entirely, we're currently munging these by
-putting the electronic or print ISSN in the ISSN-L position.
 
 ## Python Helpers/Libraries
 
