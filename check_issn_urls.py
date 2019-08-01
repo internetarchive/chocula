@@ -95,7 +95,9 @@ def check_gwb(url, match_type='exact'):
         time.sleep(5)
     if not resp.status_code == 200:
         sys.stderr.write("CDX ERR {}: {}\n".format(resp.status_code, url))
-        return 'error'
+        # TODO: this isn't really correct, but not sure what to return/record
+        # if we failed through all timeouts
+        return None
     line = resp.text.strip().split('\n')[0]
     if line:
         dt = line.split()[1]
