@@ -94,7 +94,7 @@ def check_gwb(url, match_type='exact'):
             break
         time.sleep(5)
     if not resp.status_code == 200:
-        sys.stderr.write("CDX ERR {}: {}".format(resp.status_code, url))
+        sys.stderr.write("CDX ERR {}: {}\n".format(resp.status_code, url))
         return 'error'
     line = resp.text.strip().split('\n')[0]
     if line:
@@ -132,6 +132,10 @@ def check_url(issnl, url):
         return info
     except requests.exceptions.ContentDecodingError:
         info['error'] = 'ContentDecodingError'
+        info['terminal_status_code'] = info['status_code'] = -1
+        return info
+    except requests.exceptions.InvalidSchema:
+        info['error'] = 'InvalidSchema'
         info['terminal_status_code'] = info['status_code'] = -1
         return info
 
