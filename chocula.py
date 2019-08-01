@@ -359,6 +359,8 @@ def parse_url(url):
         return None
     if url.startswith('www.'):
         url = "http://" + url
+    if url.startswith('ttp://') or url.startswith('ttps://'):
+        url = "h" + url
     url.replace('Http://', 'http://')
 
     url = str(urlcanon.semantic_precise(url))
