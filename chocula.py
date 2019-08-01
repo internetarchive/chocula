@@ -1013,6 +1013,10 @@ class ChoculaDatabase():
             counts['total'] += 1
             url = row['url']
             assert(url)
+            if row.get('gwb_url_success_dt') == 'error':
+                row['gwb_url_success_dt'] = None
+            if row.get('gwb_terminal_url_success_dt') == 'error':
+                row['gwb_terminal_url_success_dt'] = None
             self.c.execute("UPDATE homepage SET status_code=?, crawl_error=?, terminal_url=?, terminal_status_code=?, platform_software=?, issnl_in_body=?, blocked=?, gwb_url_success_dt=?, gwb_terminal_url_success_dt=? WHERE url=?",
                 (row['status_code'],
                  row.get('crawl_error'),
@@ -1303,10 +1307,21 @@ class ChoculaDatabase():
                 extra['sherpa'] = dict(color=row['sherpa_color'])
 
             urls = []
+            webarchive_urls = []
             cur = self.db.execute("SELECT * FROM homepage WHERE issnl = ?;", [row['issnl']])
             for hrow in cur:
+                if 'web.archive.org/web' in hrow['url']:
+                    webarchive_urls.append(hrow['url'])
+                    urls.append(hrow['url'])
+                    continue
+                if hrow['host'] in ('www.google.com', 'books.google.com'):
+                    # individual books or google searches, not journal/conference homepages
+                    continue
+                if '/oai/request' in hrow['url']:
+                    # OAI-PMH endpoints, not homepages
+                    continue
                 if not row['any_live_homepage'] and hrow['gwb_url_success_dt'] and hrow['gwb_url_success_dt'] != 'error':
-                    urls.append("https://web.archive.org/web/{}/{}".format(hrow['gwb_url_success_dt'], hrow['url']))
+                    webarchive_urls.append("https://web.archive.org/web/{}/{}".format(hrow['gwb_url_success_dt'], hrow['url']))
                     continue
                 if hrow['blocked']:
                     urls.append(hrow['url'])
@@ -1318,6 +1333,11 @@ class ChoculaDatabase():
                     else:
                         urls.append(hrow['url'])
                     continue
+                # didn't even crawl and no match? add anyways as a pass-through
+                if not hrow['status_code']:
+                    urls.append(hrow['url'])
+                    continue
+            extra['webarchive_urls'] = urls
             extra['urls'] = urls
             out['extra'] = extra
             print(json.dumps(out))
