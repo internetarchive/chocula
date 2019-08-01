@@ -46,3 +46,6 @@ wget -c https://archive.org/download/ISSN-GOLD-OA-3/ISSN_Gold-OA_3.0.csv
 wget -c https://archive.org/download/openapc-dataset/apc_de.2019-07-30.csv
 wget -c https://archive.org/download/wikidata-journal-metadata/wikidata_journals_sparql.2019-07-30.tsv
 
+wget -c https://archive.org/download/chocula-journal-counts/url_status.2019-07-31.partial-ia.json
+wget -c https://archive.org/download/chocula-journal-counts/url_status.2019-07-31.partial-robocracy.json
+
