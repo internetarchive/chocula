@@ -1284,7 +1284,7 @@ class ChoculaDatabase():
         counts = Counter()
         self.db.row_factory = sqlite3.Row
         self.c = self.db.cursor()
-        for row in self.c.execute('SELECT * FROM journal'):
+        for row in self.c.execute('SELECT * FROM journal WHERE valid_issnl = 1'):
             counts['total'] += 1
 
             if not row['name']:
