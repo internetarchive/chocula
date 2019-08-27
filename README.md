@@ -44,7 +44,7 @@ datasets.
 A few sources of normalization/mappings:
 
 - ISSN-L (from ISSN org)
-    - Original:
+    - Original: <https://www.issn.org/wp-content/uploads/2014/03/issnltables.zip>
     - Snapshot: <https://archive.org/download/issn_issnl_mappings/20180216.ISSN-to-ISSN-L.txt>
 - ISO 639-1 language codes: https://datahub.io/core/language-codes
 - ISO 3166-1 alpha-2 country codes

@@ -12,7 +12,7 @@ wget -c https://archive.org/download/doaj_bulk_metadata_2019/journalcsv__doaj_20
 #wget -c https://archive.org/download/issn_issnl_mappings/20190129.ISSN-to-ISSN-L.txt
 wget -c https://archive.org/download/issn_issnl_mappings/20190730.ISSN-to-ISSN-L.txt
 
-wget -c https://archive.org/download/crossref_doi_titles/doi_titles_file_2019-01-24.csv
+wget -c https://archive.org/download/crossref_doi_titles/doi_titles_file_2019-08-17.csv
 
 #wget -c https://archive.org/download/ncbi-entrez-2019/J_Entrez.txt -O ncbi-entrez-2019.txt
 
