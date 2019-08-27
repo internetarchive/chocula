@@ -1252,6 +1252,7 @@ class ChoculaDatabase():
         self.index_road(args)
         self.index_entrez(args)
         self.index_ezb(args)
+        self.index_szczepanski(args)
         self.index_gold_oa(args)
         self.index_openapc(args)
         self.index_wikidata(args)
