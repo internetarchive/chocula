@@ -76,12 +76,13 @@ PORTICO_FILE = 'data/Portico_Holding_KBart.txt'
 JSTOR_FILE = 'data/jstor_all-archive-titles.txt'
 SIM_FILE = 'data/MASTER TITLE_METADATA_LIST_20171019.converted.csv'
 IA_CRAWL_FILE = 'data/url_status.2019-07-31.partial-ia.json'
+SZCZEPANSKI_DATE = '2018-01-01'
 SZCZEPANSKI_FILE = 'data/Jan-Szczepanski-Open-Access-Journals-2018_0.fixed.json'
 EZB_FILE = 'data/ezb_metadata.json'
 GOLD_OA_FILE = 'data/ISSN_Gold-OA_3.0.csv'
 WIKIDATA_SPARQL_FILE = 'data/wikidata_journals_sparql.2019-07-30.tsv'
 OPENAPC_FILE = 'data/apc_de.2019-07-30.csv'
-FATCAT_CONTAINER_FILE = 'data/container_export.json'
+FATCAT_CONTAINER_FILE = 'data/container_export.2019-08-27.json'
 FATCAT_STATS_FILE = 'data/container_stats.json'
 
 
@@ -706,7 +707,7 @@ class ChoculaDatabase():
                 #print(row)
                 counts['no-issn'] += 1
                 continue
-            extra = dict()
+            extra = dict(as_of=SZCEPANSKI_DATE)
             if row.get('extra'):
                 extra['notes'] = row.get('extra')
             for k in ('other_titles', 'year_spans', 'ed'):
@@ -1164,6 +1165,10 @@ class ChoculaDatabase():
                             out[k] = extra[k]
                 if irow['slug'] in ('doaj','road','szczepanski', 'gold_oa'):
                     out['is_oa'] = True
+                if irow['slug'] == 'ezb':
+                    ezb_extra = json.loads(irow['extra'])
+                    if ezb_extra['ezb_color'] == 'green':
+                        out['is_oa'] = True
                 if irow['slug'] == 'sherpa_romeo':
                     extra = json.loads(irow['extra'])
                     out['sherpa_color'] = extra['color']
@@ -1296,7 +1301,8 @@ class ChoculaDatabase():
                 wikidata_qid=row['wikidata_qid'],
                 ident=row['fatcat_ident'],
                 publisher=row['publisher'],
-                name=row['name'])
+                name=row['name'],
+                _known_issnl=row['known_issnl'])
 
             extra = dict(
                 issnp=row['issnp'],
@@ -1305,7 +1311,7 @@ class ChoculaDatabase():
                 lang=row['lang'],
             )
             if row['sherpa_color']:
-                extra['sherpa'] = dict(color=row['sherpa_color'])
+                extra['sherpa_romeo'] = dict(color=row['sherpa_color'])
 
             urls = []
             webarchive_urls = []
@@ -1338,8 +1344,19 @@ class ChoculaDatabase():
                 if not hrow['status_code']:
                     urls.append(hrow['url'])
                     continue
-            extra['webarchive_urls'] = urls
+            extra['webarchive_urls'] = webarchive_urls
             extra['urls'] = urls
+
+            cur = self.db.execute("SELECT * FROM directory WHERE issnl = ?;", [row['issnl']])
+            for drow in cur:
+                if drow['slug'] == 'ezb':
+                    ezb = json.loads(drow['extra'])
+                    extra['ezb'] = dict(ezb_id=drow['identifier'], color=ezb['ezb_color'])
+                if drow['slug'] == 'szczepanski':
+                    extra['szczepanski'] = dict(as_of=SZCZEPANSKI_DATE)
+                if drow['slug'] == 'doaj':
+                    extra['doaj'] = json.loads(drow['extra'])
+
             out['extra'] = extra
             print(json.dumps(out))
 
