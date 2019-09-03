@@ -76,7 +76,7 @@ PORTICO_FILE = 'data/Portico_Holding_KBart.txt'
 JSTOR_FILE = 'data/jstor_all-archive-titles.txt'
 SIM_FILE = 'data/MASTER TITLE_METADATA_LIST_20171019.converted.csv'
 IA_CRAWL_FILE = 'data/url_status.2019-07-31.partial-ia.json'
-SZCZEPANSKI_DATE = '2018-01-01'
+SZCZEPANSKI_DATE = '2018'
 SZCZEPANSKI_FILE = 'data/Jan-Szczepanski-Open-Access-Journals-2018_0.fixed.json'
 EZB_FILE = 'data/ezb_metadata.json'
 GOLD_OA_FILE = 'data/ISSN_Gold-OA_3.0.csv'
@@ -707,7 +707,7 @@ class ChoculaDatabase():
                 #print(row)
                 counts['no-issn'] += 1
                 continue
-            extra = dict(as_of=SZCEPANSKI_DATE)
+            extra = dict(as_of=SZCZEPANSKI_DATE)
             if row.get('extra'):
                 extra['notes'] = row.get('extra')
             for k in ('other_titles', 'year_spans', 'ed'):
