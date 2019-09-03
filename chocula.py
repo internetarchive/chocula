@@ -1326,6 +1326,10 @@ class ChoculaDatabase():
             webarchive_urls = []
             cur = self.db.execute("SELECT * FROM homepage WHERE issnl = ?;", [row['issnl']])
             for hrow in cur:
+                if '://doaj.org/' in hrow['url'] or '://www.doaj.org/' in hrow['url']:
+                    continue
+                if '://www.ncbi.nlm.nih.gov/' in hrow['url']:
+                    continue
                 if 'web.archive.org/web' in hrow['url']:
                     webarchive_urls.append(hrow['url'])
                     urls.append(hrow['url'])
