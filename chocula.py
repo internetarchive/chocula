@@ -1292,24 +1292,33 @@ class ChoculaDatabase():
         for row in self.c.execute('SELECT * FROM journal WHERE valid_issnl = 1'):
             counts['total'] += 1
 
+            name = row['name'].strip()
+
             if not row['name']:
                 counts['empty-name'] += 1
                 continue
+
+            if len(name) <= 2:
+                counts['short-name'] += 1
+                continue
+
+            publisher = row['publisher'].strip() or None
 
             out = dict(
                 issnl=row['issnl'],
                 wikidata_qid=row['wikidata_qid'],
                 ident=row['fatcat_ident'],
-                publisher=row['publisher'],
-                name=row['name'],
+                publisher=publisher,
+                name=name,
                 _known_issnl=row['known_issnl'])
 
             extra = dict(
                 issnp=row['issnp'],
                 issne=row['issne'],
                 country=row['country'],
-                lang=row['lang'],
             )
+            if row['lang']:
+                extra['languages'] = [row['lang'],]
             if row['sherpa_color']:
                 extra['sherpa_romeo'] = dict(color=row['sherpa_color'])
 
