@@ -10,7 +10,14 @@ x wikidata linkage (prep for wikimania)
 - don't list dead URLs in fatcat
 - summary report of some of above
 - update all fatcat (wikidata QID, urls, fixed ISSN-L, etc)
+- when updating fatcat:
+    if title is "blah,  Proceedings of the", set type to proceedings and re-write title
+    if title like "Workshop on", set type
 
+source improvements:
+- entrez: "NLM Unique Id"
+- JUFO: finish 
+- crossref: empty string identifiers?
 
 - public scopus list (?)
 - scrape/munge public clarivate dumps
@@ -22,13 +29,15 @@ x wikidata linkage (prep for wikimania)
 - check that all fields actually getting imported reasonably
 - homepage crawl/status script
 
+- could poll portal.issn.org like:
+    https://portal.issn.org/resource/ISSN/1561-7645?format=json
+    would require a good deal of munging (eg, MARC region -> ISO)
 - KBART imports (with JSON, so only a single row per slug)
 - imprint/publisher distinction (publisher is big group)
 - summary table should be superset of fatcat table
 - add timestamp columns to enable updates?
 - fatcat export (filters for changes to make, writes out as JSON)
 - update_url_status (needs re-write)
-- index -> directory
 - log out index issues (duplicate ISSN-L, etc) to a file
 - validate against GOLD OA list
 - decide what to do with JURN... match? fuzzy match? create missing fatcat?
