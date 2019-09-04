@@ -1292,7 +1292,9 @@ class ChoculaDatabase():
         for row in self.c.execute('SELECT * FROM journal WHERE valid_issnl = 1'):
             counts['total'] += 1
 
-            name = row['name'].strip()
+            name = row['name']
+            if name:
+                name = name.strip()
 
             if not row['name']:
                 counts['empty-name'] += 1
@@ -1302,7 +1304,9 @@ class ChoculaDatabase():
                 counts['short-name'] += 1
                 continue
 
-            publisher = row['publisher'].strip() or None
+            publisher = row['publisher']
+            if publisher:
+                publisher = publisher.strip() or None
 
             out = dict(
                 issnl=row['issnl'],
