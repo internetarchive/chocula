@@ -1175,6 +1175,11 @@ class ChoculaDatabase():
                     if extra['color'] == 'green':
                         out['is_oa'] = True
 
+            # filter out "NA" ISSNs
+            for k in ('issne', 'issnp'):
+                if out.get(k) and (len(out[k]) != 9 or out[k][4] != '-'):
+                    out.pop(k)
+
             cur = self.db.execute("SELECT * FROM homepage WHERE issnl = ?;", [issnl])
             for hrow in cur:
                 out['any_homepage'] = True
