@@ -49,3 +49,5 @@ wget -c https://archive.org/download/wikidata-journal-metadata/wikidata_journals
 wget -c https://archive.org/download/chocula-journal-counts/url_status.2019-07-31.partial-ia.json
 wget -c https://archive.org/download/chocula-journal-counts/url_status.2019-07-31.partial-robocracy.json
 
+wget -c https://archive.org/download/fatcat_bulk_exports_2019-07-07/container_export.2019-09-03.json.gz
+zcat container_export.2019-09-03.json.gz > container_export.2019-09-03.json

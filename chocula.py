@@ -82,7 +82,7 @@ EZB_FILE = 'data/ezb_metadata.json'
 GOLD_OA_FILE = 'data/ISSN_Gold-OA_3.0.csv'
 WIKIDATA_SPARQL_FILE = 'data/wikidata_journals_sparql.2019-07-30.tsv'
 OPENAPC_FILE = 'data/apc_de.2019-07-30.csv'
-FATCAT_CONTAINER_FILE = 'data/container_export.2019-08-27.json'
+FATCAT_CONTAINER_FILE = 'data/container_export.2019-09-03.json'
 FATCAT_STATS_FILE = 'data/container_stats.json'
 
 
