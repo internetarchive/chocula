@@ -67,18 +67,22 @@ In order of precedence (first higher than later):
 - Norwegian Registry
     - Original: <https://dbh.nsd.uib.no/publiseringskanaler/AlltidFerskListe>
     - Snapshot: <https://archive.org/download/norwegian_register_journals>
-- Wikidata (TODO: Journal-level not title-level)
-    - Original: <http://uri.gbv.de/wikicite/20180903/>
-    - Snapshot: <https://archive.org/download/wikicite-biblio-data-20180903>
+- Wikidata via SPARQL Query
+    - SPARQL: <https://archive.org/download/wikidata-journal-metadata/wikidata.sparql>
+    - Snapshot: <https://archive.org/download/wikidata-journal-metadata>
 - KBART reports: LOCKSS, CLOCKSS, Portico
     - Original: (multiple, see README in IA item)
-    - Snapshot: <https://archive.org/download/keepers_reports_201901>
+    - Snapshot: <https://archive.org/download/keepers_reports_201912>
 - JSTOR
     - Original: <https://support.jstor.org/hc/en-us/articles/115007466248-JSTOR-title-lists>
-    - Snapshot: <KBART jstor_all-archive-titles.txt>
 - Crossref title list (not DOIs)
     - Original: <https://wwwold.crossref.org/titlelist/titleFile.csv>
     - Snapshot: <https://archive.org/download/crossref_doi_titles>
+- OpenAPC Dataset
+    - Original: <https://github.com/OpenAPC/openapc-de/blob/master/data/apc_de.csv>
+    - Snapshot: <https://archive.org/download/openapc-dataset>
+- EZB Metadata
+    - Snapshot: <https://archive.org/download/ezb_snapshot_2019-07-11>
 - IA SIM Microfilm catalog
     - Original: <https://archive.org/download/SerialsOnMicrofilmCollection/MASTER%20TITLE_METADATA_LIST_20171019.xlsx>
 - IA homepage crawl attempts
