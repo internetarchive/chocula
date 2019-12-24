@@ -2,7 +2,24 @@
 Chocula is a python script to parse and merge journal-level metadata from
 various sources into a consistent sqlite3 database file for analysis.
 
-See `chocula_schema.sql` for the output schema.
+## Quickstart
+
+You need `python3`, `pipenv`, and `sqlite3` installed.
+
+First fetch datasets:
+
+    cd data
+    ./fetch.sh
+    cd ..
+
+Then re-generate entire sqlite3 database from scratch:
+
+    pipenv shell
+    ./chocula.py everything
+
+Now you can explore the database; see `chocula_schema.sql` for the output schema.
+
+    sqlite3 chocula.sqlite
 
 ## History / Name
 
@@ -16,6 +33,7 @@ directory and retains the git history of that folder.
 The name "chocula" comes from a half-baked pun on Count Chocula... something
 something counting, serials, cereal.
 [Read more about Count Chocula](https://teamyacht.com/ernstchoukula.com/Ernst-Choukula.html).
+
 
 ## ISSN-L Munging
 
@@ -36,7 +54,7 @@ filters out "unknown" ISSN-Ls unless they are coming from existing fatcat
 entities.
 
 
-## Sources (out of date)
+## Sources
 
 The `./data/fetch.sh` script will fetch mirrored snapshots of all these
 datasets.
@@ -88,18 +106,39 @@ In order of precedence (first higher than later):
 - IA homepage crawl attempts
 
 The SHERPA/ROMEO content comes from the list helpfully munged by moreo.info.
+UPDATE: this site is now defunct (404).
 
 General form here is to build a huge python dict in memory, keyed by the
 ISSN-L, then write out to disk as JSON. Then the journal-metadata importer
 takes a subset of fields and inserts to fatcat. Lastly, the elasticsearch
 transformer takes a subset/combination of 
 
-## Python Helpers/Libraries
+## Fatcat Container Counts
 
-- ftfy
-- pycountry
+Generate a list of ISSN-L identifiers, fetch each from fatcat web peudo-API, and write to JSON.
 
-Debian:
-    
-    sudo apt install python3-pycountry
-    sudo pip3 install ftfy
+    cat container_export.json | jq .issnl -r | sort -u > container_issnl.tsv
+    cat container_issnl.tsv | parallel -j10 curl -s 'https://fatcat.wiki/container/issnl/{}/stats.json' > container_stats.json
+
+Then load in to chocula and recaculate stats:
+
+    pipenv shell
+    ./chocula.py load_fatcat_stats container_stats.json
+    ./chocula.py summarize
+
+    # also, upload stats to an IA item, update fetch.sh and chocula.py variables
+
+## Journal Homepage Crawl Status
+
+The `check_issn_urls.py` script tries crawling journal homepages to see if they
+are "live" on the web. To regenerate these stats:
+
+    # assuming you have a fresh database
+    pipenv shell
+    ./chocula.py export_urls | shuf > urls_to_crawl.tsv
+    parallel -j10 --bar --pipepart -a urls_to_crawl.shuf.tsv ./check_issn_urls.py > url_status.json
+    ./chocula.py update_url_status url_status.json
+    ./chocula.py summarize
+
+Might also want to upload results at this point.
+
