@@ -1397,7 +1397,8 @@ class ChoculaDatabase():
         print("Done!")
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     subparsers = parser.add_subparsers()
 
     parser.add_argument("--db-file",
@@ -1409,39 +1410,46 @@ def main():
         default=None,
         type=str)
 
-    sub = subparsers.add_parser('everything')
+    sub = subparsers.add_parser('everything',
+        help="run all the commands")
     sub.set_defaults(func='everything')
 
-    sub = subparsers.add_parser('init_db')
+    sub = subparsers.add_parser('init_db',
+        help="create sqlite3 output file and tables")
     sub.set_defaults(func='init_db')
 
-    sub = subparsers.add_parser('summarize')
+    sub = subparsers.add_parser('summarize',
+        help="aggregate metadata from all tables into 'journals' table")
     sub.set_defaults(func='summarize')
 
-    sub = subparsers.add_parser('export')
+    sub = subparsers.add_parser('export',
+        help="dump JSON output")
     sub.set_defaults(func='export')
 
-    sub = subparsers.add_parser('export_fatcat')
+    sub = subparsers.add_parser('export_fatcat',
+        help="dump JSON output in a format that can load into fatcat")
     sub.set_defaults(func='export_fatcat')
 
     # TODO: 'jurn'
     for ind in ('doaj', 'road', 'crossref', 'entrez', 'norwegian', 'szczepanski', 'ezb', 'gold_oa', 'wikidata', 'openapc'):
-        sub = subparsers.add_parser('index_{}'.format(ind))
+        sub = subparsers.add_parser('index_{}'.format(ind),
+            help="load metadata from {}".format(ind))
         sub.set_defaults(func='index_{}'.format(ind))
 
-    sub = subparsers.add_parser('preserve_sim')
-    sub.set_defaults(func='preserve_sim')
-
-    sub = subparsers.add_parser('load_fatcat')
+    sub = subparsers.add_parser('load_fatcat',
+        help="load fatcat container metadata")
     sub.set_defaults(func='load_fatcat')
 
-    sub = subparsers.add_parser('load_fatcat_stats')
+    sub = subparsers.add_parser('load_fatcat_stats',
+        help="update container-level stats from JSON file")
     sub.set_defaults(func='load_fatcat_stats')
 
-    sub = subparsers.add_parser('export_urls')
+    sub = subparsers.add_parser('export_urls',
+        help="dump homepage URLs (eg, to crawl for status)")
     sub.set_defaults(func='export_urls')
 
-    sub = subparsers.add_parser('update_url_status')
+    sub = subparsers.add_parser('update_url_status',
+        help="import homepage URL crawl status")
     sub.set_defaults(func='update_url_status')
 
     args = parser.parse_args()
