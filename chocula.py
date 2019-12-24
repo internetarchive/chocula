@@ -652,7 +652,8 @@ class ChoculaDatabase():
         path = args.input_file or NORWEGIAN_FILE
         print("##### Loading Norwegian Registry...")
         #pandas.read_csv(NORWEGIAN_FILE, sep=';', encoding="ISO-8859-1")
-        #NSD tidsskrift_id;Original title;International title;Present Level (2018);Print ISSN;Online ISSN;Open Access;NPI Scientific Field;NPI Academic Discipline;URL;Publishing Company;Publisher;Country of publication;Language;Level 2019;Level 2018;Level 2017;Level 2016;Level 2015;Level 2014;Level 2013;Level 2012;Level 2011;Level 2010;Level 2009;Level 2008;Level 2007;Level 2006;Level 2005;Level 2004;itar_id
+        # Old: NSD tidsskrift_id;Original title;International title;Present Level (2018);Print ISSN;Online ISSN;Open Access;NPI Scientific Field;NPI Academic Discipline;URL;Publishing Company;Publisher;Country of publication;Language;Level 2019;Level 2018;Level 2017;Level 2016;Level 2015;Level 2014;Level 2013;Level 2012;Level 2011;Level 2010;Level 2009;Level 2008;Level 2007;Level 2006;Level 2005;Level 2004;itar_id
+        # New: NSD tidsskrift_id;Original title;International title;Print ISSN;Online ISSN;Open Access;NPI Academic Discipline;NPI Scientific Field;Level 2020;Level 2019;Level 2018;Level 2017;Level 2016;Level 2015;Level 2014;Level 2013;Level 2012;Level 2011;Level 2010;Level 2009;Level 2008;Level 2007;Level 2006;Level 2005;Level 2004;itar_id;NSD forlag_id;Publishing Company;Publisher;Country of publication;Language;Conference Proceedings;Established;Ceased;URL
         reader = csv.DictReader(open(path, encoding="ISO-8859-1"), delimiter=";")
         counts = Counter()
         self.c = self.db.cursor()
@@ -667,7 +668,8 @@ class ChoculaDatabase():
                 counts['no-issn'] += 1
                 continue
             extra = dict(as_of=NORWEGIAN_DATE)
-            extra['level'] = int(row['Present Level (2018)'])
+            if row['Level 2019']:
+                extra['level'] = int(row['Level 2019'])
             if row['Original title'] != row['International title']:
                 extra['original_name'] = row['Original title']
             if row['Country of publication']:
