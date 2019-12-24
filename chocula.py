@@ -75,7 +75,6 @@ CLOCKSS_FILE = 'data/kbart_CLOCKSS.txt'
 PORTICO_FILE = 'data/Portico_Holding_KBart.txt'
 JSTOR_FILE = 'data/JSTOR_Global_AllArchiveTitles_2019-12-21.txt'
 SIM_FILE = 'data/MASTER TITLE_METADATA_LIST_20171019.converted.csv'
-IA_CRAWL_FILE = 'data/url_status.2019-07-31.partial-ia.json'
 SZCZEPANSKI_DATE = '2018'
 SZCZEPANSKI_FILE = 'data/Jan-Szczepanski-Open-Access-Journals-2018_0.fixed.json'
 EZB_FILE = 'data/ezb_metadata.json'
@@ -83,7 +82,9 @@ GOLD_OA_FILE = 'data/ISSN_Gold-OA_3.0.csv'
 WIKIDATA_SPARQL_FILE = 'data/wikidata_journals_sparql.2019-12-20.tsv'
 OPENAPC_FILE = 'data/apc_de.2019-12-20.csv'
 FATCAT_CONTAINER_FILE = 'data/container_export.2019-12-13.json'
-FATCAT_STATS_FILE = 'data/container_stats.json'
+
+IA_CRAWL_FILE = 'data/url_status.2019-07-31.partial-ia.json'
+FATCAT_STATS_FILE = 'data/container_stats.20191213.json'
 
 
 ################### Utilities
