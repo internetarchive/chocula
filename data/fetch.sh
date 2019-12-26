@@ -39,11 +39,8 @@ wget -c https://archive.org/download/ISSN-GOLD-OA-3/ISSN_Gold-OA_3.0.csv
 wget -c https://archive.org/download/openapc-dataset/apc_de.2019-12-20.csv
 wget -c https://archive.org/download/wikidata-journal-metadata/wikidata_journals_sparql.2019-12-20.tsv
 
-#wget -c https://archive.org/download/chocula-journal-counts/url_status.2019-07-31.partial-ia.json
-#wget -c https://archive.org/download/chocula-journal-counts/url_status.2019-07-31.partial-robocracy.json
-
 wget -c https://archive.org/download/fatcat_bulk_exports_2019-12-13/container_export.json.gz
 zcat container_export.json.gz > container_export.2019-12-13.json
 
 wget -c https://archive.org/download/fatcat_bulk_exports_2019-12-13/container_stats.20191213.json
-wget -c https://archive.org/download/chocula-journal-counts/url_status.2019-07-31.partial-ia.json
+wget -c https://archive.org/download/chocula-journal-counts/url_status.20191223.json
