@@ -118,7 +118,7 @@ transformer takes a subset/combination of
 Generate a list of ISSN-L identifiers, fetch each from fatcat web peudo-API, and write to JSON.
 
     cat container_export.json | jq .issnl -r | sort -u > container_issnl.tsv
-    cat container_issnl.tsv | parallel -j10 curl -s 'https://fatcat.wiki/container/issnl/{}/stats.json' > container_stats.json
+    cat container_issnl.tsv | parallel -j10 curl -s 'https://fatcat.wiki/container/issnl/{}/stats.json' | jq -c . > container_stats.json
 
 Then load in to chocula and recaculate stats:
 
