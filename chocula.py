@@ -58,7 +58,7 @@ import stdnum.issn
 
 ################### File Config
 
-ISSNL_FILE = 'data/20191220.ISSN-to-ISSN-L.txt'
+ISSNL_FILE = 'data/20200323.ISSN-to-ISSN-L.txt'
 
 ENTREZ_FILE = 'data/entrez-journals.csv'
 ROAD_FILE = 'data/road-2018-01-24.tsv'
