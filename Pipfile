@@ -3,18 +3,25 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
-[dev-packages]
-
 [packages]
 ftfy = "*"
 urlcanon = "*"
 surt = "*"
 tldextract = "*"
 pycountry = "*"
-pytest = "*"
 python-stdnum = "*"
-datasette = "*"
+python-dotenv = "*"
+
+# Future?
+#datasette = "*"
+
+[dev-packages]
+pytest = "*"
+mypy = "*"
+
+# must lock black to an exact version because it is still "beta"
+# see: https://github.com/psf/black/issues/517
+black = "==19.10b0"
 
 [requires]
-# Can't require "3.5 or 3.6" here, so just removing. See pipenv github issues.
-#python_version = "3.5"
+python_version = "3.7"
