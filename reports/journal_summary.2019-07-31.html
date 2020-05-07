@@ -1,0 +1,1018 @@
+<h1>Fatcat "Chocula" Journal Metadata Summary</h1>
+<p>This report is auto-generated from a sqlite database file, which should be available/included.</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>datetime('now')</th>
+</tr></thead>
+<tr>
+  <td>2019-08-01 03:55:43</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT datetime('now');</pre>
+<br></code></div><p>Note that pretty much all of the fatcat release stats are on a <em>release</em>, not
+<em>work</em> basis, so there may be over-counting. Also, as of July 2019 there were
+over 1.5 million OA longtail releases which are <em>not</em> linked to a container
+(journal).</p>
+<h3>Basics</h3>
+<p>Top countries by journal count (and fatcat release counts):</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>country</th>
+  <th>journal_count</th>
+  <th>sum(release_count)</th>
+</tr></thead>
+<tr>
+  <td></td>
+  <td>91931</td>
+  <td>34853365</td>
+</tr>
+<tr>
+  <td>us</td>
+  <td>6838</td>
+  <td>20812424</td>
+</tr>
+<tr>
+  <td>gb</td>
+  <td>5967</td>
+  <td>12238711</td>
+</tr>
+<tr>
+  <td>nl</td>
+  <td>2343</td>
+  <td>7763639</td>
+</tr>
+<tr>
+  <td>de</td>
+  <td>1841</td>
+  <td>4176386</td>
+</tr>
+<tr>
+  <td>id</td>
+  <td>1562</td>
+  <td>112525</td>
+</tr>
+<tr>
+  <td>br</td>
+  <td>1501</td>
+  <td>614272</td>
+</tr>
+<tr>
+  <td>es</td>
+  <td>1012</td>
+  <td>275328</td>
+</tr>
+<tr>
+  <td>pl</td>
+  <td>807</td>
+  <td>256632</td>
+</tr>
+<tr>
+  <td>it</td>
+  <td>803</td>
+  <td>304793</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT country, COUNT(*) AS journal_count, sum(release_count) from journal group by country order by count(*) desc limit 10;</pre>
+<br></code></div><p>Top languages by journal count (and fatcat release counts):</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>lang</th>
+  <th>journal_count</th>
+  <th>release_count</th>
+</tr></thead>
+<tr>
+  <td></td>
+  <td>96856</td>
+  <td>39729766</td>
+</tr>
+<tr>
+  <td>en</td>
+  <td>25584</td>
+  <td>46389136</td>
+</tr>
+<tr>
+  <td>es</td>
+  <td>738</td>
+  <td>105717</td>
+</tr>
+<tr>
+  <td>id</td>
+  <td>587</td>
+  <td>35909</td>
+</tr>
+<tr>
+  <td>pt</td>
+  <td>560</td>
+  <td>99100</td>
+</tr>
+<tr>
+  <td>de</td>
+  <td>504</td>
+  <td>1050664</td>
+</tr>
+<tr>
+  <td>fr</td>
+  <td>420</td>
+  <td>314582</td>
+</tr>
+<tr>
+  <td>ja</td>
+  <td>330</td>
+  <td>589020</td>
+</tr>
+<tr>
+  <td>ru</td>
+  <td>245</td>
+  <td>150367</td>
+</tr>
+<tr>
+  <td>it</td>
+  <td>202</td>
+  <td>97561</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT lang, COUNT(*) as journal_count, sum(release_count) as release_count FROM journal GROUP BY lang ORDER BY COUNT(*) DESC LIMIT 10;</pre>
+<br></code></div><p>Aggregate fatcat fulltext release coverage by OA status:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>is_oa</th>
+  <th>journal_count</th>
+  <th>SUM(release_count)</th>
+  <th>SUM(ia_count)</th>
+  <th>total_ia_frac</th>
+</tr></thead>
+<tr>
+  <td>0</td>
+  <td>74985</td>
+  <td>42533886</td>
+  <td>5678063</td>
+  <td>0.13</td>
+</tr>
+<tr>
+  <td>1</td>
+  <td>51850</td>
+  <td>46171246</td>
+  <td>10357705</td>
+  <td>0.22</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT is_oa, COUNT(*) AS journal_count, SUM(release_count), SUM(ia_count), ROUND(1. * SUM(ia_count) / SUM(release_count), 2) as total_ia_frac FROM journal GROUP BY is_oa;</pre>
+<br></code></div><h3>Publisher Segmentation</h3>
+<p>Big publishers by journal count:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>publisher</th>
+  <th>journal_count</th>
+  <th>SUM(release_count)</th>
+</tr></thead>
+<tr>
+  <td></td>
+  <td>47203</td>
+  <td>6504661</td>
+</tr>
+<tr>
+  <td>Elsevier</td>
+  <td>4009</td>
+  <td>16206074</td>
+</tr>
+<tr>
+  <td>Informa UK (Taylor & Francis)</td>
+  <td>3332</td>
+  <td>3921600</td>
+</tr>
+<tr>
+  <td>Springer-Verlag</td>
+  <td>2875</td>
+  <td>5638303</td>
+</tr>
+<tr>
+  <td>SAGE Publications</td>
+  <td>1372</td>
+  <td>2344281</td>
+</tr>
+<tr>
+  <td>Peter Lang International Academic Publishers</td>
+  <td>1360</td>
+  <td>252</td>
+</tr>
+<tr>
+  <td>Wiley (Blackwell Publishing)</td>
+  <td>1173</td>
+  <td>3640989</td>
+</tr>
+<tr>
+  <td>Wiley (John Wiley & Sons)</td>
+  <td>1039</td>
+  <td>4456867</td>
+</tr>
+<tr>
+  <td>Walter de Gruyter GmbH</td>
+  <td>624</td>
+  <td>435616</td>
+</tr>
+<tr>
+  <td>Springer (Biomed Central Ltd.)</td>
+  <td>558</td>
+  <td>450187</td>
+</tr>
+<tr>
+  <td>Cambridge University Press</td>
+  <td>553</td>
+  <td>1519555</td>
+</tr>
+<tr>
+  <td>Hindawi Limited</td>
+  <td>521</td>
+  <td>194707</td>
+</tr>
+<tr>
+  <td>Georg Thieme Verlag KG</td>
+  <td>512</td>
+  <td>688731</td>
+</tr>
+<tr>
+  <td>OMICS Publishing Group</td>
+  <td>502</td>
+  <td>93785</td>
+</tr>
+<tr>
+  <td>JSTOR</td>
+  <td>495</td>
+  <td>738890</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT publisher, COUNT(*) AS journal_count, SUM(release_count) from journal GROUP BY publisher ORDER BY COUNT(*) DESC LIMIT 15;</pre>
+<br></code></div><p>Number of publishers with 3 or fewer journals:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>COUNT(*)</th>
+</tr></thead>
+<tr>
+  <td>18307</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT COUNT(*) FROM (SELECT publisher, COUNT(*) as journal_count FROM journal GROUP BY publisher) WHERE journal_count <= 3;</pre>
+<br></code></div><p>Fulltext coverage by publisher type:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>publisher_type</th>
+  <th>ia_total_frac</th>
+  <th>preserved_total_frac</th>
+  <th>journal_count</th>
+  <th>paper_count</th>
+</tr></thead>
+<tr>
+  <td>big5</td>
+  <td>0.12</td>
+  <td>0.89</td>
+  <td>15362</td>
+  <td>39334593</td>
+</tr>
+<tr>
+  <td>society</td>
+  <td>0.25</td>
+  <td>0.71</td>
+  <td>8545</td>
+  <td>17499721</td>
+</tr>
+<tr>
+  <td></td>
+  <td>0.15</td>
+  <td>0.28</td>
+  <td>59716</td>
+  <td>13550129</td>
+</tr>
+<tr>
+  <td>commercial</td>
+  <td>0.12</td>
+  <td>0.84</td>
+  <td>6608</td>
+  <td>6041845</td>
+</tr>
+<tr>
+  <td>unipress</td>
+  <td>0.24</td>
+  <td>0.84</td>
+  <td>6017</td>
+  <td>5876070</td>
+</tr>
+<tr>
+  <td>longtail</td>
+  <td>0.48</td>
+  <td>0.54</td>
+  <td>25523</td>
+  <td>2216976</td>
+</tr>
+<tr>
+  <td>oa</td>
+  <td>0.76</td>
+  <td>0.84</td>
+  <td>2476</td>
+  <td>1180835</td>
+</tr>
+<tr>
+  <td>repository</td>
+  <td>0.13</td>
+  <td>0.3</td>
+  <td>646</td>
+  <td>925092</td>
+</tr>
+<tr>
+  <td>other</td>
+  <td>0.08</td>
+  <td>0.88</td>
+  <td>927</td>
+  <td>861701</td>
+</tr>
+<tr>
+  <td>archive</td>
+  <td>0.26</td>
+  <td>0.98</td>
+  <td>604</td>
+  <td>792273</td>
+</tr>
+<tr>
+  <td>scielo</td>
+  <td>0.8</td>
+  <td>0.81</td>
+  <td>411</td>
+  <td>425897</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT publisher_type, ROUND(1.0 * SUM(ia_count) / SUM(release_count), 2) as ia_total_frac, ROUND(1.0 * SUM(preserved_count) / SUM(release_count), 2) as preserved_total_frac, count(*) as journal_count, sum(release_count) as paper_count from journal group by publisher_type order by sum(release_count) desc;</pre>
+<br></code></div><p>Fulltext coverage by publisher type (NOTE: averaging fractions without weighing by release count, intentionally):</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>publisher_type</th>
+  <th>avg_ia_frac</th>
+  <th>avg_preserved_frac</th>
+  <th>journal_count</th>
+  <th>paper_count</th>
+</tr></thead>
+<tr>
+  <td>big5</td>
+  <td>0.15</td>
+  <td>0.81</td>
+  <td>15362</td>
+  <td>39334593</td>
+</tr>
+<tr>
+  <td>society</td>
+  <td>0.32</td>
+  <td>0.53</td>
+  <td>8545</td>
+  <td>17499721</td>
+</tr>
+<tr>
+  <td></td>
+  <td>0.24</td>
+  <td>0.31</td>
+  <td>59716</td>
+  <td>13550129</td>
+</tr>
+<tr>
+  <td>commercial</td>
+  <td>0.26</td>
+  <td>0.76</td>
+  <td>6608</td>
+  <td>6041845</td>
+</tr>
+<tr>
+  <td>unipress</td>
+  <td>0.42</td>
+  <td>0.69</td>
+  <td>6017</td>
+  <td>5876070</td>
+</tr>
+<tr>
+  <td>longtail</td>
+  <td>0.55</td>
+  <td>0.58</td>
+  <td>25523</td>
+  <td>2216976</td>
+</tr>
+<tr>
+  <td>oa</td>
+  <td>0.63</td>
+  <td>0.8</td>
+  <td>2476</td>
+  <td>1180835</td>
+</tr>
+<tr>
+  <td>repository</td>
+  <td>0.04</td>
+  <td>0.19</td>
+  <td>646</td>
+  <td>925092</td>
+</tr>
+<tr>
+  <td>other</td>
+  <td>0.15</td>
+  <td>0.65</td>
+  <td>927</td>
+  <td>861701</td>
+</tr>
+<tr>
+  <td>archive</td>
+  <td>0.31</td>
+  <td>0.98</td>
+  <td>604</td>
+  <td>792273</td>
+</tr>
+<tr>
+  <td>scielo</td>
+  <td>0.83</td>
+  <td>0.85</td>
+  <td>411</td>
+  <td>425897</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT publisher_type, ROUND(1.0 * AVG(ia_frac), 2) as avg_ia_frac, ROUND(1.0 * AVG(preserved_frac), 2) as avg_preserved_frac, count(*) as journal_count, sum(release_count) as paper_count from journal group by publisher_type order by sum(release_count) DESC;</pre>
+<br></code></div><p>Number of journals with no releases (metadata or fulltext) in fatcat:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>publisher_type</th>
+  <th>journals_with_no_releases</th>
+</tr></thead>
+<tr>
+  <td></td>
+  <td>21195</td>
+</tr>
+<tr>
+  <td>longtail</td>
+  <td>13194</td>
+</tr>
+<tr>
+  <td>society</td>
+  <td>1770</td>
+</tr>
+<tr>
+  <td>commercial</td>
+  <td>1626</td>
+</tr>
+<tr>
+  <td>unipress</td>
+  <td>1521</td>
+</tr>
+<tr>
+  <td>big5</td>
+  <td>363</td>
+</tr>
+<tr>
+  <td>oa</td>
+  <td>85</td>
+</tr>
+<tr>
+  <td>archive</td>
+  <td>45</td>
+</tr>
+<tr>
+  <td>other</td>
+  <td>17</td>
+</tr>
+<tr>
+  <td>repository</td>
+  <td>10</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT publisher_type, COUNT(*) AS journals_with_no_releases FROM journal WHERE release_count = 0 GROUP BY publisher_type ORDER BY COUNT(*) DESC;</pre>
+<br></code></div><h3>IA Fulltext Coverage</h3>
+<p>Coverage by sherpa color:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>sherpa_color</th>
+  <th>ia_fulltext_count</th>
+  <th>release_count</th>
+  <th>total_ia_frac</th>
+</tr></thead>
+<tr>
+  <td></td>
+  <td>5076210</td>
+  <td>26342117</td>
+  <td>0.19</td>
+</tr>
+<tr>
+  <td>blue</td>
+  <td>799381</td>
+  <td>2876891</td>
+  <td>0.28</td>
+</tr>
+<tr>
+  <td>green</td>
+  <td>7873174</td>
+  <td>41516320</td>
+  <td>0.19</td>
+</tr>
+<tr>
+  <td>white</td>
+  <td>483434</td>
+  <td>4632715</td>
+  <td>0.1</td>
+</tr>
+<tr>
+  <td>yellow</td>
+  <td>1803569</td>
+  <td>13337089</td>
+  <td>0.14</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT sherpa_color, SUM(ia_count) as ia_fulltext_count, SUM(release_count) as release_count, ROUND(1.0 * SUM(ia_count) / SUM(release_count), 2) as total_ia_frac FROM journal GROUP BY sherpa_color;</pre>
+<br></code></div><p>Top publishers with very little IA coverage (NOTE: averaging fractions without weight by journal size):</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>publisher</th>
+  <th>journal_count</th>
+  <th>ROUND(avg(ia_frac),3)</th>
+</tr></thead>
+<tr>
+  <td></td>
+  <td>13226</td>
+  <td>0.001</td>
+</tr>
+<tr>
+  <td>Informa UK (Taylor & Francis)</td>
+  <td>2081</td>
+  <td>0.019</td>
+</tr>
+<tr>
+  <td>Elsevier</td>
+  <td>2053</td>
+  <td>0.015</td>
+</tr>
+<tr>
+  <td>SAGE Publications</td>
+  <td>764</td>
+  <td>0.018</td>
+</tr>
+<tr>
+  <td>Springer-Verlag</td>
+  <td>761</td>
+  <td>0.018</td>
+</tr>
+<tr>
+  <td>Wiley (Blackwell Publishing)</td>
+  <td>641</td>
+  <td>0.02</td>
+</tr>
+<tr>
+  <td>Wiley (John Wiley & Sons)</td>
+  <td>593</td>
+  <td>0.017</td>
+</tr>
+<tr>
+  <td>JSTOR</td>
+  <td>295</td>
+  <td>0.005</td>
+</tr>
+<tr>
+  <td>CAIRN</td>
+  <td>280</td>
+  <td>0.012</td>
+</tr>
+<tr>
+  <td>Medknow Publications</td>
+  <td>280</td>
+  <td>0.008</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT publisher, count(*) as journal_count, ROUND(avg(ia_frac),3) from journal where ia_frac < 0.05 group by publisher order by count(*) desc limit 10;</pre>
+<br></code></div><h3>Homepages</h3>
+<p>Journal counts by homepage status:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>any_homepage</th>
+  <th>any_live_homepage</th>
+  <th>any_gwb_homepage</th>
+  <th>COUNT(*)</th>
+  <th>frac</th>
+</tr></thead>
+<tr>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>65614</td>
+  <td>0.52</td>
+</tr>
+<tr>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>5434</td>
+  <td>0.04</td>
+</tr>
+<tr>
+  <td>1</td>
+  <td>0</td>
+  <td>1</td>
+  <td>4843</td>
+  <td>0.04</td>
+</tr>
+<tr>
+  <td>1</td>
+  <td>1</td>
+  <td>0</td>
+  <td>3624</td>
+  <td>0.03</td>
+</tr>
+<tr>
+  <td>1</td>
+  <td>1</td>
+  <td>1</td>
+  <td>47320</td>
+  <td>0.37</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT any_homepage, any_live_homepage, any_gwb_homepage, COUNT(*), ROUND(1.0 * COUNT(*) / (SELECT COUNT(*) FROM journal), 2) AS frac FROM journal GROUP BY any_homepage, any_live_homepage, any_gwb_homepage;</pre>
+<br></code></div><p>Number of unique journals that have a homepage pointing to wayback or archive.org:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>COUNT(DISTINCT issnl)</th>
+</tr></thead>
+<tr>
+  <td>154</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT COUNT(DISTINCT issnl) FROM homepage WHERE domain = 'archive.org';</pre>
+<br></code></div><p>Top publishers that have journals in wayback:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>publisher</th>
+  <th>COUNT(*)</th>
+</tr></thead>
+<tr>
+  <td></td>
+  <td>63</td>
+</tr>
+<tr>
+  <td>EDP Sciences</td>
+  <td>11</td>
+</tr>
+<tr>
+  <td>PERSEE Program</td>
+  <td>3</td>
+</tr>
+<tr>
+  <td>CAIRN</td>
+  <td>2</td>
+</tr>
+<tr>
+  <td>Fabula</td>
+  <td>2</td>
+</tr>
+<tr>
+  <td>Institut du monde et du développement pour la bonne gouvernance publique</td>
+  <td>2</td>
+</tr>
+<tr>
+  <td>ANPAD</td>
+  <td>1</td>
+</tr>
+<tr>
+  <td>Ad hoc (Rennes)</td>
+  <td>1</td>
+</tr>
+<tr>
+  <td>Asociación Revista Venezolana de Ciencia y Tecnología de Alimentos</td>
+  <td>1</td>
+</tr>
+<tr>
+  <td>Association Epiga</td>
+  <td>1</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT publisher, COUNT(*) FROM journal LEFT JOIN homepage ON journal.issnl = homepage.issnl WHERE homepage.domain = 'archive.org' GROUP BY journal.publisher ORDER BY COUNT(*) DESC LIMIT 10;</pre>
+<br></code></div><p>Homepage URL counts:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>rows</th>
+  <th>issnls</th>
+  <th>surts</th>
+</tr></thead>
+<tr>
+  <td>83909</td>
+  <td>61221</td>
+  <td>82678</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT COUNT(*) as rows, COUNT(DISTINCT issnl) as issnls, COUNT(DISTINCT surt) as surts FROM homepage;</pre>
+<br></code></div><p>Journals with most unique SURTs:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>issnl</th>
+  <th>COUNT(*)</th>
+</tr></thead>
+<tr>
+  <td>0717-3458</td>
+  <td>6</td>
+</tr>
+<tr>
+  <td>1406-4243</td>
+  <td>6</td>
+</tr>
+<tr>
+  <td>2190-5991</td>
+  <td>6</td>
+</tr>
+<tr>
+  <td>0011-6793</td>
+  <td>5</td>
+</tr>
+<tr>
+  <td>0022-9830</td>
+  <td>5</td>
+</tr>
+<tr>
+  <td>0091-6765</td>
+  <td>5</td>
+</tr>
+<tr>
+  <td>0102-7638</td>
+  <td>5</td>
+</tr>
+<tr>
+  <td>0144-8463</td>
+  <td>5</td>
+</tr>
+<tr>
+  <td>0212-6567</td>
+  <td>5</td>
+</tr>
+<tr>
+  <td>0350-154X</td>
+  <td>5</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT issnl, COUNT(*) from homepage GROUP BY issnl ORDER BY COUNT(*) DESC LIMIT 10;</pre>
+<br></code></div><p>Blocked domains:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>domain</th>
+  <th>count(*)</th>
+  <th>sum(blocked)</th>
+</tr></thead>
+<tr>
+  <td>jstor.org</td>
+  <td>3235</td>
+  <td>3234</td>
+</tr>
+<tr>
+  <td>brill.nl</td>
+  <td>216</td>
+  <td>161</td>
+</tr>
+<tr>
+  <td>wiley.com</td>
+  <td>2372</td>
+  <td>152</td>
+</tr>
+<tr>
+  <td>bentham.org</td>
+  <td>146</td>
+  <td>146</td>
+</tr>
+<tr>
+  <td>tandfonline.com</td>
+  <td>2919</td>
+  <td>84</td>
+</tr>
+<tr>
+  <td>cairn.info</td>
+  <td>52</td>
+  <td>49</td>
+</tr>
+<tr>
+  <td>emeraldgrouppublishing.com</td>
+  <td>49</td>
+  <td>49</td>
+</tr>
+<tr>
+  <td>emeraldinsight.com</td>
+  <td>390</td>
+  <td>16</td>
+</tr>
+<tr>
+  <td>rodopi.nl</td>
+  <td>19</td>
+  <td>15</td>
+</tr>
+<tr>
+  <td>sagepub.com</td>
+  <td>1863</td>
+  <td>9</td>
+</tr>
+<tr>
+  <td>vsppub.com</td>
+  <td>9</td>
+  <td>9</td>
+</tr>
+<tr>
+  <td>iaster.com</td>
+  <td>7</td>
+  <td>7</td>
+</tr>
+<tr>
+  <td>mohr.de</td>
+  <td>15</td>
+  <td>7</td>
+</tr>
+<tr>
+  <td>scienceq.org</td>
+  <td>7</td>
+  <td>7</td>
+</tr>
+<tr>
+  <td>uctjournals.com</td>
+  <td>7</td>
+  <td>7</td>
+</tr>
+<tr>
+  <td>elsevier.com</td>
+  <td>2746</td>
+  <td>6</td>
+</tr>
+<tr>
+  <td>esaunggul.ac.id</td>
+  <td>6</td>
+  <td>6</td>
+</tr>
+<tr>
+  <td>bloomsbury.com</td>
+  <td>4</td>
+  <td>4</td>
+</tr>
+<tr>
+  <td>gov.hu</td>
+  <td>8</td>
+  <td>4</td>
+</tr>
+<tr>
+  <td>inap.es</td>
+  <td>4</td>
+  <td>4</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT domain, count(*), sum(blocked) from homepage group by domain order by sum(blocked) desc limit 20;</pre>
+<br></code></div><p>Top duplicated URLs and SURTs:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>url</th>
+  <th>COUNT(*)</th>
+</tr></thead>
+<tr>
+  <td><a href="http://www.studia.ubbcluj.ro/serii/index_en.html">http://www.studia.ubbcluj.ro/serii/index_en.html</a></td>
+  <td>22</td>
+</tr>
+<tr>
+  <td><a href="http://jurnal.unimed.ac.id/">http://jurnal.unimed.ac.id/</a></td>
+  <td>12</td>
+</tr>
+<tr>
+  <td><a href="https://benjamins.com/">https://benjamins.com/</a></td>
+  <td>10</td>
+</tr>
+<tr>
+  <td><a href="http://www.ecorfan.org/bolivia/research_journals.php">http://www.ecorfan.org/bolivia/research_journals.php</a></td>
+  <td>9</td>
+</tr>
+<tr>
+  <td><a href="http://www.minervamedica.it/index2.t">http://www.minervamedica.it/index2.t</a></td>
+  <td>8</td>
+</tr>
+<tr>
+  <td><a href="https://www.benjamins.com/">https://www.benjamins.com/</a></td>
+  <td>8</td>
+</tr>
+<tr>
+  <td><a href="http://gesundheitsfoerderung.ch/ueber-uns/downloads.html">http://gesundheitsfoerderung.ch/ueber-uns/downloads.html</a></td>
+  <td>6</td>
+</tr>
+<tr>
+  <td><a href="http://www.inderscience.com/browse/index.php">http://www.inderscience.com/browse/index.php</a></td>
+  <td>6</td>
+</tr>
+<tr>
+  <td><a href="http://www.iospress.nl/">http://www.iospress.nl/</a></td>
+  <td>6</td>
+</tr>
+<tr>
+  <td><a href="http://edizionicafoscari.unive.it/it/edizioni/collane/antichistica/">http://edizionicafoscari.unive.it/it/edizioni/collane/antichistica/</a></td>
+  <td>5</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT url, COUNT(*) FROM homepage GROUP BY url ORDER BY COUNT(*) DESC LIMIT 10;</pre>
+<br></code></div><p>Top terminal URLs catch cases where many URLs redirect to a single page:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>terminal_url</th>
+  <th>COUNT(DISTINCT issnl)</th>
+</tr></thead>
+<tr>
+  <td><a href="https://portal.eiu.com/Login.aspx?c=1">https://portal.eiu.com/Login.aspx?c=1</a></td>
+  <td>180</td>
+</tr>
+<tr>
+  <td><a href="https://taylorandfrancis.com">https://taylorandfrancis.com</a></td>
+  <td>151</td>
+</tr>
+<tr>
+  <td><a href="https://onlinelibrary.wiley.com/">https://onlinelibrary.wiley.com/</a></td>
+  <td>131</td>
+</tr>
+<tr>
+  <td><a href="http://eia.libis.lt/aboutProject.php">http://eia.libis.lt/aboutProject.php</a></td>
+  <td>70</td>
+</tr>
+<tr>
+  <td><a href="https://www.hindawi.com/journals/isrn/">https://www.hindawi.com/journals/isrn/</a></td>
+  <td>67</td>
+</tr>
+<tr>
+  <td><a href="https://us.sagepub.com/en-us/nam/insights-journals">https://us.sagepub.com/en-us/nam/insights-journals</a></td>
+  <td>61</td>
+</tr>
+<tr>
+  <td><a href="https://metapress.com">https://metapress.com</a></td>
+  <td>44</td>
+</tr>
+<tr>
+  <td><a href="http://blackwell-science.com/">http://blackwell-science.com/</a></td>
+  <td>41</td>
+</tr>
+<tr>
+  <td><a href="https://staatsbibliothek-berlin.de/Emedien-Meldungen/Login-Hinweis/">https://staatsbibliothek-berlin.de/Emedien-Meldungen/Login-Hinweis/</a></td>
+  <td>40</td>
+</tr>
+<tr>
+  <td><a href="https://taylorandfrancis.com/">https://taylorandfrancis.com/</a></td>
+  <td>37</td>
+</tr>
+<tr>
+  <td><a href="https://pubs.rsc.org/en/ebooks">https://pubs.rsc.org/en/ebooks</a></td>
+  <td>36</td>
+</tr>
+<tr>
+  <td><a href="http://explore.tandfonline.com/page/ah/maney-publishing-journals">http://explore.tandfonline.com/page/ah/maney-publishing-journals</a></td>
+  <td>34</td>
+</tr>
+<tr>
+  <td><a href="http://www.bentham.org/403.shtml">http://www.bentham.org/403.shtml</a></td>
+  <td>27</td>
+</tr>
+<tr>
+  <td><a href="https://metapress.com/">https://metapress.com/</a></td>
+  <td>27</td>
+</tr>
+<tr>
+  <td><a href="http://www.inderscience.com/browse/index.php">http://www.inderscience.com/browse/index.php</a></td>
+  <td>23</td>
+</tr>
+<tr>
+  <td><a href="http://www.studia.ubbcluj.ro/serii/index_en.html">http://www.studia.ubbcluj.ro/serii/index_en.html</a></td>
+  <td>22</td>
+</tr>
+<tr>
+  <td><a href="https://www.impresaitalia.info">https://www.impresaitalia.info</a></td>
+  <td>20</td>
+</tr>
+<tr>
+  <td><a href="https://www.tandfonline.com/">https://www.tandfonline.com/</a></td>
+  <td>20</td>
+</tr>
+<tr>
+  <td><a href="https://benjamins.com/content/home">https://benjamins.com/content/home</a></td>
+  <td>17</td>
+</tr>
+<tr>
+  <td><a href="https://content-select.com/login">https://content-select.com/login</a></td>
+  <td>15</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT terminal_url, COUNT(DISTINCT issnl) FROM homepage WHERE terminal_url IS NOT NULL GROUP BY terminal_url ORDER BY COUNT(DISTINCT issnl) DESC LIMIT 20;</pre>
+<br></code></div><div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>surt</th>
+  <th>COUNT(*)</th>
+</tr></thead>
+<tr>
+  <td>org,rsc,pubs)/en/ebooks</td>
+  <td>47</td>
+</tr>
+<tr>
+  <td>com,benjamins)/</td>
+  <td>27</td>
+</tr>
+<tr>
+  <td>ro,ubbcluj,studia)/serii/index_en.html</td>
+  <td>22</td>
+</tr>
+<tr>
+  <td>id,ac,unimed,jurnal)/</td>
+  <td>12</td>
+</tr>
+<tr>
+  <td>org,ecorfan)/bolivia/research_journals.php</td>
+  <td>9</td>
+</tr>
+<tr>
+  <td>it,minervamedica)/index2.t</td>
+  <td>8</td>
+</tr>
+<tr>
+  <td>ch,gesundheitsfoerderung)/ueber-uns/downloads.html</td>
+  <td>6</td>
+</tr>
+<tr>
+  <td>com,inderscience)/browse/index.php</td>
+  <td>6</td>
+</tr>
+<tr>
+  <td>nl,iospress)/</td>
+  <td>6</td>
+</tr>
+<tr>
+  <td>com,inderscience)/</td>
+  <td>5</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT surt, COUNT(*) FROM homepage GROUP BY surt ORDER BY COUNT(*) DESC LIMIT 10;</pre>
+<br></code></div>
