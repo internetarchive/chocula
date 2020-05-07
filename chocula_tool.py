@@ -47,8 +47,7 @@ import sys
 import csv
 import argparse
 
-from chocula import ChoculaDatabase
-from chocula.config import *
+from chocula import ChoculaDatabase, ChoculaConfig
 
 
 def main():

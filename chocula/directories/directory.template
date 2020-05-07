@@ -1,0 +1,32 @@
+
+from typing import Iterable, Optional
+import csv
+
+from chocula.util import clean_str
+from chocula.common import DirectoryLoader
+from chocula.database import DirectoryInfo
+
+
+class TemplateLoader(DirectoryLoader):
+    """
+    CSV Columns:
+
+    """
+
+    source_slug = "template"
+
+    def open_file(self) -> Iterable:
+        return csv.DictReader(open(self.config.TEMPLATE_FILE))
+
+    def parse_record(self, record) -> Optional[DirectoryInfo]:
+        info = DirectoryInfo(
+            directory_slug=self.source_slug,
+            issne=record.get('ISSN (Online)'),
+            issnp=record.get('ISSN (Print)'),
+            custom_id=record.get('NlmId').strip() or None,
+            name=clean_str(record.get('JournalTitle')),
+            abbrev=clean_str(record['IsoAbbr']),
+        )
+
+        return info
+

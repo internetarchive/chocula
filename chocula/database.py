@@ -1,488 +1,276 @@
 
+from __future__ import annotations
+
+import sys
 import csv
 import json
-from collections import Counter
 import sqlite3
+from collections import Counter
+from dataclasses import dataclass, field
+from typing import List, Dict, Tuple, Optional, Any
 
+import urlcanon
+import surt
+import tldextract
 import ftfy
 import stdnum.issn
 
 from chocula.config import *
 from chocula.util import *
 
-################### Main Class
 
-class ChoculaDatabase():
+@dataclass
+class HomepageUrl:
+    url: str
+    surt: str
+    host: Optional[str]
+    domain: Optional[str]
+    suffix: Optional[str]
 
-    def __init__(self, db_file):
-        self._issn_issnl_map = dict()
-        self.db = sqlite3.connect(db_file, isolation_level='EXCLUSIVE')
-        self.data = dict()
-        self.c = None
+    def to_db_tuple(self, issnl: str) -> Tuple:
+        """
+        Relevant columns are:
 
-    def read_issn_map_file(self, issn_map_path):
-        print("##### Loading ISSN-L map file...")
+            issnl TEXT NOT NULL,
+            surt TEXT NOT NULL,
+            url TEXT NOT NULL,
+            host TEXT,
+            domain TEXT,
+            suffix TEXT,
+
+        Returns a tuple in that order for inserting.
+        """
+        return (issnl, self.surt, self.url, self.host, self.domain, self.suffix)
+
+    @classmethod
+    def from_url(cls, url: str) -> Optional[HomepageUrl]:
+        """
+        Returns None if url is really bad (not a URL).
+        """
+        if not url or 'mailto:' in url.lower() or url.lower() in ('http://n/a', 'http://na/', 'http://na'):
+            return None
+        if url.startswith('www.'):
+            url = "http://" + url
+        if url.startswith('ttp://') or url.startswith('ttps://'):
+            url = "h" + url
+        url.replace('Http://', 'http://')
+
+        url = str(urlcanon.semantic_precise(url))
+        if url == 'http://na/':
+            # sort of redundant with above, but some only match after canonicalization
+            return None
+        url_surt = surt.surt(url)
+        tld = tldextract.extract(url)
+        host = '.'.join(tld)
+        if host.startswith('.'):
+            host = host[1:]
+        return HomepageUrl(url=url,
+                    surt=url_surt,
+                    host=host,
+                    domain=tld.registered_domain,
+                    suffix=tld.suffix)
+
+def test_from_url():
+    
+    assert HomepageUrl.from_url("http://thing.core.ac.uk").domain == 'core.ac.uk'
+    assert HomepageUrl.from_url("http://thing.core.ac.uk").host == 'thing.core.ac.uk'
+    assert HomepageUrl.from_url("http://thing.core.ac.uk").suffix== 'ac.uk'
+
+    assert HomepageUrl.from_url("google.com").suffix == 'com'
+    assert HomepageUrl.from_url("google.com").host == 'google.com'
+
+    assert HomepageUrl.from_url("mailto:bnewbold@bogus.com") == None
+    assert HomepageUrl.from_url("thing.com").url == 'http://thing.com/'
+    assert HomepageUrl.from_url("Http://thing.com///").url == 'http://thing.com/'
+
+@dataclass
+class UrlCrawlStatus:
+    status_code: Optional[int]
+    crawl_error: Optional[str]
+    terminal_url: Optional[str]
+    terminal_status_code: Optional[int]
+    platform_software: Optional[str]
+    issnl_in_body: Optional[bool]
+    blocked: Optional[bool]
+    gwb_url_success_dt: Optional[str]
+    gwb_terminal_url_success_dt: Optional[str]
+
+@dataclass
+class DirectoryInfo:
+    directory_slug: str
+    raw_issn: Optional[str] = None
+    issnl: Optional[str] = None
+    issne: Optional[str] = None
+    issnp: Optional[str] = None
+    custom_id: Optional[str] = None
+    name: Optional[str] = None
+    original_name: Optional[str] = None
+    publisher: Optional[str] = None
+    abbrev: Optional[str] = None
+    platform: Optional[str] = None
+    country: Optional[str] = None
+    langs: List[str] = field(default_factory=list)
+    homepage_urls: List[HomepageUrl] = field(default_factory=list)
+    extra: dict = field(default_factory=dict)
+
+    def to_db_tuple(self) -> Tuple:
+        """
+        Actual database schema is:
+
+            issnl TEXT NOT NULL,
+            slug TEXT NOT NULL,
+            identifier TEXT,
+            name TEXT,
+            extra TEXT,
+        
+        Returns a tuple in that order.
+        """
+        if not self.issnl:
+            raise ValueError
+        extra_dict  = self.extra
+
+        for k in ('issne', 'issnp', 'name', 'publisher', 'abbrev', 'platform',
+                  'country', 'langs', 'original_name'):
+            if self.__dict__[k]:
+                extra_dict[k] = self.__dict__[k]
+
+        extra_str: Optional[str] = None
+        if extra_dict:
+            extra_str = json.dumps(extra_dict, sort_keys=True)
+
+        return (
+            self.issnl,
+            self.directory_slug,
+            self.custom_id or None,
+            self.name or None,
+            extra_str,
+        )
+
+    @classmethod
+    def from_db(cls):
+        raise NotImplementedError()
+
+
+class IssnDatabase():
+    """
+    Holds complete ISSN/ISSN-L table and helps with lookups and munging of raw
+    ISSN strings
+    """
+
+    def __init__(self, issn_issnl_file_path: str):
+        self.issn_issnl_map: Dict[str, str] = dict()
+        self.read_issn_map_file(issn_issnl_file_path)
+
+    def read_issn_map_file(self, issn_map_path: str):
+        print("##### Loading ISSN-L map file...", file=sys.stderr)
         with open(issn_map_path, 'r') as issn_map_file:
-            self._issn_issnl_map = dict()
             for line in issn_map_file:
                 if line.startswith("ISSN") or len(line) == 0:
                     continue
                 (issn, issnl) = line.split()[0:2]
-                self._issn_issnl_map[issn] = issnl
+                self.issn_issnl_map[issn] = issnl
                 # double mapping makes lookups easy
-                self._issn_issnl_map[issnl] = issnl
-        print("Got {} ISSN-L mappings.".format(len(self._issn_issnl_map)))
+                if not issnl in self.issn_issnl_map:
+                    self.issn_issnl_map[issnl] = issnl
+        count = len(self.issn_issnl_map)
+        print(f"Got {count} ISSN-L mappings", file=sys.stderr)
 
-    def issn2issnl(self, issn):
-        if issn is None:
-            return None
-        return self._issn_issnl_map.get(issn)
+    def issn2issnl(self, issn: str) -> Optional[str]:
+        return self.issn_issnl_map.get(issn)
 
-    def add_issn(self, index_slug, raw_issn=None, issne=None, issnp=None, identifier=None, name=None, publisher=None, extra=None):
+    def munge_issns(self, info: DirectoryInfo) -> DirectoryInfo:
+        """
+        Cleans up the ISSN fields of a DirectoryInfo object, and tries to
+        lookup or confirm an ISSN-L mapping.
 
-        # do ISSN => ISSN-L mappings for any raw ISSNs
+        Note that if the passed ISSN-L number is not in the ISSN-L directory,
+        it will be wiped from the returned info object.
+
+        TODO: check what previous behavior was... passing through raw_issn?
+        """
+
+        if info.issnl:
+            info.issnl = clean_issn(info.issnl)
+        if info.raw_issn:
+            info.raw_issn = clean_issn(info.raw_issn)
+        if info.issne:
+            info.issne = clean_issn(info.issne)
+        if info.issnp:
+            info.issnp = clean_issn(info.issnp)
+
         issnl = None
-        if not (raw_issn or issne or issnp):
-            return None, 'no-issn'
-        for lookup in (issnp, issne, raw_issn):
+        for lookup in (info.issnl, info.raw_issn, info.issne, info.issnp):
             if not lookup:
                 continue
-            lookup = lookup.strip().upper()
-            #if not (len(lookup) == 9 and lookup[4] == '-'):
-            #    print(lookup)
-            #    print(len(lookup))
-            #    print(lookup[4])
-            #    return None, 'invalid-issn'
-            #assert len(lookup) == 9 and lookup[4] == '-'
             issnl = self.issn2issnl(lookup)
             if issnl:
                 break
-        if not issnl:
-            return None, 'unknown-issnl'
-            #print((raw_issn, issne, issnp))
-            # UGH.
-            #issnl = issne or issnp or raw_issn
-            #if not issnl:
-            #issnl = issnl.strip().upper()
-            #assert len(issnl) == 9 and issnl[4] == '-'
-            #status = 'found-munge'
-        else:
-            status = 'found'
+        info.issnl = issnl
+        return info
 
-        if extra == None:
-            extra = dict()
 
-        if issne:
-            extra['issne'] = issne
-        if issnp:
-            extra['issnp'] = issnp
+class ChoculaDatabase():
+    """
+    Wraps a sqlite3 database
+    """
 
-        if publisher:
-            publisher = unquote(ftfy.fix_text(publisher))
-        if publisher:
-            extra['publisher'] = publisher
+    def __init__(self, db_file, issn_db):
+        """
+        To create a temporary database, pass ":memory:" as db_file
+        """
+        self.db = sqlite3.connect(db_file, isolation_level='EXCLUSIVE')
+        self.data = dict()
+        self.issn_db = issn_db
 
-        if extra:
-            extra = json.dumps(extra)
-        else:
-            extra = None
+    def insert_directory(self, info: DirectoryInfo, cur: Any = None) -> str:
+        """
+        This method does some general cleanup on a directory info object (eg,
+        munges ISSNs), then inserts into the database.
+
+        Also inserts any/all nested homepage URLs.
+
+        Returns status of insert, which could be:
+
+        - inserted
+        - duplicate
+        - missing-issn
+        - no-match
+        """
+
+        info = self.issn_db.munge_issns(info)
+        if not (info.issnl or info.raw_issn or info.issne or info.issnp):
+            return "missing-issn"
+        if not info.issnl:
+            return "no-match"
+
+        if not cur:
+            cur = self.db.cursor()
 
         try:
-            self.c.execute("INSERT INTO directory VALUES (?,?,?,?,?)",
-                (issnl, index_slug, identifier, name, extra))
-            status = 'inserted'
+            cur.execute("INSERT INTO directory VALUES (?,?,?,?,?)",
+                info.to_db_tuple())
         except sqlite3.IntegrityError as ie:
             if str(ie).startswith("UNIQUE"):
-                return None, "duplicate-issnl"
+                return "duplicate"
             raise ie
 
-        return issnl, status
+        for url in info.homepage_urls:
+            self.insert_homepage(info.issnl, url, cur)
 
-    def add_url(self, issnl, url):
-        if not (issnl and url):
-            return
-        meta = parse_url(url)
-        if not meta:
-            return
+        return "inserted"
 
-        self.c.execute("INSERT OR REPLACE INTO homepage (issnl, surt, url, host, domain, suffix) VALUES (?,?,?,?,?,?)",
-            (issnl,
-             meta['url_surt'],
-             meta['url'],
-             meta['host'],
-             meta['registered_domain'],
-             meta['suffix']
-            ))
+    def insert_homepage(self, issnl: str, homepage: HomepageUrl, cur: Any) -> str:
 
-    def index_entrez(self, args):
-        path = args.input_file or ENTREZ_FILE
-        print("##### Loading Entrez...")
-        # JrId,JournalTitle,MedAbbr,"ISSN (Print)","ISSN (Online)",IsoAbbr,NlmId
-        reader = csv.DictReader(open(path))
-        counts = Counter()
-        self.c = self.db.cursor()
-        for row in reader:
-            if not (row.get('ISSN (Online)') or row.get('ISSN (Print)')):
-                counts['skipped'] += 1
-                continue
-            extra = dict()
-            if row['IsoAbbr']:
-               extra['abbrev'] = row['IsoAbbr'].strip()
-            issnl, status = self.add_issn(
-                'entrez',
-                issne=row.get('ISSN (Online)'),
-                issnp=row.get('ISSN (Print)'),
-                name=row['JournalTitle'],
-                extra=extra,
-            )
-            counts[status] += 1
-        self.c.close()
-        self.db.commit()
-        print(counts)
+        try:
+            cur.execute(
+                "INSERT OR REPLACE INTO homepage (issnl, surt, url, host, domain, suffix) VALUES (?,?,?,?,?,?)",
+                homepage.to_db_tuple(issnl))
+        except sqlite3.IntegrityError as ie:
+            if str(ie).startswith("UNIQUE"):
+                return "duplicate"
+            raise ie
 
-    def index_road(self, args):
-        path = args.input_file or ROAD_FILE
-        print("##### Loading ROAD...")
-        reader = csv.DictReader(open(path), delimiter='\t',
-            fieldnames=("ISSN", "ISSN-L", "Short Title", "Title", "Publisher", "URL1", "URL2", "Region", "Lang1", "Lang2")
-        )
-        counts = Counter()
-        self.c = self.db.cursor()
-        for row in reader:
-            extra = dict()
-            if row['Lang1']:
-                extra['langs'] = [row['Lang1']]
-            if row['Lang2']:
-                extra['langs'].append(row['Lang2'])
-            # TODO: region mapping: "Europe and North America"
-            # TODO: lang mapping: already alpha-3
-            issnl, status = self.add_issn(
-                'road',
-                raw_issn=row['ISSN-L'],
-                name=row['Short Title'],
-                publisher=row['Publisher'],
-            )
-            counts[status] += 1
-            if not issnl:
-                continue
-            if row['URL1']:
-                self.add_url(issnl, row['URL1'])
-            if row['URL2']:
-                self.add_url(issnl, row['URL2'])
-        self.c.close()
-        self.db.commit()
-        print(counts)
-
-    def index_doaj(self, args):
-        path = args.input_file or DOAJ_FILE
-        print("##### Loading DOAJ...")
-        #Journal title,Journal URL,Alternative title,Journal ISSN (print version),Journal EISSN (online version),Publisher,Society or institution,"Platform, host or aggregator",Country of publisher,Journal article processing charges (APCs),APC information URL,APC amount,Currency,Journal article submission fee,Submission fee URL,Submission fee amount,Submission fee currency,Number of articles publish in the last calendar year,Number of articles information URL,Journal waiver policy (for developing country authors etc),Waiver policy information URL,Digital archiving policy or program(s),Archiving: national library,Archiving: other,Archiving infomation URL,Journal full-text crawl permission,Permanent article identifiers,Journal provides download statistics,Download statistics information URL,First calendar year journal provided online Open Access content,Full text formats,Keywords,Full text language,URL for the Editorial Board page,Review process,Review process information URL,URL for journal's aims & scope,URL for journal's instructions for authors,Journal plagiarism screening policy,Plagiarism information URL,Average number of weeks between submission and publication,URL for journal's Open Access statement,Machine-readable CC licensing information embedded or displayed in articles,URL to an example page with embedded licensing information,Journal license,License attributes,URL for license terms,Does this journal allow unrestricted reuse in compliance with BOAI?,Deposit policy directory,Author holds copyright without restrictions,Copyright information URL,Author holds publishing rights without restrictions,Publishing rights information URL,DOAJ Seal,Tick: Accepted after March 2014,Added on Date,Subjects
-        # TODO: Subjects, Permanent article identifiers, work_level stuff
-        reader = csv.DictReader(open(path))
-        counts = Counter()
-        self.c = self.db.cursor()
-        for row in reader:
-
-            extra = dict(as_of=DOAJ_DATE)
-            extra['mimetypes'] = parse_mimetypes(row['Full text formats'])
-            platform = PLATFORM_MAP.get(row['Platform, host or aggregator'])
-            if platform:
-                extra['platform'] = platform
-            if row['DOAJ Seal']:
-                extra['seal'] = {"no": False, "yes": True}[row['DOAJ Seal'].lower()]
-            if row['Country of publisher']:
-                extra['country'] = parse_country(row['Country of publisher'])
-            row['lang'] = parse_lang(row['Full text language'])
-
-            if row['Digital archiving policy or program(s)']:
-                extra['archive'] = [a.strip() for a in row['Digital archiving policy or program(s)'].split(',') if a.strip()]
-            elif row['Archiving: national library']:
-                extra['archive'] = ['national-library']
-
-            crawl_permission = row['Journal full-text crawl permission']
-            if crawl_permission:
-                extra['crawl-permission'] = dict(Yes=True, No=False)[crawl_permission]
-            default_license = row['Journal license']
-            if default_license and default_license.startswith('CC'):
-                extra['default_license'] = default_license.replace('CC ', 'CC-').strip()
-
-            issnl, status = self.add_issn(
-                'doaj',
-                issnp=row['Journal ISSN (print version)'],
-                issne=row['Journal EISSN (online version)'],
-                name=row['Journal title'],
-                publisher=row['Publisher'],
-                extra=extra,
-            )
-            if row['Journal URL']:
-                self.add_url(issnl, row['Journal URL'])
-            counts[status] += 1
-
-        self.c.close()
-        self.db.commit()
-        print(counts)
-
-    def index_sherpa_romeo(self, args):
-        journal_path = args.input_file or SHERPA_ROMEO_JOURNAL_FILE
-        policy_path = SHERPA_ROMEO_POLICY_FILE
-        # first load policies
-        print("##### Loading SHERPA/ROMEO policies...")
-        #RoMEO Record ID,Publisher,Policy Heading,Country,RoMEO colour,Published Permission,Published Restrictions,Published Max embargo,Accepted Prmission,Accepted Restrictions,Accepted Max embargo,Submitted Permission,Submitted Restrictions,Submitted Max embargo,Open Access Publishing,Record Status,Updated
-        policies = dict()
-        fixed_policy_file = ftfy.fix_file(open(policy_path, 'rb'))
-        policy_reader = csv.DictReader(fixed_policy_file)
-        for row in policy_reader:
-            policies[row['RoMEO Record ID']] = row
-        print("##### Loading SHERPA/ROMEO journal metadata...")
-        #Journal Title,ISSN,ESSN,URL,RoMEO Record ID,Updated
-        # super mangled :(
-        raw_file = open(journal_path, 'rb').read().decode(errors='replace')
-        fixed_file = ftfy.fix_text(raw_file)
-        reader = csv.DictReader(fixed_file.split('\n'))
-        counts = Counter()
-        self.c = self.db.cursor()
-        for row in reader:
-            #row['Journal Title'] = row.pop('\ufeffJournal Title')
-            row.update(policies[row['RoMEO Record ID']])
-            extra = dict()
-            if row['RoMEO colour']:
-                extra['color'] = row['RoMEO colour']
-            # row['Open Access Publishing']
-            if row['Country']:
-                extra['country'] = parse_country(row['Country'])
-            issnl, status = self.add_issn(
-                'sherpa_romeo',
-                issnp=row['ISSN'],
-                issne=row['ESSN'],
-                name=row['Journal Title'],
-                publisher=row['Publisher'],
-                extra=extra,
-            )
-            counts[status] += 1
-            if not issnl:
-                continue
-        self.c.close()
-        self.db.commit()
-        print(counts)
-
-    def index_norwegian(self, args):
-        path = args.input_file or NORWEGIAN_FILE
-        print("##### Loading Norwegian Registry...")
-        #pandas.read_csv(NORWEGIAN_FILE, sep=';', encoding="ISO-8859-1")
-        # Old: NSD tidsskrift_id;Original title;International title;Present Level (2018);Print ISSN;Online ISSN;Open Access;NPI Scientific Field;NPI Academic Discipline;URL;Publishing Company;Publisher;Country of publication;Language;Level 2019;Level 2018;Level 2017;Level 2016;Level 2015;Level 2014;Level 2013;Level 2012;Level 2011;Level 2010;Level 2009;Level 2008;Level 2007;Level 2006;Level 2005;Level 2004;itar_id
-        # New: NSD tidsskrift_id;Original title;International title;Print ISSN;Online ISSN;Open Access;NPI Academic Discipline;NPI Scientific Field;Level 2020;Level 2019;Level 2018;Level 2017;Level 2016;Level 2015;Level 2014;Level 2013;Level 2012;Level 2011;Level 2010;Level 2009;Level 2008;Level 2007;Level 2006;Level 2005;Level 2004;itar_id;NSD forlag_id;Publishing Company;Publisher;Country of publication;Language;Conference Proceedings;Established;Ceased;URL
-        reader = csv.DictReader(open(path, encoding="ISO-8859-1"), delimiter=";")
-        counts = Counter()
-        self.c = self.db.cursor()
-        for row in reader:
-            issnp = row['Print ISSN']
-            issne = row['Online ISSN']
-            if issne and len(issne.strip()) != 9:
-                issne = None
-            if issnp and len(issnp.strip()) != 9:
-                issnp = None
-            if not (issnp or issne):
-                counts['no-issn'] += 1
-                continue
-            extra = dict(as_of=NORWEGIAN_DATE)
-            if row['Level 2019']:
-                extra['level'] = int(row['Level 2019'])
-            if row['Original title'] != row['International title']:
-                extra['original_name'] = row['Original title']
-            if row['Country of publication']:
-                extra['country'] = parse_country(row['Country of publication'])
-            if row['Language']:
-                extra['lang'] = parse_lang(row['Language'])
-            issnl, status = self.add_issn(
-                'norwegian',
-                issnp=issnp,
-                issne=issne,
-                identifier=row['NSD tidsskrift_id'],
-                name=row['International title'],
-                publisher=row['Publisher'],
-                extra=extra,
-            )
-            counts[status] += 1
-            if not issnl:
-                continue
-            if row['URL']:
-                self.add_url(issnl, row['URL'])
-        self.c.close()
-        self.db.commit()
-        print(counts)
-
-    def index_szczepanski(self, args):
-        path = args.input_file or SZCZEPANSKI_FILE
-        print("##### Loading Szczepanski...")
-        # JSON
-        json_file = open(path, 'r')
-        counts = Counter()
-        self.c = self.db.cursor()
-        for row in json_file:
-            if not row:
-                continue
-            row = json.loads(row)
-            if not (row.get('issne') or row.get('issnp') or row.get('issn')):
-                #print(row)
-                counts['no-issn'] += 1
-                continue
-            extra = dict(as_of=SZCZEPANSKI_DATE)
-            if row.get('extra'):
-                extra['notes'] = row.get('extra')
-            for k in ('other_titles', 'year_spans', 'ed'):
-                if row.get(k):
-                    extra[k] = row[k]
-            issnl, status = self.add_issn(
-                'szczepanski',
-                issne=row.get('issne'),
-                issnp=row.get('issnp'),
-                raw_issn=row.get('issn'),
-                name=row['title'],
-                publisher=row.get('ed'),
-                extra=extra,
-            )
-            counts[status] += 1
-            if not issnl:
-                continue
-            for url in row.get('urls', []):
-                self.add_url(issnl, url['url'])
-        self.c.close()
-        self.db.commit()
-        print(counts)
-
-    def index_ezb(self, args):
-        path = args.input_file or EZB_FILE
-        print("##### Loading EZB...")
-        # JSON
-        json_file = open(path, 'r')
-        counts = Counter()
-        self.c = self.db.cursor()
-        for row in json_file:
-            if not row:
-                continue
-            row = json.loads(row)
-            if not (row.get('issne') or row.get('issnp')):
-                #print(row)
-                counts['no-issn'] += 1
-                continue
-            extra = dict()
-            for k in ('ezb_color', 'subjects', 'keywords', 'zdb_id',
-                      'first_volume', 'first_issue', 'first_year',
-                      'appearance', 'costs'):
-                if row.get(k):
-                    extra[k] = row[k]
-            issnl, status = self.add_issn(
-                'ezb',
-                issne=row.get('issne'),
-                issnp=row.get('issnp'),
-                identifier=row['ezb_id'],
-                name=row['title'],
-                publisher=row.get('publisher'),
-                extra=extra,
-            )
-            counts[status] += 1
-            if not issnl:
-                continue
-            if row.get('url'):
-                self.add_url(issnl, row['url'])
-        self.c.close()
-        self.db.commit()
-        print(counts)
-
-    def index_gold_oa(self, args):
-        path = args.input_file or GOLD_OA_FILE
-        print("##### Loading GOLD OA...")
-        # "ISSN","ISSN_L","ISSN_IN_DOAJ","ISSN_IN_ROAD","ISSN_IN_PMC","ISSN_IN_OAPC","ISSN_IN_WOS","ISSN_IN_SCOPUS","JOURNAL_IN_DOAJ","JOURNAL_IN_ROAD","JOURNAL_IN_PMC","JOURNAL_IN_OAPC","JOURNAL_IN_WOS","JOURNAL_IN_SCOPUS","TITLE","TITLE_SOURCE"
-        reader = csv.DictReader(open(path, encoding="ISO-8859-1"))
-        counts = Counter()
-        self.c = self.db.cursor()
-        for row in reader:
-            if not (row.get('ISSN_L') and row.get('TITLE')):
-                counts['skipped'] += 1
-                continue
-            extra = dict()
-            for ind in ('DOAJ', 'ROAD', 'PMC', 'OAPC', 'WOS', 'SCOPUS'):
-                extra['in_' + ind.lower()] = bool(int(row['JOURNAL_IN_' + ind]))
-            issnl, status = self.add_issn(
-                'gold_oa',
-                raw_issn=row['ISSN_L'],
-                name=row['TITLE'],
-                extra=extra,
-            )
-            counts[status] += 1
-            # also add for other non-direct indices
-            for ind in ('WOS', 'SCOPUS'):
-                issnl, status = self.add_issn(
-                    ind.lower(),
-                    raw_issn=row['ISSN_L'],
-                    name=row['TITLE'],
-                )
-        self.c.close()
-        self.db.commit()
-        print(counts)
-
-    def index_wikidata(self, args):
-        path = args.input_file or WIKIDATA_SPARQL_FILE
-        print("##### Loading Wikidata...")
-        reader = csv.DictReader(open(path), delimiter='\t')
-        counts = Counter()
-        self.c = self.db.cursor()
-        for row in reader:
-            if not (row.get('issn') and row.get('title')):
-                counts['skipped'] += 1
-                continue
-            publisher = row['publisher_name']
-            if (publisher.startswith('Q') and publisher[1].isdigit()) or publisher.startswith('t1') or not publisher:
-                publisher = None
-            wikidata_qid = row['item'].strip().split('/')[-1]
-            extra = dict()
-            extra['start_year'] = row.get('start_year')
-            issnl, status = self.add_issn(
-                'wikidata',
-                raw_issn=row['issn'],
-                name=row['title'],
-                identifier=wikidata_qid,
-                publisher=publisher,
-                extra=extra,
-            )
-            counts[status] += 1
-            if not issnl:
-                continue
-            if row.get('websiteurl'):
-                self.add_url(issnl, row['websiteurl'])
-        self.c.close()
-        self.db.commit()
-        print(counts)
-
-    def index_openapc(self, args):
-        path = args.input_file or OPENAPC_FILE
-        print("##### Loading OpenAPC...")
-        # "institution","period","euro","doi","is_hybrid","publisher","journal_full_title","issn","issn_print","issn_electronic","issn_l","license_ref","indexed_in_crossref","pmid","pmcid","ut","url","doaj"
-        reader = csv.DictReader(open(path))
-        counts = Counter()
-        self.c = self.db.cursor()
-        for row in reader:
-            if not row.get('issn'):
-                counts['skipped'] += 1
-                continue
-            extra = dict(is_hybrid=bool(row['is_hybrid']))
-            issnl, status = self.add_issn(
-                'openapc',
-                issne=row['issn_electronic'],
-                issnp=row['issn_print'],
-                raw_issn=row['issn_l'] or row['issn'],
-                name=row['journal_full_title'],
-                publisher=row['publisher'],
-                extra=extra,
-            )
-            counts[status] += 1
-            if not issnl:
-                continue
-            if row.get('url'):
-                self.add_url(issnl, row['url'])
-        self.c.close()
-        self.db.commit()
-        print(counts)
+        return "inserted"
 
     def parse_kbart(self, name, path):
         """
@@ -534,39 +322,6 @@ class ChoculaDatabase():
         print(counts)
         return kbart_dict
 
-    def index_crossref(self, args):
-        path = args.input_file or CROSSREF_FILE
-        print("##### Loading Crossref...")
-        #"JournalTitle","JournalID","Publisher","pissn","eissn","additionalIssns","doi","(year1)[volume1]issue1,issue2,issue3(year2)[volume2]issue4,issues5"
-        reader = csv.DictReader(open(path))
-        counts = Counter()
-        self.c = self.db.cursor()
-        for row in reader:
-            if row['pissn'] and len(row['pissn']) == 8:
-                row['pissn'] = row['pissn'][:4] + '-' + row['pissn'][4:]
-            if row['eissn'] and len(row['eissn']) == 8:
-                row['eissn'] = row['eissn'][:4] + '-' + row['eissn'][4:]
-            if row['additionalIssns'] and len(row['additionalIssns']) == 8:
-                row['additionalIssns'] = row['additionalIssns'][:4] + '-' + row['additionalIssns'][4:]
-            if not (row['pissn'] or row['eissn'] or row['additionalIssns']):
-                #print(row)
-                counts['no-issn'] += 1
-                continue
-            extra = dict()
-            issnl, status = self.add_issn(
-                'crossref',
-                issnp=row['pissn'],
-                issne=row['eissn'],
-                raw_issn=row['additionalIssns'],
-                identifier=row.get('doi'),
-                name=row['JournalTitle'],
-                publisher=row['Publisher'],
-                extra=extra,
-            )
-            counts[status] += 1
-        self.c.close()
-        self.db.commit()
-        print(counts)
 
     def index_sim(self, args):
         path = args.input_file or SIM_FILE
@@ -574,7 +329,7 @@ class ChoculaDatabase():
         #NA Pub Cat ID,Title,Publisher,ISSN,Impact Rank,Total Cities,Journal Impact Factor,Eigenfact or Score,First Volume,Last Volume,NA Gaps,"Scholarly / Peer-\n Reviewed","Peer-\n Reviewed",Pub Type,Pub Language,Subjects
         reader = csv.DictReader(open(path))
         counts = Counter()
-        self.c = self.db.cursor()
+        cur = self.db.cursor()
         for row in reader:
             if not row['ISSN'] or row['ISSN'] == "NULL":
                 counts['no-issn'] += 1
@@ -617,7 +372,7 @@ class ChoculaDatabase():
                 if not sim[k]:
                     sim.pop(k)
             self.data[issnl]['sim'] = sim
-        self.c.close()
+        cur.close()
         self.db.commit()
         print(counts)
 
@@ -625,7 +380,7 @@ class ChoculaDatabase():
         path = args.input_file or IA_CRAWL_FILE
         print("##### Loading IA Homepage Crawl Results...")
         counts = Counter()
-        self.c = self.db.cursor()
+        cur = self.db.cursor()
         for row in open(path, 'r'):
             if not row.strip():
                 continue
@@ -637,7 +392,7 @@ class ChoculaDatabase():
                 row['gwb_url_success_dt'] = None
             if row.get('gwb_terminal_url_success_dt') == 'error':
                 row['gwb_terminal_url_success_dt'] = None
-            self.c.execute("UPDATE homepage SET status_code=?, crawl_error=?, terminal_url=?, terminal_status_code=?, platform_software=?, issnl_in_body=?, blocked=?, gwb_url_success_dt=?, gwb_terminal_url_success_dt=? WHERE url=?",
+            cur.execute("UPDATE homepage SET status_code=?, crawl_error=?, terminal_url=?, terminal_status_code=?, platform_software=?, issnl_in_body=?, blocked=?, gwb_url_success_dt=?, gwb_terminal_url_success_dt=? WHERE url=?",
                 (row['status_code'],
                  row.get('crawl_error'),
                  row.get('terminal_url'),
@@ -649,7 +404,7 @@ class ChoculaDatabase():
                  row.get('gwb_terminal_url_success_dt'),
                  url))
             counts['updated'] += 1
-        self.c.close()
+        cur.close()
         self.db.commit()
         print(counts)
 
@@ -659,7 +414,7 @@ class ChoculaDatabase():
         # JSON
         json_file = open(path, 'r')
         counts = Counter()
-        self.c = self.db.cursor()
+        cur = self.db.cursor()
         for row in json_file:
             if not row:
                 continue
@@ -676,7 +431,7 @@ class ChoculaDatabase():
             if languages:
                 lang = languages[0]
             try:
-                self.c.execute("INSERT OR REPLACE INTO fatcat_container (issnl, ident, revision, issne, issnp, wikidata_qid, name, container_type, publisher, country, lang) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                cur.execute("INSERT OR REPLACE INTO fatcat_container (issnl, ident, revision, issne, issnp, wikidata_qid, name, container_type, publisher, country, lang) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                     (row.get('issnl'),
                      row['ident'],
                      row['revision'],
@@ -698,7 +453,7 @@ class ChoculaDatabase():
                 urls = extra.get('urls', [])
                 for url in urls:
                     self.add_url(row['issnl'], url)
-        self.c.close()
+        cur.close()
         self.db.commit()
         print(counts)
 
@@ -708,7 +463,7 @@ class ChoculaDatabase():
         # JSON
         json_file = open(path, 'r')
         counts = Counter()
-        self.c = self.db.cursor()
+        cur = self.db.cursor()
         for row in json_file:
             if not row:
                 continue
@@ -720,15 +475,15 @@ class ChoculaDatabase():
             else:
                 ia_frac = None
                 preserved_frac = None
-            self.c.execute("UPDATE fatcat_container SET release_count = ?, ia_count = ?, ia_frac = ?, preserved_count = ?, preserved_frac = ? WHERE issnl = ?",
+            cur.execute("UPDATE fatcat_container SET release_count = ?, ia_count = ?, ia_frac = ?, preserved_count = ?, preserved_frac = ? WHERE issnl = ?",
                 (total, row['in_web'], ia_frac, row['is_preserved'], preserved_frac, row['issnl']))
             counts['updated'] += 1
-        self.c.close()
+        cur.close()
         self.db.commit()
         print(counts)
 
     def export_urls(self, args):
-        self.c = self.db.cursor()
+        cur = self.db.cursor()
         self.db.row_factory = sqlite3.Row
         cur = self.db.execute("SELECT issnl, url FROM homepage;")
         for hrow in cur:
@@ -739,10 +494,10 @@ class ChoculaDatabase():
     def summarize(self, args):
         print("##### Summarizing Everything...")
         counts = Counter()
-        self.c = self.db.cursor()
+        cur = self.db.cursor()
         self.db.row_factory = sqlite3.Row
-        index_issnls = list(self.c.execute('SELECT DISTINCT issnl FROM directory'))
-        fatcat_issnls = list(self.c.execute('SELECT DISTINCT issnl FROM fatcat_container WHERE issnl IS NOT null'))
+        index_issnls = list(cur.execute('SELECT DISTINCT issnl FROM directory'))
+        fatcat_issnls = list(cur.execute('SELECT DISTINCT issnl FROM fatcat_container WHERE issnl IS NOT null'))
         all_issnls = set([i[0] for i in index_issnls + fatcat_issnls])
         print("{} total ISSN-Ls".format(len(all_issnls)))
         for issnl in list(all_issnls):
@@ -838,7 +593,7 @@ class ChoculaDatabase():
                 out['publisher_type'] = 'longtail'
                 out['is_longtail'] = True
 
-            self.c.execute("INSERT OR REPLACE INTO journal (issnl, issne, issnp, wikidata_qid, fatcat_ident, name, publisher, country, lang, is_oa, sherpa_color, is_longtail, is_active, publisher_type, has_dois, any_homepage, any_live_homepage, any_gwb_homepage, known_issnl, valid_issnl, release_count, ia_count, ia_frac, kbart_count, kbart_frac, preserved_count, preserved_frac) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            cur.execute("INSERT OR REPLACE INTO journal (issnl, issne, issnp, wikidata_qid, fatcat_ident, name, publisher, country, lang, is_oa, sherpa_color, is_longtail, is_active, publisher_type, has_dois, any_homepage, any_live_homepage, any_gwb_homepage, known_issnl, valid_issnl, release_count, ia_count, ia_frac, kbart_count, kbart_frac, preserved_count, preserved_frac) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (issnl,
                  out.get('issne'),
                  out.get('issnp'),
@@ -868,7 +623,7 @@ class ChoculaDatabase():
                  out.get('preserved_count'),
                  out.get('preserved_frac'),
                 ))
-        self.c.close()
+        cur.close()
         self.db.commit()
         print(counts)
 
@@ -904,16 +659,16 @@ class ChoculaDatabase():
             return d
         counts = Counter()
         self.db.row_factory = dict_factory
-        self.c = self.db.cursor()
-        for row in self.c.execute('SELECT * FROM journal'):
+        cur = self.db.cursor()
+        for row in cur.execute('SELECT * FROM journal'):
             print(json.dumps(row))
             counts['total'] += 1
 
     def export_fatcat(self, args):
         counts = Counter()
         self.db.row_factory = sqlite3.Row
-        self.c = self.db.cursor()
-        for row in self.c.execute('SELECT * FROM journal WHERE valid_issnl = 1'):
+        cur = self.db.cursor()
+        for row in cur.execute('SELECT * FROM journal WHERE valid_issnl = 1'):
             counts['total'] += 1
 
             name = row['name']
@@ -1001,8 +756,8 @@ class ChoculaDatabase():
             out['extra'] = extra
             print(json.dumps(out))
 
-    def init_db(self, args):
-        print("### Creating Database...")
+    def init_db(self):
+        print("### Creating Database...", file=sys.stderr)
         self.db.executescript("""
             PRAGMA main.page_size = 4096;
             PRAGMA main.cache_size = 20000;
@@ -1011,5 +766,5 @@ class ChoculaDatabase():
         """)
         with open('chocula_schema.sql', 'r') as fschema:
             self.db.executescript(fschema.read())
-        print("Done!")
+        print("Done!", file=sys.stderr)
 

@@ -1,7 +1,8 @@
 
-import urlcanon
-import surt
-import tldextract
+from dataclasses import dataclass
+from typing import Dict, Optional
+
+import ftfy
 import pycountry
 
 ################### Utilities
@@ -117,15 +118,6 @@ OTHER_PUBLISHERS = [
     'Philosophy Documentation Center',
     'Project MUSE',
 ]
-
-def unquote(s):
-    if s.startswith('"'):
-        s = s[1:]
-    if s.endswith('"'):
-        s = s[:-1]
-    if s.endswith('.'):
-        s = s[:-1]
-    return s.strip()
 
 def parse_lang(s):
     if not s or s in ('Not applicable', 'Multiple languages', 'Unknown'):
@@ -260,52 +252,51 @@ def test_merge_spans():
         [[1450, 1900], [2000, 2000]]
 
 
-def parse_url(url):
+def unquote(s: str) -> str:
+    if s.startswith('"') or s.startswith("'"):
+        s = s[1:]
+    if s.endswith('"') or s.endswith("'"):
+        s = s[:-1]
+    if s.endswith('.'):
+        s = s[:-1]
+    return s.strip()
+
+
+def clean_str(s: Optional[str]) -> Optional[str]:
     """
-    Parses/cleans URLs.
+    Takes a generic string and "cleans" it:
 
-    Returns a dict with:
-        
-        url: str, cleaned/normalized URL
-        url_surt: str, "sortable url" (a web-archiving format)
-        host: str, full hostname
-        registered_domain: "primary domain", eg "google.com" or "thing.co.uk"
-        suffix: str, eg "com" or "co.uk"
+    - strips whitespace
+    - de-mangles unicode
+    - strips HTML tags
+    - transforms HTML entities to unicode characters
+    - removes leading and trailing
 
-    Returns None if url is really bad (not a URL).
+    This version of the function is pretty aggressive; it is intended for
+    journal titles, publisher names, etc, not things like article titles.
     """
-    if not url or 'mailto:' in url.lower() or url.lower() in ('http://n/a', 'http://na/', 'http://na'):
+    if not s:
         return None
-    if url.startswith('www.'):
-        url = "http://" + url
-    if url.startswith('ttp://') or url.startswith('ttps://'):
-        url = "h" + url
-    url.replace('Http://', 'http://')
+    s = unquote(ftfy.fix_text(s))
+    return s or None
 
-    url = str(urlcanon.semantic_precise(url))
-    if url == 'http://na/':
-        # sort of redundant with above, but some only match after canonicalization
+def test_clean_str():
+    assert clean_str("") is None
+    assert clean_str(" ") is None
+    assert clean_str("" "") is None
+    assert clean_str(" Bloody work.") == "Bloody work"
+
+
+
+def clean_issn(s: str) -> Optional[str]:
+    s = s.strip().upper()
+    if len(s) == 8:
+        s = s[:4] + "-" + s[4:]
+    if len(s) != 9 or s[4] != "-":
         return None
-    url_surt = surt.surt(url)
-    tld = tldextract.extract(url)
-    host = '.'.join(tld)
-    if host.startswith('.'):
-        host = host[1:]
-    return dict(url=url,
-                url_surt=url_surt or None,
-                host=host or None,
-                registered_domain=tld.registered_domain or None,
-                suffix=tld.suffix or None)
+    return s
 
-def test_parse_url():
-    
-    assert parse_url("http://thing.core.ac.uk")['registered_domain'] == 'core.ac.uk'
-    assert parse_url("http://thing.core.ac.uk")['host'] == 'thing.core.ac.uk'
-    assert parse_url("http://thing.core.ac.uk")['suffix'] == 'ac.uk'
-
-    assert parse_url("google.com")['suffix'] == 'com'
-    assert parse_url("google.com")['host'] == 'google.com'
-
-    assert parse_url("mailto:bnewbold@bogus.com") == None
-    assert parse_url("thing.com")['url'] == 'http://thing.com/'
-    assert parse_url("Http://thing.com///")['url'] == 'http://thing.com/'
+def test_clean_issn():
+    assert clean_issn("1234-5678") == "1234-5678"
+    assert clean_issn(" 12345678") == "1234-5678"
+    assert clean_issn("123445678") == None
