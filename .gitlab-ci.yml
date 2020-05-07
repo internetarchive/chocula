@@ -1,0 +1,15 @@
+image: debian:buster
+before_script:
+  - apt update -qy
+  - apt install -y python3-pip python3-wheel python3.7 python3.7-dev python3.7-venv python3.7-distutils python3-pytest git make
+  - pip3 install pipenv
+  - pipenv --version
+
+variables:
+  LC_ALL: "C.UTF-8"
+  LANG: "C.UTF-8"
+
+test_python:
+  script:
+    - pipenv install --dev --deploy
+    - pipenv run make test
