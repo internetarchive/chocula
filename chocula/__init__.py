@@ -1,2 +1,2 @@
 
-from chocula.chocula import ChoculaDatabase
+from chocula.database import ChoculaDatabase
