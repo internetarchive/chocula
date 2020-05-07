@@ -23,9 +23,6 @@ CREATE TABLE IF NOT EXISTS journal
      is_oa BOOLEAN default false,
      is_longtail BOOLEAN default false,
      sherpa_color TEXT,
-     --vor_pdf BOOLEAN,
-     --vor_html BOOLEAN,
-     --vor_jats BOOLEAN,
      has_dois BOOLEAN,
      any_homepage BOOLEAN,
      any_live_homepage BOOLEAN,
@@ -85,19 +82,3 @@ CREATE TABLE IF NOT EXISTS homepage
      UNIQUE(issnl, surt)
     );
 CREATE INDEX IF NOT EXISTS homepage_url_idx ON homepage(url);
-
--- CREATE TABLE IF NOT EXISTS name
---     (id INTEGER PRIMARY KEY,
---      issnl TEXT NOT NULL,
---      name TEXT NOT NULL
---      -- sluggy (lower-case, no special chars)
---     );
-    
--- CREATE TABLE IF NOT EXISTS fulltext_pattern
---     (id INTEGER PRIMARY KEY,
---      issnl TEXT NOT NULL,
---      surt_glob TEXT,
---      mimetype TEXT,
---      state_date TEXT,
---      end_date TEXT
---     );
