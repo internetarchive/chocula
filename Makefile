@@ -6,7 +6,7 @@ help:
 .PHONY: test
 test: ## Run all tests and lints
 	pipenv run pytest
-	pipenv run mypy *.py chocula/*.py --ignore-missing-imports
+	pipenv run mypy *.py chocula/*.py chocula/*/*.py --ignore-missing-imports
 
 .PHONY: build
 build: src/*.rs src/bin/*.rs
