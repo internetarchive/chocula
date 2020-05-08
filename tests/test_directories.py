@@ -21,8 +21,7 @@ def test_all(config, database):
 
     for cls in (CrossrefLoader, DoajLoader, EntrezLoader, EzbLoader,
                 GoldOALoader, NorwegianLoader, OpenAPCLoader, RoadLoader,
-                SzczepanskiLoader, WikidataLoader):
-        # XXX: SherpaRomeoLoader
+                SherpaRomeoLoader, SzczepanskiLoader, WikidataLoader):
         loader = cls(config)
         counts = loader.index_file(database)
         assert counts['total'] >= 20
