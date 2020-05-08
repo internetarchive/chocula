@@ -10,7 +10,7 @@ surt = "*"
 tldextract = "*"
 pycountry = "*"
 python-stdnum = "*"
-python-dotenv = "*"
+toml = "*"
 
 # Future?
 #datasette = "*"
