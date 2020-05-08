@@ -1,0 +1,30 @@
+﻿publication_title	print_identifier	online_identifier	date_first_issue_online	num_first_vol_online	num_first_issue_online	date_last_issue_online	num_last_vol_online	num_last_issue_online	title_url	first_author	title_id	embargo_info	coverage_depth	coverage_notes	publisher_name
+2D Materials		2053-1583	2015	2			6(present)		LOCKSS_RESOLVER?eissn=2053-1583						IOP Publishing
+3 Biotech	2190-572X	2190-5738	2011	1			10(present)		LOCKSS_RESOLVER?eissn=2190-5738						Springer
+3C ON-LINE	1078-2192		1994	1		1997	4		LOCKSS_RESOLVER?issn=1078-2192						Association for Computing Machinery
+3D Printing in Medicine		2365-6271	2015	1			5(present)		LOCKSS_RESOLVER?eissn=2365-6271						Springer
+3D Research		2092-6731	2010	1			10(present)		LOCKSS_RESOLVER?eissn=2092-6731						Springer
+4OR	1619-4500	1614-2411	2003	1			17(present)		LOCKSS_RESOLVER?eissn=1614-2411						Springer
+2007 ACM/SIGDA Dinner and Open Member Meeting			2007			2007			LOCKSS_RESOLVER?title=2007+ACM%2FSIGDA+Dinner+and+Open+Member+Meeting&pub=Association+for+Computing+Machinery						Association for Computing Machinery
+2008 ACM/SIGDA Dinner and Open Member Meeting			2008			2008			LOCKSS_RESOLVER?title=2008+ACM%2FSIGDA+Dinner+and+Open+Member+Meeting&pub=Association+for+Computing+Machinery						Association for Computing Machinery
+A & A Case Reports	2325-7237		2014	2		2017	9		LOCKSS_RESOLVER?issn=2325-7237						Wolters Kluwer Health
+International Journal of Remote Sensing	0143-1161	1366-5901	2009	30		2009	30		LOCKSS_RESOLVER?eissn=1366-5901						Taylor & Francis
+Journal of Cardiovascular Electrophysiology	0892-1059	1540-8167	1990	1		1990	1		LOCKSS_RESOLVER?eissn=1540-8167						John Wiley & Sons, Inc.
+The Psychoanalytic Quarterly	0033-2828	2167-4086	1994	62		1994	62		LOCKSS_RESOLVER?eissn=2167-4086						Taylor & Francis
+Argumentation and Advocacy	1051-1431	1051-1431	2009	46		2009	46		LOCKSS_RESOLVER?eissn=1051-1431						Taylor & Francis
+SeMA Journal	1575-9822	2281-7875	2017	74		2018	75		LOCKSS_RESOLVER?eissn=2281-7875						Springer
+Journal of Business & Finance Librarianship	0896-3568	1547-0644	2018	23		2018	23		LOCKSS_RESOLVER?eissn=1547-0644						Taylor & Francis
+Health Psychology Review	1743-7199	1743-7202	2018	ahead-of-print		2018	ahead-of-print		LOCKSS_RESOLVER?eissn=1743-7202						Taylor & Francis
+International Journal of Tourism Policy	1750-4090	1750-4104	2010	3		2013	5		LOCKSS_RESOLVER?eissn=1750-4104						Inderscience
+Pulmonary Therapy	2364-1754	2364-1746	2015	1			5(present)		LOCKSS_RESOLVER?eissn=2364-1746						Springer
+European Journal of Pharmacology: Molecular Pharmacology	0922-4106		1992	225		1992	227		LOCKSS_RESOLVER?issn=0922-4106						Elsevier
+International Hepatology Communications	0928-4346		1993	1		1997	6		LOCKSS_RESOLVER?issn=0928-4346						Elsevier
+Electrical Engineering	0948-7921	1432-0487	1997	80		1997	80		LOCKSS_RESOLVER?eissn=1432-0487						Springer
+International Journal of Green Nanotechnology	1943-0892	1943-0906	2009	1		2009	1		LOCKSS_RESOLVER?eissn=1943-0906						Taylor & Francis
+Design Management Review	1557-0614	1948-7169	2013	24		2013	24		LOCKSS_RESOLVER?eissn=1948-7169						John Wiley & Sons, Inc.
+European Journal of Clinical Microbiology & Infectious Diseases	0722-2211	1435-4373	2005	24		2005	24		LOCKSS_RESOLVER?eissn=1435-4373						Springer
+Sportphysio	2196-5951	2196-596X	2013	1		2015	3		LOCKSS_RESOLVER?eissn=2196-596X						Georg Thieme Verlag KG
+Philosophy in Context	0742-2733		1988	18		1988	18		LOCKSS_RESOLVER?issn=0742-2733						Philosophy Documentation Center
+Studies in Applied Mathematics	0097-1421	1467-9590	2012	128		2012	128		LOCKSS_RESOLVER?eissn=1467-9590						John Wiley & Sons, Inc.
+Proceedings of the Society of Agricultural Bacteriologists	0021-8847	1365-2672	2014	117		2014	117		LOCKSS_RESOLVER?eissn=1365-2672						John Wiley & Sons, Inc.
+Journal of Thermal Stresses	0149-5739	1521-074X	2014	37		2014	37		LOCKSS_RESOLVER?eissn=1521-074X						Taylor & Francis
