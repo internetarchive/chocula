@@ -16,7 +16,7 @@ class SzczepanskiLoader(DirectoryLoader):
     source_slug = "szczepanski"
 
     def open_file(self) -> Iterable:
-        return open(self.config.SZCZEPANSKI_FILE, 'r')
+        return open(self.config.szczepanski.filepath, 'r')
 
     def parse_record(self, row) -> Optional[DirectoryInfo]:
 
@@ -34,7 +34,7 @@ class SzczepanskiLoader(DirectoryLoader):
             publisher=clean_str(row.get('ed')),
         )
 
-        info.extra['szczepanski'] = dict(as_of=self.config.SZCZEPANSKI_DATE)
+        info.extra['szczepanski'] = dict(as_of=self.config.szczepanski.date)
         if row.get('extra'):
             info.extra['szczepanski']['notes'] = row.get('extra')
         for k in ('other_titles', 'year_spans', 'ed'):

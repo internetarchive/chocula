@@ -26,7 +26,7 @@ class RoadLoader(DirectoryLoader):
     source_slug = "road"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.ROAD_FILE), delimiter='\t',
+        return csv.DictReader(open(self.config.road.filepath), delimiter='\t',
             fieldnames=("ISSN", "ISSN-L", "Short Title", "Title", "Publisher", "URL1", "URL2", "Region", "Lang1", "Lang2")
         )
 

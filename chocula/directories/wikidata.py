@@ -16,7 +16,7 @@ class WikidataLoader(DirectoryLoader):
     source_slug = "wikidata"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.WIKIDATA_SPARQL_FILE), delimiter='\t')
+        return csv.DictReader(open(self.config.wikidata.filepath), delimiter='\t')
 
     def parse_record(self, row) -> Optional[DirectoryInfo]:
 

@@ -18,7 +18,7 @@ class CrossrefLoader(DirectoryLoader):
     source_slug = "crossref"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.CROSSREF_FILE))
+        return csv.DictReader(open(self.config.crossref.filepath))
 
     def parse_record(self, record) -> Optional[DirectoryInfo]:
         info = DirectoryInfo(

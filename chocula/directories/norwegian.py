@@ -52,7 +52,7 @@ class NorwegianLoader(DirectoryLoader):
     source_slug = "norwegian"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.NORWEGIAN_FILE, encoding="ISO-8859-1"), delimiter=";")
+        return csv.DictReader(open(self.config.norwegian.filepath, encoding="ISO-8859-1"), delimiter=";")
 
     def parse_record(self, row) -> Optional[DirectoryInfo]:
         info = DirectoryInfo(
@@ -64,7 +64,7 @@ class NorwegianLoader(DirectoryLoader):
             langs=[l for l in [parse_lang(row['Language'])] if l],
         )
 
-        info.extra['norwegian'] = dict(as_of=self.config.NORWEGIAN_DATE)
+        info.extra['norwegian'] = dict(as_of=self.config.norwegian.date)
         if row['Level 2019']:
             info.extra['norwegian']['level'] = int(row['Level 2019'])
 

@@ -27,13 +27,13 @@ class SherpaRomeoLoader(DirectoryLoader):
 
         # first load policies
         print("##### Loading SHERPA/ROMEO policies...", file=sys.stderr)
-        fixed_policy_file = ftfy.fix_file(open(self.config.SHERPA_ROMEO_POLICY_FILE, 'rb'))
+        fixed_policy_file = ftfy.fix_file(open(self.config.sherpa_romeo_policies_simple.filepath, 'rb'))
         policy_reader = csv.DictReader(fixed_policy_file)
         for row in policy_reader:
             self.sherpa_policies[row['RoMEO Record ID']] = row
 
         # then open regular file
-        raw_file = open(self.config.SHERPA_ROMEO_JOURNAL_FILE, 'rb').read().decode(errors='replace')
+        raw_file = open(self.config.sherpa_romeo_journals_simple.filepath, 'rb').read().decode(errors='replace')
         fixed_file = ftfy.fix_text(raw_file)
         return csv.DictReader(fixed_file.split('\n'))
 

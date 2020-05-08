@@ -17,7 +17,7 @@ class GoldOALoader(DirectoryLoader):
     source_slug = "gold_oa"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.GOLD_OA_FILE, encoding="ISO-8859-1"))
+        return csv.DictReader(open(self.config.gold_oa.filepath, encoding="ISO-8859-1"))
 
     def parse_record(self, row) -> Optional[DirectoryInfo]:
 

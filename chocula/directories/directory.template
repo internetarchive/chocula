@@ -16,7 +16,7 @@ class TemplateLoader(DirectoryLoader):
     source_slug = "template"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.TEMPLATE_FILE))
+        return csv.DictReader(open(self.config.TEMPLATE.filepath))
 
     def parse_record(self, record) -> Optional[DirectoryInfo]:
         info = DirectoryInfo(

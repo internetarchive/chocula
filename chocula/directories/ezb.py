@@ -16,7 +16,7 @@ class EzbLoader(DirectoryLoader):
     source_slug = "ezb"
 
     def open_file(self) -> Iterable:
-        return open(self.config.EZB_FILE, 'r')
+        return open(self.config.ezb.filepath, 'r')
 
     def parse_record(self, row) -> Optional[DirectoryInfo]:
 

@@ -111,9 +111,10 @@ def main():
         print("tell me what to do! (try --help)")
         sys.exit(-1)
 
+    config = ChoculaConfig.from_file()
     cdb = ChoculaDatabase(args.db_file)
     if args.func.startswith('index_') or args.func in ('everything','summarize',):
-        cdb.read_issn_map_file(ISSNL_FILE)
+        cdb.read_issn_map_file(config.issnl.filepath)
     func = getattr(cdb, args.func)
     func(args)
 

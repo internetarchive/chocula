@@ -17,7 +17,7 @@ class OpenAPCLoader(DirectoryLoader):
     source_slug = "openapc"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.OPENAPC_FILE))
+        return csv.DictReader(open(self.config.openapc.filepath))
 
     def parse_record(self, row) -> Optional[DirectoryInfo]:
 

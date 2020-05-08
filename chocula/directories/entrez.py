@@ -23,7 +23,7 @@ class EntrezLoader(DirectoryLoader):
     source_slug = "entrez"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.ENTREZ_FILE))
+        return csv.DictReader(open(self.config.entrez_simple.filepath))
 
     def parse_record(self, record) -> Optional[DirectoryInfo]:
         if not (record.get('ISSN (Online)') or record.get('ISSN (Print)')):

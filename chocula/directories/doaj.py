@@ -74,7 +74,7 @@ class DoajLoader(DirectoryLoader):
     source_slug = "doaj"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.DOAJ_FILE))
+        return csv.DictReader(open(self.config.doaj.filepath))
 
     def parse_record(self, row) -> Optional[DirectoryInfo]:
         # TODO: Subjects, Permanent article identifiers, work_level stuff
@@ -95,7 +95,7 @@ class DoajLoader(DirectoryLoader):
 
         extra: Dict[str, Any] = dict(doaj=dict())
         extra['mimetypes'] = parse_mimetypes(row['Full text formats'])
-        extra['doaj']['as_of'] = self.config.DOAJ_DATE
+        extra['doaj']['as_of'] = self.config.doaj.date
         if row['DOAJ Seal']:
             extra['doaj']['seal'] = {"no": False, "yes": True}[row['DOAJ Seal'].lower()]
 

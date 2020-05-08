@@ -15,7 +15,6 @@ import tldextract
 import ftfy
 import stdnum.issn
 
-from chocula.config import *
 from chocula.util import *
 
 
@@ -749,7 +748,8 @@ class ChoculaDatabase():
                     ezb = json.loads(drow['extra'])
                     extra['ezb'] = dict(ezb_id=drow['identifier'], color=ezb['ezb_color'])
                 if drow['slug'] == 'szczepanski':
-                    extra['szczepanski'] = dict(as_of=SZCZEPANSKI_DATE)
+                    # XXX: pull from record
+                    extra['szczepanski'] = dict(as_of=config.szczepanski.date)
                 if drow['slug'] == 'doaj':
                     extra['doaj'] = json.loads(drow['extra'])
 
