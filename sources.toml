@@ -1,0 +1,123 @@
+
+[snapshot]
+ia_item = "chocula-sources-snapshot-2020-05-08"
+
+[issnl]
+date = "2019-12-20"
+filename = "ISSN-to-ISSN-L.txt"
+original_url = "https://www.issn.org/wp-content/uploads/2014/03/issnltables.zip"
+
+[entrez_simple]
+# transformed files from https://moreo.info, a now defunct site
+date = 2018-12-20
+filename = "entrez-journals.csv"
+mirror_url = "https://archive.org/download/moreo.info-2018-12-20/entrez-journals.csv"
+
+[entrez]
+filename = "entrez.txt"
+original_url = "ftp://ftp.ncbi.nlm.nih.gov/pubmed/J_Entrez.txt"
+mirror_url = "https://archive.org/download/ncbi-entrez-2019/J_Entrez.txt"
+
+[road]
+date = "2018-01-24"
+filename = "road.tsv"
+# Now dead: original_url = "http://road.issn.org/en/contenu/download-road-records"
+mirror_url = "https://archive.org/download/road-issn-2018/2018-01-24/export-issn.zip"
+
+[doaj]
+date = "2019-01-24"
+filename = "doaj.csv"
+original_url = "https://doaj.org/csv"
+mirror_url = "https://archive.org/download/doaj_bulk_metadata_2019/doaj_20190124.csv"
+
+[crossref]
+# doi_titles_file_2019-12-20.csv
+filename = "crossref_titles.csv"
+original_url = "https://wwwold.crossref.org/titlelist/titleFile.csv"
+mirror_url = "https://archive.org/download/crossref_doi_titles"
+
+[sherpa_romeo_journals_simple]
+date = "2018-12-20"
+filename = "romeo-journals.csv"
+# defunct: original_url = "http://www.moreo.info/?csv=romeo-journals.csv
+mirror_url = "https://archive.org/download/moreo.info-2018-12-20/romeo-journals.csv"
+
+[sherpa_romeo_policies_simple]
+date = "2018-12-20"
+filename = "romeo-policies.csv"
+# defunct: original_url = "http://www.moreo.info/?csv=romeo-policies.csv
+mirror_url = "https://archive.org/download/moreo.info-2018-12-20/romeo-policies.csv"
+
+# requires registration
+#[sherpa_romeo]
+#original_url = "http://www.sherpa.ac.uk/downloads/journal-title-issn-urls.php"
+
+[norwegian]
+# 2019-12-21 Norwegian Register for Scientific Journals and Series.csv
+date = "2019-12-21"
+filename = "norwegian_register.csv"
+original_url = "https://dbh.nsd.uib.no/publiseringskanaler/AlltidFerskListe"
+mirror_url = "https://archive.org/download/norwegian_register_journals"
+
+[lockss]
+filename = "kbart_LOCKSS.txt"
+
+[clockss]
+filename = "kbart_CLOCKSS.txt"
+
+[portico]
+#filename = 'data/Portico_Holding_KBart.txt'
+filename = "kbart_Portico.txt"
+
+[jstor]
+# JSTOR_Global_AllArchiveTitles_2019-12-21.txt
+date = "2019-12-21"
+filename = "kbart_jstor.txt"
+original_url = "https://support.jstor.org/hc/en-us/articles/115007466248-JSTOR-title-lists"
+
+[ia_sim]
+date = "2017-10-19"
+# MASTER TITLE_METADATA_LIST_20171019.converted.csv
+filename = "sim_master_title_metadata.csv"
+# exported from libreoffice from .xlsx to csv
+mirror_url = "https://archive.org/download/SerialsOnMicrofilmCollection/MASTER%20TITLE_METADATA_LIST_20171019.xlsx"
+
+[szczepanski]
+date = '2018'
+# Jan-Szczepanski-Open-Access-Journals-2018_0.fixed.json
+filename = "szczepanski.json"
+
+[ezb]
+filename = "ezb_metadata.json"
+mirror_url = "https://archive.org/download/ezb_snapshot_2019-07-11"
+
+[gold_oa]
+# ISSN_Gold-OA_3.0.csv
+filename = "gold_oa.csv"
+
+[wikidata]
+date = "2019-12-20"
+# wikidata_journals_sparql.2019-12-20.tsv
+filename = "wikidata_journals.tsv"
+# SPARQL: https://archive.org/download/wikidata-journal-metadata/wikidata.sparql
+mirror_url = "https://archive.org/download/wikidata-journal-metadata"
+
+[openapc]
+date = "2019-07-03"
+# ata/apc_de.2019-07-03.csv
+filename = "openapc.csv"
+original_url = "https://github.com/OpenAPC/openapc-de/blob/master/data/apc_de.csv"
+mirror_url = "https://archive.org/download/openapc-dataset"
+
+[fatcat_container]
+date = "2019-12-13"
+filename = "container_export.json"
+
+[homepage_status]
+date = "2019-12-23"
+filename = "homepage_status.json"
+
+[fatcat_stats]
+date = "2019-12-13"
+filename = "container_stats.json"
+
