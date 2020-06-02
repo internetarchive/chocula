@@ -19,9 +19,7 @@ def database(issn_db):
 
 def test_all(config, database):
 
-    for cls in (CrossrefLoader, DoajLoader, EntrezLoader, EzbLoader,
-                GoldOALoader, NorwegianLoader, OpenAPCLoader, RoadLoader,
-                SherpaRomeoLoader, SzczepanskiLoader, WikidataLoader):
+    for cls in ALL_CHOCULA_DIR_CLASSES:
         loader = cls(config)
         counts = loader.index_file(database)
         assert counts['total'] >= 20

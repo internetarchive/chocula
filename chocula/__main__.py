@@ -26,12 +26,13 @@ Commands:
     index_ezb
     index_wikidata
     index_openapc
+    index_sim
 
-    load_fatcat
+    load_fatcat_containers
     load_fatcat_stats
+    load_homepage_status
 
     export_urls
-    update_url_status
 
 Future commands:
 
@@ -47,8 +48,34 @@ import sys
 import csv
 import argparse
 
-from chocula import ChoculaDatabase, ChoculaConfig
+from chocula import ChoculaDatabase, ChoculaConfig, IssnDatabase, ALL_CHOCULA_DIR_CLASSES
 
+
+def run_everything(config, database):
+
+    database.init_db()
+    for cls in ALL_CHOCULA_DIR_CLASSES:
+        loader = cls(config)
+        counts = loader.index_file(database)
+        print(counts)
+
+    # XXX: TODO:
+    database.load_fatcat_containers(config)
+    database.load_fatcat_stats(config)
+    # XXX: TODO:
+    #self.preserve_kbart('lockss', LOCKSS_FILE)
+    #self.preserve_kbart('clockss', CLOCKSS_FILE)
+    #self.preserve_kbart('portico', PORTICO_FILE)
+    #self.preserve_kbart('jstor', JSTOR_FILE)
+    #self.preserve_sim(args)
+    database.load_homepage_status(config)
+    database.summarize()
+    print("### Done with everything!")
+
+def run_index(config, database, cls):
+    loader = cls(config)
+    counts = loader.index_file(database)
+    print(counts)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -56,12 +83,8 @@ def main():
     subparsers = parser.add_subparsers()
 
     parser.add_argument("--db-file",
-        help="run in mode that considers only terminal HTML success",
+        help="sqlite database file",
         default='chocula.sqlite',
-        type=str)
-    parser.add_argument("--input-file",
-        help="override default input file path",
-        default=None,
         type=str)
 
     sub = subparsers.add_parser('everything',
@@ -84,15 +107,14 @@ def main():
         help="dump JSON output in a format that can load into fatcat")
     sub.set_defaults(func='export_fatcat')
 
-    # TODO: 'jurn'
-    for ind in ('doaj', 'road', 'crossref', 'entrez', 'norwegian', 'szczepanski', 'ezb', 'gold_oa', 'wikidata', 'openapc'):
-        sub = subparsers.add_parser('index_{}'.format(ind),
-            help="load metadata from {}".format(ind))
-        sub.set_defaults(func='index_{}'.format(ind))
+    for cls in ALL_CHOCULA_DIR_CLASSES:
+        sub = subparsers.add_parser('index_{}'.format(cls.source_slug),
+            help="load metadata from {}".format(cls.source_slug))
+        sub.set_defaults(func='index_{}'.format(cls.source_slug), index_cls=cls)
 
-    sub = subparsers.add_parser('load_fatcat',
+    sub = subparsers.add_parser('load_fatcat_containers',
         help="load fatcat container metadata")
-    sub.set_defaults(func='load_fatcat')
+    sub.set_defaults(func='load_fatcat_containers')
 
     sub = subparsers.add_parser('load_fatcat_stats',
         help="update container-level stats from JSON file")
@@ -102,9 +124,9 @@ def main():
         help="dump homepage URLs (eg, to crawl for status)")
     sub.set_defaults(func='export_urls')
 
-    sub = subparsers.add_parser('update_url_status',
+    sub = subparsers.add_parser('load_homepage_status',
         help="import homepage URL crawl status")
-    sub.set_defaults(func='update_url_status')
+    sub.set_defaults(func='load_homepage_status')
 
     args = parser.parse_args()
     if not args.__dict__.get("func"):
@@ -112,11 +134,21 @@ def main():
         sys.exit(-1)
 
     config = ChoculaConfig.from_file()
-    cdb = ChoculaDatabase(args.db_file)
     if args.func.startswith('index_') or args.func in ('everything','summarize',):
-        cdb.read_issn_map_file(config.issnl.filepath)
-    func = getattr(cdb, args.func)
-    func(args)
+        issn_db = IssnDatabase(config.issnl.filepath)
+    else:
+        issn_db = None
+    cdb = ChoculaDatabase(args.db_file, issn_db)
+    if args.func == 'everything':
+        run_everything(config, cdb)
+    elif args.func.startswith('index_'):
+        print(run_index(config, cdb, args.index_cls))
+    elif args.func.startswith('load_'):
+        func = getattr(cdb, args.func)
+        print(func(config))
+    else:
+        func = getattr(cdb, args.func)
+        print(func(), file=sys.stderr)
 
 if __name__ == '__main__':
     main()

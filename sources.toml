@@ -1,6 +1,6 @@
 
 [snapshot]
-ia_item = "chocula-sources-snapshot-2020-05-08"
+ia_item = "chocula-sources-snapshot-2020-05-29"
 
 [issnl]
 date = "2019-12-20"
@@ -109,7 +109,11 @@ filename = "openapc.csv"
 original_url = "https://github.com/OpenAPC/openapc-de/blob/master/data/apc_de.csv"
 mirror_url = "https://archive.org/download/openapc-dataset"
 
-[fatcat_container]
+[sim]
+date = "2019"
+filename = "sim_master_title_metadata.csv"
+
+[fatcat_containers]
 date = "2019-12-13"
 filename = "container_export.json"
 

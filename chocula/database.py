@@ -15,6 +15,7 @@ import tldextract
 import ftfy
 import stdnum.issn
 
+from chocula import *
 from chocula.util import *
 
 
@@ -271,7 +272,7 @@ class ChoculaDatabase():
 
         return "inserted"
 
-    def parse_kbart(self, name, path):
+    def parse_kbart(self, name, path) -> Counter:
         """
         Transforms a KBART file into a dict of dicts; but basically a list of
         JSON objects, one per journal. KBART files can have multiple rows per
@@ -318,69 +319,13 @@ class ChoculaDatabase():
                 else:
                     new_spans = [[start, end]]
                 d['year_spans'] = merge_spans(old_spans, new_spans)
-        print(counts)
-        return kbart_dict
+        return counts
 
-
-    def index_sim(self, args):
-        path = args.input_file or SIM_FILE
-        print("##### Loading SIM Metadata...")
-        #NA Pub Cat ID,Title,Publisher,ISSN,Impact Rank,Total Cities,Journal Impact Factor,Eigenfact or Score,First Volume,Last Volume,NA Gaps,"Scholarly / Peer-\n Reviewed","Peer-\n Reviewed",Pub Type,Pub Language,Subjects
-        reader = csv.DictReader(open(path))
-        counts = Counter()
-        cur = self.db.cursor()
-        for row in reader:
-            if not row['ISSN'] or row['ISSN'] == "NULL":
-                counts['no-issn'] += 1
-                continue
-            issnl, status = self.add_issn(
-                'ia_sim',
-                raw_issn=row['ISSN'][:9],
-                name=row['Title'],
-                publisher=row['Publisher'],
-                extra=extra,
-            )
-            counts[status] += 1
-            if not issnl:
-                continue
-            d = self.data[issnl]
-            sim = dict()
-            sim['id'] = row['NA Pub Cat ID']
-            first_year = row['First Volume']
-            if first_year:
-                first_year = int(first_year)
-                sim['first_year'] = int(row['First Volume'])
-            else:
-                first_year = None
-            last_year = row['Last Volume']
-            if last_year:
-                last_year = int(last_year)
-                sim['last_year'] = last_year
-            else:
-                last_year = None
-            gaps = [int(g) for g in row['NA Gaps'].split(';') if g.strip()]
-            if gaps:
-                sim['gaps'] = gaps
-            if first_year and last_year:
-                sim['year_spans'] = gaps_to_spans(first_year, last_year, gaps)
-            if row['Pub Language']:
-                self.add_lang(issnl, row['Pub Language'])
-            # TODO: 'Pub Type'
-            all_keys = list(sim.keys())
-            for k in all_keys:
-                if not sim[k]:
-                    sim.pop(k)
-            self.data[issnl]['sim'] = sim
-        cur.close()
-        self.db.commit()
-        print(counts)
-
-    def update_url_status(self, args):
-        path = args.input_file or IA_CRAWL_FILE
+    def load_homepage_status(self, config: ChoculaConfig) -> Counter:
         print("##### Loading IA Homepage Crawl Results...")
         counts = Counter()
         cur = self.db.cursor()
-        for row in open(path, 'r'):
+        for row in open(config.homepage_status.filepath, 'r'):
             if not row.strip():
                 continue
             row = json.loads(row)
@@ -405,13 +350,12 @@ class ChoculaDatabase():
             counts['updated'] += 1
         cur.close()
         self.db.commit()
-        print(counts)
+        return counts
 
-    def load_fatcat(self, args):
-        path = args.input_file or FATCAT_CONTAINER_FILE
+    def load_fatcat_containers(self, config: ChoculaConfig) -> Counter:
         print("##### Loading Fatcat Container Entities...")
         # JSON
-        json_file = open(path, 'r')
+        json_file = open(config.fatcat_containers.filepath, 'r')
         counts = Counter()
         cur = self.db.cursor()
         for row in json_file:
@@ -445,22 +389,25 @@ class ChoculaDatabase():
                     ))
             except sqlite3.IntegrityError as ie:
                 if str(ie).startswith("UNIQUE"):
-                    return None, "duplicate-issnl"
-                raise ie
+                    counts["existing"] += 1
+                    continue
+                else:
+                    raise ie
             counts['inserted'] += 1
             if row.get('issnl'):
                 urls = extra.get('urls', [])
                 for url in urls:
-                    self.add_url(row['issnl'], url)
+                    homepage = HomepageUrl.from_url(url)
+                    if homepage:
+                        self.insert_homepage(row.get('issnl'), homepage, cur)
         cur.close()
         self.db.commit()
-        print(counts)
+        return counts
 
-    def load_fatcat_stats(self, args):
-        path = args.input_file or FATCAT_STATS_FILE
+    def load_fatcat_stats(self, config: ChoculaConfig) -> Counter:
         print("##### Loading Fatcat Container Stats...")
         # JSON
-        json_file = open(path, 'r')
+        json_file = open(config.fatcat_stats.filepath, 'r')
         counts = Counter()
         cur = self.db.cursor()
         for row in json_file:
@@ -479,18 +426,21 @@ class ChoculaDatabase():
             counts['updated'] += 1
         cur.close()
         self.db.commit()
-        print(counts)
+        return counts
 
-    def export_urls(self, args):
+    def export_urls(self) -> Counter:
+        counts = Counter()
         cur = self.db.cursor()
         self.db.row_factory = sqlite3.Row
         cur = self.db.execute("SELECT issnl, url FROM homepage;")
         for hrow in cur:
             assert(hrow['url'])
             assert(len(hrow['url'].split()) == 1)
+            counts['total'] += 1
             print('\t'.join((hrow['issnl'], hrow['url'])))
+        return counts
 
-    def summarize(self, args):
+    def summarize(self) -> Counter:
         print("##### Summarizing Everything...")
         counts = Counter()
         cur = self.db.cursor()
@@ -506,7 +456,7 @@ class ChoculaDatabase():
             out = dict()
 
             # check if ISSN-L is good. this is here because of fatcat import
-            out['known_issnl'] = (self.issn2issnl(issnl) == issnl)
+            out['known_issnl'] = (self.issn_db.issn2issnl(issnl) == issnl)
             if not out['known_issnl']:
                 counts['unknown-issnl'] += 1
             out['valid_issnl'] = stdnum.issn.is_valid(issnl)
@@ -544,8 +494,8 @@ class ChoculaDatabase():
                         out['is_oa'] = True
                 if irow['slug'] == 'sherpa_romeo':
                     extra = json.loads(irow['extra'])
-                    out['sherpa_color'] = extra['color']
-                    if extra['color'] == 'green':
+                    out['sherpa_color'] = extra['sherpa_romeo']['color']
+                    if extra['sherpa_romeo']['color'] == 'green':
                         out['is_oa'] = True
 
             # filter out "NA" ISSNs
@@ -624,33 +574,9 @@ class ChoculaDatabase():
                 ))
         cur.close()
         self.db.commit()
-        print(counts)
+        return counts
 
-    def everything(self, args):
-        self.init_db(args)
-        self.index_doaj(args)
-        self.index_norwegian(args)
-        self.index_crossref(args)
-        self.index_sherpa_romeo(args)
-        self.index_road(args)
-        self.index_entrez(args)
-        self.index_ezb(args)
-        self.index_szczepanski(args)
-        self.index_gold_oa(args)
-        self.index_openapc(args)
-        self.index_wikidata(args)
-        self.load_fatcat(args)
-        self.load_fatcat_stats(args)
-        #self.preserve_kbart('lockss', LOCKSS_FILE)
-        #self.preserve_kbart('clockss', CLOCKSS_FILE)
-        #self.preserve_kbart('portico', PORTICO_FILE)
-        #self.preserve_kbart('jstor', JSTOR_FILE)
-        #self.preserve_sim(args)
-        self.update_url_status(args)
-        self.summarize(args)
-        print("### Done with everything!")
-
-    def export(self, args):
+    def export(self) -> Counter:
         def dict_factory(cursor, row):
             d = {}
             for idx, col in enumerate(cursor.description):
@@ -662,8 +588,9 @@ class ChoculaDatabase():
         for row in cur.execute('SELECT * FROM journal'):
             print(json.dumps(row))
             counts['total'] += 1
+        return counts
 
-    def export_fatcat(self, args):
+    def export_fatcat(self):
         counts = Counter()
         self.db.row_factory = sqlite3.Row
         cur = self.db.cursor()
@@ -748,13 +675,14 @@ class ChoculaDatabase():
                     ezb = json.loads(drow['extra'])
                     extra['ezb'] = dict(ezb_id=drow['identifier'], color=ezb['ezb_color'])
                 if drow['slug'] == 'szczepanski':
-                    # XXX: pull from record
-                    extra['szczepanski'] = dict(as_of=config.szczepanski.date)
+                    # TODO: what to put here?
+                    extra['szczepanski'] = drow['extra']
                 if drow['slug'] == 'doaj':
                     extra['doaj'] = json.loads(drow['extra'])
 
             out['extra'] = extra
             print(json.dumps(out))
+        return counts
 
     def init_db(self):
         print("### Creating Database...", file=sys.stderr)

@@ -1,33 +1,66 @@
 
+2020-05-06
+x python3.7
+x type annotations / dataclasses
+x "update-sources"
+    => makefile
+- run "everything" successfully
+- "upload-sources"
+    => to archive.org, with datetime
+- "fetch-sources"
+    => all snapshots in a single ia item, with datetime
+- scielo journal metadata
+- kbart loading
+- "platform" column in database
+- rewrite README
+
+- flag to delete old table/rows when loading (?)
+- "loaders" not directories?
+- makefile
+- black
+- refactor most code into module directory
+- tests
+    => index process
+- update upstreams
+
+refactors:
+- "directory" command with directory as arg
+- "kbart" command with directory as arg
+- "load" command with directory as arg
+
+https://isaw.nyu.edu/publications/awol-index/
+
 ## Chocula
 
+- fully automated updates, luigi/gluish style
+    => downloads/uploads source metadata files
+    => outputs config file for chocula run
+    => runs chocula everything
+
 priorities:
-x fraction/which are pointing to wayback
 - coverage stats, particularly for longtail
-x wikidata linkage (prep for wikimania)
 - "still in print" flag
 - clean out invalid ISSN-L from fatcat
 - don't list dead URLs in fatcat
 - summary report of some of above
-- update all fatcat (wikidata QID, urls, fixed ISSN-L, etc)
 - when updating fatcat:
     if title is "blah,  Proceedings of the", set type to proceedings and re-write title
     if title like "Workshop on", set type
 
 source improvements:
 - entrez: "NLM Unique Id"
-- JUFO: finish 
+- JURN: finish 
 - crossref: empty string identifiers?
+- scielo: https://scielo.org/en/journals/list-by-alphabetical-order/?export=csv
+- https://www.arc.gov.au/excellence-research-australia (journal list)
 
 - public scopus list (?)
 - scrape/munge public clarivate dumps
 - import JURN into fatcat (one way or another)
     => try to title match and get ISSN-L
     => manual lookups for remainders?
-- dump json
 - "GOLD" importer (for scopus/WoS)
 - check that all fields actually getting imported reasonably
-- homepage crawl/status script
 
 - could poll portal.issn.org like:
     https://portal.issn.org/resource/ISSN/1561-7645?format=json
@@ -40,7 +73,4 @@ source improvements:
 - update_url_status (needs re-write)
 - log out index issues (duplicate ISSN-L, etc) to a file
 - validate against GOLD OA list
-- decide what to do with JURN... match? fuzzy match? create missing fatcat?
-- lots of bogus ISSN-L, like 9999-9999 or 0000-0000. should both validate
-  check digit and require an ISSN-L to actually exist.
 
