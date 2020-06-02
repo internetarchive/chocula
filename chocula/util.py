@@ -167,9 +167,8 @@ def gaps_to_spans(first, last, gaps):
     if not gaps:
         return [[first, last]]
     if not (last >= first and max(gaps) < last and min(gaps) > first):
-        # mangled
-        print("mangled years: {}".format((first, last, gaps)))
-        return []
+        # years seem mangled? will continue though
+        print("mangled years: {}".format((first, last, gaps)), file=sys.stderr)
     full = list(range(first, last+1))
     for missing in gaps:
         full.remove(missing)
