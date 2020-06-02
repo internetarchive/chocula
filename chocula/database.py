@@ -272,55 +272,6 @@ class ChoculaDatabase():
 
         return "inserted"
 
-    def parse_kbart(self, name, path) -> Counter:
-        """
-        Transforms a KBART file into a dict of dicts; but basically a list of
-        JSON objects, one per journal. KBART files can have multiple rows per
-        journal (eg, different year spans), which is why this pass is needed.
-        """
-        print("##### Parsing KBART file for {}...".format(name))
-        #publication_title      print_identifier        online_identifier       date_first_issue_online num_first_vol_online    num_first_issue_online  date_last_issue_online  num_last_vol_online     num_last_issue_online   title_url       first_author    title_id        embargo_info    coverage_depth  coverage_notes  publisher_name
-        kbart_dict: Dict[str, Any] = dict()
-        raw_file = open(path, 'rb').read().decode(errors='replace')
-        fixed_file = ftfy.fix_text(raw_file)
-        reader = csv.DictReader(fixed_file.split('\n'), delimiter='\t')
-        counts: Counter = Counter()
-        for row in reader:
-            if not row['print_identifier'] and not row['online_identifier']:
-                counts['no-issn'] += 1
-                continue
-            issnl, status = self.issn_db.lookup_issnl(
-                issnp=row['print_identifier'],
-                issne=row['online_identifier'],
-            )
-            counts[status] += 1
-            if not issnl:
-                continue
-
-            info = dict(
-                title=row['publication_title'] or None,
-                publisher=row['publisher_name'] or None,
-                url=row['title_url'] or None,
-                embargo_info=row['embargo_info'] or None,
-            )
-
-            d = kbart_dict.get(issnl, info)
-
-            old_spans = d.get('year_spans', [])
-            if row['date_first_issue_online'] and row['date_last_issue_online']:
-                start = int(row['date_first_issue_online'][:4])
-                end = int(row['date_last_issue_online'][:4])
-                if not start <= end:
-                    print("{}: {} not before {}! er, mangling".format(
-                        issnl,
-                        row['date_first_issue_online'],
-                        row['date_last_issue_online']))
-                    new_spans = [[end, start]]
-                else:
-                    new_spans = [[start, end]]
-                d['year_spans'] = merge_spans(old_spans, new_spans)
-        return counts
-
     def load_homepage_status(self, config: ChoculaConfig) -> Counter:
         print("##### Loading IA Homepage Crawl Results...")
         counts: Counter = Counter()
@@ -673,11 +624,18 @@ class ChoculaDatabase():
                 if drow['slug'] == 'ezb':
                     ezb = json.loads(drow['extra'])
                     extra['ezb'] = dict(ezb_id=drow['identifier'], color=ezb['ezb_color'])
-                if drow['slug'] == 'szczepanski':
+                elif drow['slug'] == 'szczepanski':
                     # TODO: what to put here?
                     extra['szczepanski'] = drow['extra']
-                if drow['slug'] == 'doaj':
+                elif drow['slug'] == 'doaj':
                     extra['doaj'] = json.loads(drow['extra'])
+                elif drow['slug'] == 'sim':
+                    extra['ia'] = extra.get('ia', {})
+                    extra['ia']['sim'] = json.loads(drow['extra'])
+                    extra['ia']['sim']['sim_pubid'] = drow['identifier']
+                elif drow['slug'] in ('lockss', 'clockss', 'portico', 'jstor'):
+                    extra['kbart'] = extra.get('kbart', {})
+                    extra['kbart'][drow['slug']] = json.loads(drow['extra'])
 
             out['extra'] = extra
             print(json.dumps(out))
