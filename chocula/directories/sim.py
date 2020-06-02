@@ -36,7 +36,7 @@ class SimLoader(DirectoryLoader):
         """
         # TODO: 'Pub Type'
 
-        extra = {}
+        extra: Dict[str, Any] = {}
         first_year = row['First Volume']
         if first_year:
             first_year = int(first_year)
