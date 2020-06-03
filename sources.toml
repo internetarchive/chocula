@@ -1,9 +1,9 @@
 
 [snapshot]
-ia_item = "chocula-sources-snapshot-2020-05-29"
+date = "2020-06-03"
+ia_item = "chocula-sources-snapshot-2020-06-03"
 
 [issnl]
-date = "2019-12-20"
 filename = "ISSN-to-ISSN-L.txt"
 original_url = "https://www.issn.org/wp-content/uploads/2014/03/issnltables.zip"
 
@@ -25,13 +25,11 @@ filename = "road.tsv"
 mirror_url = "https://archive.org/download/road-issn-2018/2018-01-24/export-issn.zip"
 
 [doaj]
-date = "2019-01-24"
 filename = "doaj.csv"
 original_url = "https://doaj.org/csv"
 mirror_url = "https://archive.org/download/doaj_bulk_metadata_2019/doaj_20190124.csv"
 
 [crossref]
-# doi_titles_file_2019-12-20.csv
 filename = "crossref_titles.csv"
 original_url = "https://wwwold.crossref.org/titlelist/titleFile.csv"
 mirror_url = "https://archive.org/download/crossref_doi_titles"
@@ -61,26 +59,21 @@ mirror_url = "https://archive.org/download/norwegian_register_journals"
 
 [lockss]
 filename = "kbart_LOCKSS.txt"
+original_url = "https://reports.lockss.org/kbart/kbart_LOCKSS.txt"
 
 [clockss]
 filename = "kbart_CLOCKSS.txt"
+original_url = "https://reports.clockss.org/kbart/kbart_CLOCKSS.txt"
 
 [portico]
 #filename = 'data/Portico_Holding_KBart.txt'
 filename = "kbart_Portico.txt"
+original_url = "http://api.portico.org/kbart/Portico_Holding_KBart.txt"
 
 [jstor]
 # JSTOR_Global_AllArchiveTitles_2019-12-21.txt
-date = "2019-12-21"
 filename = "kbart_JSTOR.txt"
 original_url = "https://support.jstor.org/hc/en-us/articles/115007466248-JSTOR-title-lists"
-
-[ia_sim]
-date = "2017-10-19"
-# MASTER TITLE_METADATA_LIST_20171019.converted.csv
-filename = "sim_master_title_metadata.csv"
-# exported from libreoffice from .xlsx to csv
-mirror_url = "https://archive.org/download/SerialsOnMicrofilmCollection/MASTER%20TITLE_METADATA_LIST_20171019.xlsx"
 
 [szczepanski]
 date = '2018'
@@ -96,7 +89,7 @@ mirror_url = "https://archive.org/download/ezb_snapshot_2019-07-11"
 filename = "gold_oa.csv"
 
 [wikidata]
-date = "2019-12-20"
+date = "2020-06-03"
 # wikidata_journals_sparql.2019-12-20.tsv
 filename = "wikidata_journals.tsv"
 # SPARQL: https://archive.org/download/wikidata-journal-metadata/wikidata.sparql
@@ -110,18 +103,21 @@ original_url = "https://github.com/OpenAPC/openapc-de/blob/master/data/apc_de.cs
 mirror_url = "https://archive.org/download/openapc-dataset"
 
 [sim]
-date = "2019"
+date = "2017-10-19"
 filename = "sim_master_title_metadata.csv"
+# MASTER TITLE_METADATA_LIST_20171019.converted.csv
+# exported from libreoffice from .xlsx to csv
+mirror_url = "https://archive.org/download/SerialsOnMicrofilmCollection/MASTER%20TITLE_METADATA_LIST_20171019.xlsx"
 
 [fatcat_containers]
-date = "2019-12-13"
+date = "2020-05-26"
 filename = "container_export.json"
 
 [homepage_status]
-date = "2019-12-23"
+date = "2020-06-03"
 filename = "homepage_status.json"
 
 [fatcat_stats]
-date = "2019-12-13"
+date = "2020-06-03"
 filename = "container_stats.json"
 

@@ -95,7 +95,7 @@ class DoajLoader(DirectoryLoader):
 
         extra: Dict[str, Any] = dict(doaj=dict())
         extra['mimetypes'] = parse_mimetypes(row['Full text formats'])
-        extra['doaj']['as_of'] = self.config.doaj.date
+        extra['doaj']['as_of'] = self.config.snapshot.date
         if row['DOAJ Seal']:
             extra['doaj']['seal'] = {"no": False, "yes": True}[row['DOAJ Seal'].lower()]
 
