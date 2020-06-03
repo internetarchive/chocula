@@ -8,6 +8,10 @@ help: ## Print info about all commands
 	@echo
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "    \033[01;32m%-20s\033[0m %s\n", $$1, $$2}'
 
+.PHONY: deps
+deps: ## Create local virtualenv using pipenv
+	pipenv install --dev
+
 .PHONY: test
 test: ## Run all tests and lints
 	pipenv run pytest
@@ -40,26 +44,64 @@ homepage-status: data/homepage_status.json
 fetch-sources: ## Download existing snapshot versions of all sources from archive.org
 	mkdir -p data
 	ia download --checksum --no-directories $(SNAPSHOTITEM) --destdir data/
+	rm data/$(SNAPSHOTITEM)_*
+
+data/$(TODAY)/kbart_JSTOR.txt:
+	mkdir -p data/
+	wget -c "https://www.jstor.org/kbart/collections/all-archive-titles?contentType=journals" -O $@.wip
+	mv $@.wip $@
+
+data/$(TODAY)/kbart_CLOCKSS.txt:
+	wget -c "https://reports.clockss.org/kbart/kbart_CLOCKSS.txt" -O $@.wip
+	mv $@.wip $@
+
+data/$(TODAY)/kbart_CLOCKSS-triggered.txt:
+	wget -c "https://reports.clockss.org/kbart/kbart_CLOCKSS-triggered.txt" -O $@.wip
+	mv $@.wip $@
+
+data/$(TODAY)/kbart_LOCKSS.txt:
+	wget -c "https://reports.lockss.org/kbart/kbart_LOCKSS.txt" -O $@.wip
+	mv $@.wip $@
+
+data/$(TODAY)/kbart_Portico.txt:
+	wget -c "http://api.portico.org/kbart/Portico_Holding_KBart.txt" -O $@.wip
+	mv $@.wip $@
+
+data/$(TODAY)/ISSN-to-ISSN-L.txt:
+	wget -c "https://www.issn.org/wp-content/uploads/2014/03/issnltables.zip" -O /tmp/issnltables.$(TODAY).zip
+	unzip -p /tmp/issnltables.$(TODAY).zip "*.ISSN-to-ISSN-L.txt" > $@.wip
+	mv $@.wip $@
+
+data/$(TODAY)/entrez.csv:
+	wget -c "ftp://ftp.ncbi.nlm.nih.gov/pubmed/J_Entrez.txt" -O $@.wip
+	mv $@.wip $@
+
+data/$(TODAY)/doaj.csv:
+	wget -c "https://doaj.org/csv" -O $@.wip
+	mv $@.wip $@
+
+data/$(TODAY)/crossref_titles.csv:
+	wget -c "https://wwwold.crossref.org/titlelist/titleFile.csv" -O $@.wip
+	mv $@.wip $@
 
 .PHONY: update-sources
-update-sources: ## Download new versions of updatable sources
-	@# TODO: refactor to be individual targets-per-file (see fatcat-covid19 example)
-	mkdir -p data/$(TODAY)
-	wget -c "https://www.issn.org/wp-content/uploads/2014/03/issnltables.zip" -O /tmp/issnltables.$(TODAY).zip
-	unzip -p /tmp/issnltables.$(TODAY).zip "*.ISSN-to-ISSN-L.txt" > /tmp/ISSN-to-ISSN-L.$(TODAY).txt
-	mv /tmp/ISSN-to-ISSN-L.$(TODAY).txt data/$(TODAY)/ISSN-to-ISSN-L.txt
-	wget -c "ftp://ftp.ncbi.nlm.nih.gov/pubmed/J_Entrez.txt" -O /tmp/entrez.$(TODAY).csv
-	cp /tmp/entrez.$(TODAY).csv data/$(TODAY)/entrez.csv
-	wget -c "https://doaj.org/csv" -O /tmp/doaj.$(TODAY).csv
-	cp /tmp/doaj.$(TODAY).csv data/$(TODAY)/doaj.csv
-	wget -c "https://wwwold.crossref.org/titlelist/titleFile.csv" -O /tmp/crossref_titles.$(TODAY).csv
-	cp /tmp/crossref_titles.$(TODAY).csv data/$(TODAY)/crossref_titles.csv
+update-sources: data/$(TODAY)/kbart_JSTOR.txt data/$(TODAY)/kbart_CLOCKSS.txt data/$(TODAY)/kbart_CLOCKSS-triggered.txt data/$(TODAY)/kbart_LOCKSS.txt data/$(TODAY)/kbart_Portico.txt data/$(TODAY)/ISSN-to-ISSN-L.txt data/$(TODAY)/entrez.csv data/$(TODAY)/doaj.csv data/$(TODAY)/crossref_titles.csv  ## Download new versions of updatable sources
 	@echo
 	@echo "Successfully updated for date (UTC): $(TODAY)"
 
+data/$(TODAY)/homepage_status.json:
+	pipenv run python -m chocula export_urls | shuf | pv -l > /tmp/chocula_urls.tsv
+	pipenv run parallel -j10 --bar --pipepart -a /tmp/chocula_urls.tsv ./check_issn_urls.py > /tmp/homepage_status.json
+	mv /tmp/url_status.json $@
+
+data/$(TODAY)/container_stats.json: data/container_export.json
+	cat data/container_export.json | jq .issnl -r | sort -u > /tmp/container_issnl.tsv
+	cat /tmp/container_issnl.tsv | parallel -j10 curl -s 'https://fatcat.wiki/container/issnl/{}/stats.json' | jq -c . > /tmp/container_stats.json
+	cp /tmp/container_stats.json $@
+
 .PHONY: upload-sources
 upload-sources: update-sources ## Upload most recent update-able sources to a new IA item
-	ia upload --checksum chocula-sources-snapshot-$(TODAY) data/$(TODAY)/*
+	ia upload --checksum chocula-sources-snapshot-$(TODAY) data/*.txt data/*.tsv data/*.json data/*.txt
 	# TODO: ia upload --checksum chocula-sources-$(TODAY) data/*.tsv data/*.csv data/*.json data/*.txt
 
 #.PHONY: upload-snapshot
