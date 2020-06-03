@@ -57,6 +57,13 @@ filename = "norwegian_register.csv"
 original_url = "https://dbh.nsd.uib.no/publiseringskanaler/AlltidFerskListe"
 mirror_url = "https://archive.org/download/norwegian_register_journals"
 
+[scielo]
+date = "2020-05-05"
+filename = "scielo.json"
+mirror_url = "https://archive.org/download/scielo-journal-metadata/journals.20200505.json"
+# not to be confused with scielo_journal_list.20200428.csv also floating
+# around, but has no ISSNs
+
 [lockss]
 filename = "kbart_LOCKSS.txt"
 original_url = "https://reports.lockss.org/kbart/kbart_LOCKSS.txt"
