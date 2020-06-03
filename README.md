@@ -2,6 +2,10 @@
 Chocula: Scholary Journal Metadata Munging
 ==========================================
 
+<div align="center">
+<img src="extra/count_chocola.jpg">
+</div>
+
 **Chocula** is a python tool for parsing and merging journal-level metadata
 from various sources into a sqlite3 database file for analysis. It is currently
 the main source of journal-level metadata for the [fatcat](https://fatcat.wiki)
