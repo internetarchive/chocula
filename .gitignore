@@ -3,6 +3,7 @@ old/
 *.html
 *.json
 *.json.gz
+data/
 
 *.o
 *.a
