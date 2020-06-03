@@ -1,25 +1,36 @@
 
-Chocula is a python script to parse and merge journal-level metadata from
-various sources into a consistent sqlite3 database file for analysis.
+Chocula: Scholary Journal Metadata Munging
+==========================================
+
+**Chocula** is a python tool for parsing and merging journal-level metadata
+from various sources into a sqlite3 database file for analysis. It is currently
+the main source of journal-level metadata for the [fatcat](https://fatcat.wiki)
+catalog of published papers.
 
 ## Quickstart
 
-You need `python3`, `pipenv`, and `sqlite3` installed.
+You need `python3.7`, `pipenv`, and `sqlite3` installed. Commands are run via
+`make`. If you don't have `python3.7` installed system-wide, try installing
+`pyenv`.
 
-First fetch datasets:
+Set up dependencies and fetch source metadata:
 
-    cd data
-    ./fetch.sh
-    cd ..
+    make deps fetch-sources
 
 Then re-generate entire sqlite3 database from scratch:
 
-    pipenv shell
-    ./chocula.py everything
+    make database
 
 Now you can explore the database; see `chocula_schema.sql` for the output schema.
 
     sqlite3 chocula.sqlite
+
+## Developing
+
+There is partial test coverage, and we verify python type annotations. Run the
+tests with:
+
+    make test
 
 ## History / Name
 
@@ -54,91 +65,41 @@ filters out "unknown" ISSN-Ls unless they are coming from existing fatcat
 entities.
 
 
-## Sources
+## Source Metadata
 
-The `./data/fetch.sh` script will fetch mirrored snapshots of all these
-datasets.
+The `sources.toml` configuration file contains a canoncial list of metadata
+files, the last time they were updated, and original URLs for mirrored files.
+The general workflow is that all metadata files are bunled into "source
+snapshots" and uploaded/downloaded from the Internet Archive (archive.org)
+together.
 
-A few sources of normalization/mappings:
+There is some tooling (`make update-sources`) to automatically download fresh
+copies of some files. Others need to be fetched manually. In all cases, new
+files are not automatically integrated: they are added to a sub-folder of
+`./data/` and must be manually copied and `sources.toml` updated with the
+appropriate date before they will be used.
 
-- ISSN-L (from ISSN org)
-    - Original: <https://www.issn.org/wp-content/uploads/2014/03/issnltables.zip>
-    - Snapshot: <https://archive.org/download/issn_issnl_mappings/20180216.ISSN-to-ISSN-L.txt>
-- ISO 639-1 language codes: https://datahub.io/core/language-codes
-- ISO 3166-1 alpha-2 country codes
+Some sources of metadata were helpfully pre-parsed by the maintainer of
+<https://moreo.info>. Unfortunately this site is now defunct and the metadata
+is out of date.
 
-In order of precedence (first higher than later):
+Adding new directories or KBART preservation providers is relatively easy, by
+creating new helpers in `chocula/directories/` and/or `chocula/kbart.py`.
 
-- NCBI Entrez (Pubmed)
-    - Original: <ftp://ftp.ncbi.nlm.nih.gov/pubmed/J_Entrez.txt>
-    - Snapshot: <https://archive.org/download/ncbi-entrez-2019/J_Entrez.txt>
-- DOAJ
-    - Original: <https://doaj.org/csv>
-    - Snapshot: <https://archive.org/download/doaj_bulk_metadata_2019/doaj_20190124.csv>
-- ROAD
-    - Original: <http://road.issn.org/en/contenu/download-road-records>
-    - Snapshot: <https://archive.org/download/road-issn-2018/2018-01-24/export-issn.zip>
-- SHERPA/ROMEO
-    - Original: <http://www.sherpa.ac.uk/downloads/journal-title-issn-urls.php> (requires reg)
-    - Mirror: <http://www.moreo.info/?csv=romeo-journals.csv>
-    - Snapshot:
-- Norwegian Registry
-    - Original: <https://dbh.nsd.uib.no/publiseringskanaler/AlltidFerskListe>
-    - Snapshot: <https://archive.org/download/norwegian_register_journals>
-- Wikidata via SPARQL Query
-    - SPARQL: <https://archive.org/download/wikidata-journal-metadata/wikidata.sparql>
-    - Snapshot: <https://archive.org/download/wikidata-journal-metadata>
-- KBART reports: LOCKSS, CLOCKSS, Portico
-    - Original: (multiple, see README in IA item)
-    - Snapshot: <https://archive.org/download/keepers_reports_201912>
-- JSTOR
-    - Original: <https://support.jstor.org/hc/en-us/articles/115007466248-JSTOR-title-lists>
-- Crossref title list (not DOIs)
-    - Original: <https://wwwold.crossref.org/titlelist/titleFile.csv>
-    - Snapshot: <https://archive.org/download/crossref_doi_titles>
-- OpenAPC Dataset
-    - Original: <https://github.com/OpenAPC/openapc-de/blob/master/data/apc_de.csv>
-    - Snapshot: <https://archive.org/download/openapc-dataset>
-- EZB Metadata
-    - Snapshot: <https://archive.org/download/ezb_snapshot_2019-07-11>
-- IA SIM Microfilm catalog
-    - Original: <https://archive.org/download/SerialsOnMicrofilmCollection/MASTER%20TITLE_METADATA_LIST_20171019.xlsx>
-- IA homepage crawl attempts
+## Updating Homepage Status and Countainer Counts
 
-The SHERPA/ROMEO content comes from the list helpfully munged by moreo.info.
-UPDATE: this site is now defunct (404).
+Run these commands from a fast connection; they will run with parallel
+processes. These hit only public URLs and API
+endpoints, but you would probably have the best luck running these from inside
+the Internet Archive cluster IP space:
 
-General form here is to build a huge python dict in memory, keyed by the
-ISSN-L, then write out to disk as JSON. Then the journal-metadata importer
-takes a subset of fields and inserts to fatcat. Lastly, the elasticsearch
-transformer takes a subset/combination of 
+    make data/2020-06-03/homepage_status.json
+    make data/2020-06-03/container_status.json
 
-## Fatcat Container Counts
+Then copy these files to `data/` (no sub-directory) and update the dates in
+`sources.toml`. Update the sqlite database with:
 
-Generate a list of ISSN-L identifiers, fetch each from fatcat web peudo-API, and write to JSON.
-
-    cat container_export.json | jq .issnl -r | sort -u > container_issnl.tsv
-    cat container_issnl.tsv | parallel -j10 curl -s 'https://fatcat.wiki/container/issnl/{}/stats.json' | jq -c . > container_stats.json
-
-Then load in to chocula and recaculate stats:
-
-    pipenv shell
-    ./chocula.py load_fatcat_stats container_stats.json
-    ./chocula.py summarize
-
-    # also, upload stats to an IA item, update fetch.sh and chocula.py variables
-
-## Journal Homepage Crawl Status
-
-The `check_issn_urls.py` script tries crawling journal homepages to see if they
-are "live" on the web. To regenerate these stats:
-
-    # assuming you have a fresh database
-    pipenv shell
-    ./chocula.py export_urls | shuf > urls_to_crawl.tsv
-    parallel -j10 --bar --pipepart -a urls_to_crawl.shuf.tsv ./check_issn_urls.py > url_status.json
-    ./chocula.py update_url_status url_status.json
-    ./chocula.py summarize
-
-Might also want to upload results at this point.
+    pipenv run python -m chocula load_fatcat_stats
+    pipenv run python -m chocula load_homepage_status
+    pipenv run python -m chocula summarize
 
