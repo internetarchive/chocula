@@ -13,6 +13,8 @@ from chocula.config import ChoculaConfig
 from chocula.database import DirectoryInfo, IssnDatabase, HomepageUrl
 
 
+# Portico files have weirdly large field sizes
+csv.field_size_limit(1310720)
 THIS_YEAR = datetime.date.today().year
 
 class DirectoryLoader():
@@ -77,8 +79,8 @@ class KbartLoader():
 
     def parse_record(self, row: dict, issn_db: IssnDatabase) -> Optional[KbartRecord]:
 
-        issne: Optional[str] = clean_issn(row['online_identifier'])
-        issnp: Optional[str] = clean_issn(row['print_identifier'])
+        issne: Optional[str] = clean_issn(row['online_identifier'] or "")
+        issnp: Optional[str] = clean_issn(row['print_identifier'] or "")
         issnl: Optional[str] = None
         if issne:
             issnl = issn_db.issn2issnl(issne)
@@ -92,7 +94,7 @@ class KbartLoader():
             end_year = int(row['date_last_issue_online'][:4])
         end_volume = row['num_last_vol_online']
         # hack to handle open-ended preservation
-        if end_year is None and '(present)' in end_volume:
+        if end_year is None and end_volume and '(present)' in end_volume:
             end_year = THIS_YEAR
         record = KbartRecord(
             issnl=issnl,
@@ -101,13 +103,17 @@ class KbartLoader():
             title=clean_str(row['publication_title']),
             publisher=clean_str(row['publisher_name']),
             url=HomepageUrl.from_url(row['title_url']),
-            embargo=row['embargo_info'] or None,
+            embargo=clean_str(row['embargo_info']),
             start_year=start_year,
             end_year=end_year,
-            start_volume=row['num_first_vol_online'],
-            end_volume=row['num_last_vol_online'],
+            start_volume=clean_str(row['num_first_vol_online']),
+            end_volume=clean_str(row['num_last_vol_online']),
             year_spans=[],
         )
+        if record.start_volume == 'null':
+            record.start_volume = None
+        if record.end_volume == 'null':
+            record.end_volume = None
         return record
 
     def index_file(self, db) -> Counter:
@@ -130,7 +136,7 @@ class KbartLoader():
                 counts['skip-issnl'] += 1
                 continue
             elif record.start_year is None or record.end_year is None:
-                counts['missing-years'] += 1
+                counts['partial-missing-years'] += 1
             counts['parsed'] += 1
 
             existing = kbart_dict.get(record.issnl, record)

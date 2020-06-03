@@ -72,7 +72,7 @@ filename = "kbart_Portico.txt"
 [jstor]
 # JSTOR_Global_AllArchiveTitles_2019-12-21.txt
 date = "2019-12-21"
-filename = "kbart_jstor.txt"
+filename = "kbart_JSTOR.txt"
 original_url = "https://support.jstor.org/hc/en-us/articles/115007466248-JSTOR-title-lists"
 
 [ia_sim]

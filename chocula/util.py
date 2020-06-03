@@ -1,4 +1,5 @@
 
+import sys
 from dataclasses import dataclass
 from typing import Dict, Optional
 
@@ -171,7 +172,8 @@ def gaps_to_spans(first, last, gaps):
         print("mangled years: {}".format((first, last, gaps)), file=sys.stderr)
     full = list(range(first, last+1))
     for missing in gaps:
-        full.remove(missing)
+        if missing in full:
+            full.remove(missing)
     spans = []
     low = None
     last = None
