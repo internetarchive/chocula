@@ -47,7 +47,7 @@ fetch-sources: ## Download existing snapshot versions of all sources from archiv
 	rm data/$(SNAPSHOTITEM)_*
 
 data/$(TODAY)/kbart_JSTOR.txt:
-	mkdir -p data/
+	mkdir -p data/$(TODAY)
 	wget -c "https://www.jstor.org/kbart/collections/all-archive-titles?contentType=journals" -O $@.wip
 	mv $@.wip $@
 
@@ -101,8 +101,7 @@ data/$(TODAY)/container_stats.json: data/container_export.json
 
 .PHONY: upload-sources
 upload-sources: update-sources ## Upload most recent update-able sources to a new IA item
-	ia upload --checksum chocula-sources-snapshot-$(TODAY) data/*.txt data/*.tsv data/*.json data/*.txt
-	# TODO: ia upload --checksum chocula-sources-$(TODAY) data/*.tsv data/*.csv data/*.json data/*.txt
+	ia upload --checksum chocula-sources-snapshot-$(TODAY) data/*.tsv data/*.json data/*.txt data/*.csv
 
 #.PHONY: upload-snapshot
 #upload-snapshot: ## Upload an sqlite snapshot to archive.org
