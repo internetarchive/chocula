@@ -98,7 +98,7 @@ endpoints, but you would probably have the best luck running these from inside
 the Internet Archive cluster IP space:
 
     make data/2020-06-03/homepage_status.json
-    make data/2020-06-03/container_status.json
+    make data/2020-06-03/container_stats.json
 
 Then copy these files to `data/` (no sub-directory) and update the dates in
 `sources.toml`. Update the sqlite database with:
