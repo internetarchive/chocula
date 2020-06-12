@@ -8,8 +8,8 @@ help: ## Print info about all commands
 	@echo
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "    \033[01;32m%-20s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: deps
-deps: ## Create local virtualenv using pipenv
+.PHONY: dep
+dep: ## Create local virtualenv using pipenv
 	pipenv install --dev
 
 .PHONY: test
