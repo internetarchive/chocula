@@ -1,6 +1,6 @@
 
-TODAY := $(shell date --iso --utc)
-SNAPSHOTITEM := $(shell grep ia_item sources.toml | cut -f2 -d'"')
+TODAY ?= $(shell date --iso --utc)
+SNAPSHOTITEM ?= $(shell grep ia_item sources.toml | cut -f2 -d'"')
 
 .PHONY: help
 help: ## Print info about all commands
@@ -101,12 +101,11 @@ data/$(TODAY)/container_stats.json: data/container_export.json
 
 .PHONY: upload-sources
 upload-sources: update-sources ## Upload most recent update-able sources to a new IA item
-	ia upload --checksum chocula-sources-snapshot-$(TODAY) data/*.tsv data/*.json data/*.txt data/*.csv
+	ia upload --checksum -m collection:ia_biblio_metadata chocula-sources-snapshot-$(TODAY) data/*.tsv data/*.json data/*.txt data/*.csv
 
-#.PHONY: upload-snapshot
-#upload-snapshot: ## Upload an sqlite snapshot to archive.org
-#	ia upload --checksum --no-derive chocula-snapshot-$(TODAY) chocula.sqlite3 README.md extra/count_chocula.jpg
-
+.PHONY: upload-database
+upload-database: ## Upload an sqlite snapshot to archive.org
+	ia upload --checksum --no-derive -m collection:ia_biblio_metadata chocula-database-snapshot-$(TODAY) chocula.sqlite sources.toml README.md extra/count_chocula.jpg
 
 .PHONY: database
 database: ## Build database from sources
