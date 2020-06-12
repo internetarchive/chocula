@@ -12,6 +12,8 @@ import pycountry
 # software frameworks
 PLATFORM_MAP = {
     'OJS': 'ojs',
+    'OJS SEER': 'ojs',
+    'Open Journal System/OJS': 'ojs',
     'BMC': 'bmc',
     'SciELO Brazil': 'scielo',
     'SciELO Argentina': 'scielo',
