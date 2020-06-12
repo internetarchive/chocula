@@ -433,7 +433,7 @@ class ChoculaDatabase():
                         out[k] = irow[k]
                 if irow['extra']:
                     extra = json.loads(irow['extra'])
-                    for k in ('country', 'lang', 'issne', 'issnp', 'publisher'):
+                    for k in ('country', 'lang', 'issne', 'issnp', 'publisher', 'platform'):
                         if not out.get(k) and extra.get(k):
                             out[k] = extra[k]
                 if irow['slug'] in ('doaj','road','szczepanski', 'gold_oa'):
@@ -469,7 +469,9 @@ class ChoculaDatabase():
             # define publisher types
             publisher = out.get('publisher')
             pl = out.get('publisher', '').lower().strip()
-            if publisher in BIG5_PUBLISHERS or 'elsevier' in pl or 'springer' in pl or 'wiley' in pl:
+            if out.get('platform') == 'scielo':
+                out['publisher_type'] = 'scielo'
+            elif publisher in BIG5_PUBLISHERS or 'elsevier' in pl or 'springer' in pl or 'wiley' in pl:
                 out['publisher_type'] = 'big5'
             elif publisher in OA_PUBLISHERS:
                 out['publisher_type'] = 'oa'
@@ -488,7 +490,7 @@ class ChoculaDatabase():
             elif 'scielo' in pl:
                 out['publisher_type'] = 'scielo'
             elif out.get('is_oa') and (not out.get('has_dois') or out.get('lang') not in (None, 'en', 'de', 'fr', 'ja') or out.get('country') not in (None, 'us', 'gb', 'nl', 'cn', 'jp', 'de')):
-                # current definition of longtail
+                # current informal definition of longtail
                 out['publisher_type'] = 'longtail'
                 out['is_longtail'] = True
 
@@ -625,10 +627,11 @@ class ChoculaDatabase():
                     ezb = json.loads(drow['extra'])
                     extra['ezb'] = dict(ezb_id=drow['identifier'], color=ezb['ezb_color'])
                 elif drow['slug'] == 'szczepanski':
-                    # TODO: what to put here?
                     extra['szczepanski'] = drow['extra']
                 elif drow['slug'] == 'doaj':
                     extra['doaj'] = json.loads(drow['extra'])
+                elif drow['slug'] == 'scielo':
+                    extra['scielo'] = json.loads(drow['extra'])
                 elif drow['slug'] == 'sim':
                     extra['ia'] = extra.get('ia', {})
                     extra['ia']['sim'] = json.loads(drow['extra'])
