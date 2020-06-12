@@ -140,6 +140,10 @@ def check_url(issnl, url):
         info['error'] = 'InvalidSchema'
         info['terminal_status_code'] = info['status_code'] = -1
         return info
+    except UnicodeDecodeError:
+        info['error'] = 'UnicodeDecodeError'
+        info['terminal_status_code'] = info['status_code'] = -1
+        return info
 
     if resp.history:
         info['status_code'] = resp.history[0].status_code
