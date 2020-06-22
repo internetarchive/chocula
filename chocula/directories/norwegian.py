@@ -60,6 +60,8 @@ class NorwegianLoader(DirectoryLoader):
             directory_slug=self.source_slug,
             issnp=row["Print ISSN"],
             issne=row["Online ISSN"],
+            custom_id=clean_str(row["NSD tidsskrift_id"]),
+            publisher=clean_str(row["Publisher"]),
             country=parse_country(row["Country of publication"]),
             name=clean_str(row.get("International title")),
             langs=[l for l in [parse_lang(row["Language"])] if l],
@@ -71,9 +73,6 @@ class NorwegianLoader(DirectoryLoader):
 
         if row["Original title"] != row["International title"]:
             info.original_name = clean_str(row["Original title"])
-
-            identifier = (row["NSD tidsskrift_id"],)
-            publisher = (row["Publisher"],)
 
         url = HomepageUrl.from_url(row["URL"])
         if url:
