@@ -17,7 +17,10 @@ toml = "*"
 
 [dev-packages]
 pytest = "*"
+pytest-cov = "*"
 mypy = "*"
+flake8 = "*"
+flake8-annotations = "*"
 
 # must lock black to an exact version because it is still "beta"
 # see: https://github.com/psf/black/issues/517
