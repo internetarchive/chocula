@@ -503,9 +503,10 @@ class ChoculaDatabase:
                     ezb_extra = json.loads(irow["extra"])
                 if irow["slug"] == "sherpa_romeo":
                     extra = json.loads(irow["extra"])
-                    out["sherpa_color"] = extra["sherpa_romeo"]["color"]
-                    if extra["sherpa_romeo"]["color"] == "green":
-                        out["is_oa"] = True
+                    if extra.get("sherpa_romeo"):
+                        out["sherpa_color"] = extra["sherpa_romeo"]["color"]
+                        if extra["sherpa_romeo"].get("color") == "green":
+                            out["is_oa"] = True
 
             # filter out "NA" ISSNs
             for k in ("issne", "issnp"):
