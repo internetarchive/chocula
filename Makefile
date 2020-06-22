@@ -12,10 +12,18 @@ help: ## Print info about all commands
 dep: ## Create local virtualenv using pipenv
 	pipenv install --dev
 
-.PHONY: test
-test: ## Run all tests and lints
-	pipenv run pytest
+.PHONY: lint
+lint: ## Run lints (eg, flake8, mypy)
+	pipenv run flake8 *.py chocula/*.py chocula/*/*.py tests/ --exit-zero
 	pipenv run mypy *.py chocula/*.py chocula/*/*.py --ignore-missing-imports
+
+.PHONY: fmt
+fmt: ## Run code formating on all source code
+	pipenv run black *.py chocula/ tests/
+
+.PHONY: test
+test: lint ## Run all tests and lints
+	pipenv run pytest
 
 data/container_stats.json:
 	mkdir -p data
