@@ -399,7 +399,7 @@ class ChoculaDatabase():
         fatcat_issnls = list(cur.execute('SELECT DISTINCT issnl FROM fatcat_container WHERE issnl IS NOT null'))
         all_issnls = set([i[0] for i in index_issnls + fatcat_issnls])
         print("{} total ISSN-Ls".format(len(all_issnls)))
-        for issnl in list(all_issnls):
+        for issnl in all_issnls:
             #print(issnl)
             counts['total'] += 1
 
