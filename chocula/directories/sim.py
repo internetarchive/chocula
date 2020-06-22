@@ -3,14 +3,11 @@ import csv
 
 from chocula.util import (
     clean_str,
-    parse_mimetypes,
-    parse_country,
     parse_lang,
-    PLATFORM_MAP,
     gaps_to_spans,
 )
 from chocula.common import DirectoryLoader
-from chocula.database import DirectoryInfo, HomepageUrl
+from chocula.database import DirectoryInfo
 
 
 class SimLoader(DirectoryLoader):

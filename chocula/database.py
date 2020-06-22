@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import sys
-import csv
 import json
 import sqlite3
 from collections import Counter
@@ -11,7 +10,6 @@ from typing import List, Dict, Tuple, Optional, Any
 import urlcanon
 import surt
 import tldextract
-import ftfy
 import stdnum.issn
 
 from chocula import *
@@ -130,7 +128,7 @@ class DirectoryInfo:
             identifier TEXT,
             name TEXT,
             extra TEXT,
-        
+
         Returns a tuple in that order.
         """
         if not self.issnl:

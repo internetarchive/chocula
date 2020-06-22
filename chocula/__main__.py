@@ -45,8 +45,8 @@ See TODO.md for more work-in-progress
 """
 
 import sys
-import csv
 import argparse
+from typing import Optional
 
 from chocula import (
     ChoculaDatabase,

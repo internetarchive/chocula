@@ -1,11 +1,9 @@
 import sys
-from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Optional
 
 import ftfy
 import pycountry
 
-################### Utilities
 
 # NOTE: this is a partial list, focusing on non-publisher hosted platforms and
 # software frameworks

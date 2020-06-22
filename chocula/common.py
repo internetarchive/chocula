@@ -3,7 +3,7 @@ import csv
 import datetime
 from typing import Iterable, Optional, Dict, Any, List
 from collections import Counter
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 import ftfy
 

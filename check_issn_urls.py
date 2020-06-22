@@ -30,7 +30,6 @@ For each URL, do a request and record, as JSON:
 HTTP status will be -1 if domain does not even resolve.
 """
 
-import os
 import sys
 import json
 import time
