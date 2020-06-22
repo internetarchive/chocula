@@ -19,7 +19,7 @@ You need `python3.7`, `pipenv`, and `sqlite3` installed. Commands are run via
 
 Set up dependencies and fetch source metadata:
 
-    make deps fetch-sources
+    make dep fetch-sources
 
 Then re-generate entire sqlite3 database from scratch:
 
