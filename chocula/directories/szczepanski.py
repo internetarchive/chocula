@@ -1,4 +1,3 @@
-
 from typing import Iterable, Optional
 import json
 
@@ -16,7 +15,7 @@ class SzczepanskiLoader(DirectoryLoader):
     source_slug = "szczepanski"
 
     def open_file(self) -> Iterable:
-        return open(self.config.szczepanski.filepath, 'r')
+        return open(self.config.szczepanski.filepath, "r")
 
     def parse_record(self, row) -> Optional[DirectoryInfo]:
 
@@ -27,21 +26,21 @@ class SzczepanskiLoader(DirectoryLoader):
 
         info = DirectoryInfo(
             directory_slug=self.source_slug,
-            issne=row.get('issne'),
-            issnp=row.get('issnp'),
-            raw_issn=row.get('issn'),
-            name=clean_str(row['title']),
-            publisher=clean_str(row.get('ed')),
+            issne=row.get("issne"),
+            issnp=row.get("issnp"),
+            raw_issn=row.get("issn"),
+            name=clean_str(row["title"]),
+            publisher=clean_str(row.get("ed")),
         )
 
-        info.extra['szczepanski'] = dict(as_of=self.config.szczepanski.date)
-        if row.get('extra'):
-            info.extra['szczepanski']['notes'] = row.get('extra')
-        for k in ('other_titles', 'year_spans', 'ed'):
+        info.extra["szczepanski"] = dict(as_of=self.config.szczepanski.date)
+        if row.get("extra"):
+            info.extra["szczepanski"]["notes"] = row.get("extra")
+        for k in ("other_titles", "year_spans", "ed"):
             if row.get(k):
-                info.extra['szczepanski'][k] = row[k]
+                info.extra["szczepanski"][k] = row[k]
 
-        url = HomepageUrl.from_url(row.get('url'))
+        url = HomepageUrl.from_url(row.get("url"))
         if url:
             info.homepage_urls.append(url)
 

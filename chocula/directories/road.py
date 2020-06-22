@@ -1,4 +1,3 @@
-
 from typing import Iterable, Optional
 import csv
 
@@ -26,27 +25,39 @@ class RoadLoader(DirectoryLoader):
     source_slug = "road"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.road.filepath), delimiter='\t',
-            fieldnames=("ISSN", "ISSN-L", "Short Title", "Title", "Publisher", "URL1", "URL2", "Region", "Lang1", "Lang2")
+        return csv.DictReader(
+            open(self.config.road.filepath),
+            delimiter="\t",
+            fieldnames=(
+                "ISSN",
+                "ISSN-L",
+                "Short Title",
+                "Title",
+                "Publisher",
+                "URL1",
+                "URL2",
+                "Region",
+                "Lang1",
+                "Lang2",
+            ),
         )
 
     def parse_record(self, row) -> Optional[DirectoryInfo]:
         info = DirectoryInfo(
             directory_slug=self.source_slug,
-            raw_issn=row['ISSN-L'],
-            name=clean_str(row['Short Title']),
-            publisher=clean_str(row['Publisher']),
-            langs=[l for l in (row['Lang1'], row['Lang2']) if l],
+            raw_issn=row["ISSN-L"],
+            name=clean_str(row["Short Title"]),
+            publisher=clean_str(row["Publisher"]),
+            langs=[l for l in (row["Lang1"], row["Lang2"]) if l],
         )
 
         # TODO: region mapping: "Europe and North America"
         # TODO: lang mapping: already alpha-3
 
         # homepages
-        for url in [u for u in (row['URL1'], row['URL2']) if u]:
+        for url in [u for u in (row["URL1"], row["URL2"]) if u]:
             homepage = HomepageUrl.from_url(url)
             if homepage:
                 info.homepage_urls.append(homepage)
 
         return info
-

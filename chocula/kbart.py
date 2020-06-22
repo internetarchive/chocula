@@ -1,4 +1,3 @@
-
 from typing import List, Any
 from chocula.common import KbartLoader
 
@@ -25,7 +24,7 @@ class PorticoKbartLoader(KbartLoader):
 
     def file_path(self) -> str:
         return self.config.portico.filepath
- 
+
 
 class JstorKbartLoader(KbartLoader):
 

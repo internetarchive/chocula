@@ -1,4 +1,3 @@
-
 from typing import Iterable, Optional
 import csv
 
@@ -21,24 +20,22 @@ class OpenAPCLoader(DirectoryLoader):
 
     def parse_record(self, row) -> Optional[DirectoryInfo]:
 
-        if not row.get('issn'):
+        if not row.get("issn"):
             return None
 
         info = DirectoryInfo(
             directory_slug=self.source_slug,
-            issne=row['issn_electronic'],
-            issnp=row['issn_print'],
-            raw_issn=row['issn_l'] or row['issn'],
-            name=clean_str(row['journal_full_title']),
-            publisher=clean_str(row['publisher']),
+            issne=row["issn_electronic"],
+            issnp=row["issn_print"],
+            raw_issn=row["issn_l"] or row["issn"],
+            name=clean_str(row["journal_full_title"]),
+            publisher=clean_str(row["publisher"]),
         )
 
-        info.extra['is_hybrid'] = bool(row['is_hybrid'])
+        info.extra["is_hybrid"] = bool(row["is_hybrid"])
 
-        homepage = HomepageUrl.from_url(row['url'])
+        homepage = HomepageUrl.from_url(row["url"])
         if homepage:
             info.homepage_urls.append(homepage)
 
         return info
-
-

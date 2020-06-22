@@ -1,9 +1,8 @@
-
 from types import SimpleNamespace
 import toml
 
-class ChoculaConfig(SimpleNamespace):
 
+class ChoculaConfig(SimpleNamespace):
     @classmethod
     def from_file(cls, file_path="sources.toml", sources_dir="data/"):
 

@@ -1,8 +1,13 @@
-
 from typing import Iterable, Optional, Dict, Any
 import csv
 
-from chocula.util import clean_str, parse_mimetypes, parse_country, parse_lang, PLATFORM_MAP
+from chocula.util import (
+    clean_str,
+    parse_mimetypes,
+    parse_country,
+    parse_lang,
+    PLATFORM_MAP,
+)
 from chocula.common import DirectoryLoader
 from chocula.database import DirectoryInfo, HomepageUrl
 
@@ -81,40 +86,43 @@ class DoajLoader(DirectoryLoader):
 
         info = DirectoryInfo(
             directory_slug=self.source_slug,
-            issnp=row['Journal ISSN (print version)'],
-            issne=row['Journal EISSN (online version)'],
-            name=clean_str(row['Journal title']),
-            publisher=clean_str(row['Publisher']),
-            platform=PLATFORM_MAP.get(row['Platform, host or aggregator']),
-            country=parse_country(row['Country of publisher']),
+            issnp=row["Journal ISSN (print version)"],
+            issne=row["Journal EISSN (online version)"],
+            name=clean_str(row["Journal title"]),
+            publisher=clean_str(row["Publisher"]),
+            platform=PLATFORM_MAP.get(row["Platform, host or aggregator"]),
+            country=parse_country(row["Country of publisher"]),
         )
 
-        lang = parse_lang(row['Full text language'])
+        lang = parse_lang(row["Full text language"])
         if lang:
             info.langs.append(lang)
 
         extra: Dict[str, Any] = dict(doaj=dict())
-        extra['mimetypes'] = parse_mimetypes(row['Full text formats'])
-        extra['doaj']['as_of'] = self.config.snapshot.date
-        if row['DOAJ Seal']:
-            extra['doaj']['seal'] = {"no": False, "yes": True}[row['DOAJ Seal'].lower()]
+        extra["mimetypes"] = parse_mimetypes(row["Full text formats"])
+        extra["doaj"]["as_of"] = self.config.snapshot.date
+        if row["DOAJ Seal"]:
+            extra["doaj"]["seal"] = {"no": False, "yes": True}[row["DOAJ Seal"].lower()]
 
-        if row['Digital archiving policy or program(s)']:
-            extra['archive'] = [a.strip() for a in row['Digital archiving policy or program(s)'].split(',') if a.strip()]
-        elif row['Archiving: national library']:
-            extra['archive'] = ['national-library']
+        if row["Digital archiving policy or program(s)"]:
+            extra["archive"] = [
+                a.strip()
+                for a in row["Digital archiving policy or program(s)"].split(",")
+                if a.strip()
+            ]
+        elif row["Archiving: national library"]:
+            extra["archive"] = ["national-library"]
 
-        crawl_permission = row['Journal full-text crawl permission']
+        crawl_permission = row["Journal full-text crawl permission"]
         if crawl_permission:
-            extra['crawl-permission'] = dict(Yes=True, No=False)[crawl_permission]
-        default_license = row['Journal license']
-        if default_license and default_license.startswith('CC'):
-            extra['default_license'] = default_license.replace('CC ', 'CC-').strip()
+            extra["crawl-permission"] = dict(Yes=True, No=False)[crawl_permission]
+        default_license = row["Journal license"]
+        if default_license and default_license.startswith("CC"):
+            extra["default_license"] = default_license.replace("CC ", "CC-").strip()
 
-        url = row['Journal URL']
+        url = row["Journal URL"]
         if url:
-            homepage = HomepageUrl.from_url(row['Journal URL'])
+            homepage = HomepageUrl.from_url(row["Journal URL"])
             if homepage:
                 info.homepage_urls.append(homepage)
         return info
-

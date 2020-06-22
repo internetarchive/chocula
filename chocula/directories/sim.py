@@ -1,8 +1,14 @@
-
 from typing import Iterable, Optional, Dict, Any
 import csv
 
-from chocula.util import clean_str, parse_mimetypes, parse_country, parse_lang, PLATFORM_MAP, gaps_to_spans
+from chocula.util import (
+    clean_str,
+    parse_mimetypes,
+    parse_country,
+    parse_lang,
+    PLATFORM_MAP,
+    gaps_to_spans,
+)
 from chocula.common import DirectoryLoader
 from chocula.database import DirectoryInfo, HomepageUrl
 
@@ -37,35 +43,34 @@ class SimLoader(DirectoryLoader):
         # TODO: 'Pub Type'
 
         extra: Dict[str, Any] = {}
-        first_year = row['First Volume']
+        first_year = row["First Volume"]
         if first_year:
             first_year = int(first_year)
-            extra['first_year'] = int(row['First Volume'])
+            extra["first_year"] = int(row["First Volume"])
         else:
             first_year = None
-        last_year = row['Last Volume']
+        last_year = row["Last Volume"]
         if last_year:
             last_year = int(last_year)
-            extra['last_year'] = last_year
+            extra["last_year"] = last_year
         else:
             last_year = None
-        gaps = [int(g) for g in row['NA Gaps'].split(';') if g.strip()]
+        gaps = [int(g) for g in row["NA Gaps"].split(";") if g.strip()]
         if gaps:
-            extra['gaps'] = gaps
+            extra["gaps"] = gaps
         if first_year and last_year:
-            extra['year_spans'] = gaps_to_spans(first_year, last_year, gaps)
-        extra['scholarly_peer_reviewed'] = row["Scholarly / Peer-\nReviewed"]
-        extra['peer_reviewed'] = row["Peer-\nReviewed"]
-        extra['pub_type'] = clean_str(row["Pub Type"])
+            extra["year_spans"] = gaps_to_spans(first_year, last_year, gaps)
+        extra["scholarly_peer_reviewed"] = row["Scholarly / Peer-\nReviewed"]
+        extra["peer_reviewed"] = row["Peer-\nReviewed"]
+        extra["pub_type"] = clean_str(row["Pub Type"])
 
         info = DirectoryInfo(
             directory_slug=self.source_slug,
-            name=clean_str(row['Title']),
-            publisher=clean_str(row['Publisher']),
-            raw_issn=row['ISSN'][:9],
-            custom_id=row.get('NA Pub Cat ID').strip() or None,
-            langs=[parse_lang(row['Pub Language'])],
+            name=clean_str(row["Title"]),
+            publisher=clean_str(row["Publisher"]),
+            raw_issn=row["ISSN"][:9],
+            custom_id=row.get("NA Pub Cat ID").strip() or None,
+            langs=[parse_lang(row["Pub Language"])],
             extra=extra,
         )
         return info
-

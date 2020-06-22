@@ -1,4 +1,3 @@
-
 from chocula.directories.crossref import CrossrefLoader
 from chocula.directories.doaj import DoajLoader
 from chocula.directories.entrez import EntrezLoader
@@ -14,7 +13,17 @@ from chocula.directories.szczepanski import SzczepanskiLoader
 from chocula.directories.wikidata import WikidataLoader
 
 ALL_CHOCULA_DIR_CLASSES = [
-    CrossrefLoader, DoajLoader, EntrezLoader,EzbLoader, GoldOALoader,
-    NorwegianLoader, OpenAPCLoader, RoadLoader, SherpaRomeoLoader,
-    SzczepanskiLoader, WikidataLoader, SimLoader, ScieloLoader,
+    CrossrefLoader,
+    DoajLoader,
+    EntrezLoader,
+    EzbLoader,
+    GoldOALoader,
+    NorwegianLoader,
+    OpenAPCLoader,
+    RoadLoader,
+    SherpaRomeoLoader,
+    SzczepanskiLoader,
+    WikidataLoader,
+    SimLoader,
+    ScieloLoader,
 ]

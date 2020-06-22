@@ -1,4 +1,3 @@
-
 from typing import Iterable, Optional
 import csv
 
@@ -21,11 +20,11 @@ class GoldOALoader(DirectoryLoader):
 
     def parse_record(self, row) -> Optional[DirectoryInfo]:
 
-        if not (row.get('ISSN_L') and row.get('TITLE')):
+        if not (row.get("ISSN_L") and row.get("TITLE")):
             return None
 
         # TODO: also add for other non-direct indices
-        #for ind in ('WOS', 'SCOPUS'):
+        # for ind in ('WOS', 'SCOPUS'):
         #    issnl, status = self.add_issn(
         #        ind.lower(),
         #        raw_issn=row['ISSN_L'],
@@ -33,12 +32,12 @@ class GoldOALoader(DirectoryLoader):
         #    )
 
         extra = dict()
-        for ind in ('DOAJ', 'ROAD', 'PMC', 'OAPC', 'WOS', 'SCOPUS'):
-            extra['in_' + ind.lower()] = bool(int(row['JOURNAL_IN_' + ind]))
+        for ind in ("DOAJ", "ROAD", "PMC", "OAPC", "WOS", "SCOPUS"):
+            extra["in_" + ind.lower()] = bool(int(row["JOURNAL_IN_" + ind]))
 
         return DirectoryInfo(
             directory_slug=self.source_slug,
-            raw_issn=row['ISSN_L'],
-            name=clean_str(row['TITLE']),
+            raw_issn=row["ISSN_L"],
+            name=clean_str(row["TITLE"]),
             extra=extra,
         )

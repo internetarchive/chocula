@@ -1,4 +1,3 @@
-
 from typing import Iterable, Optional
 import csv
 
@@ -52,29 +51,31 @@ class NorwegianLoader(DirectoryLoader):
     source_slug = "norwegian"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.norwegian.filepath, encoding="ISO-8859-1"), delimiter=";")
+        return csv.DictReader(
+            open(self.config.norwegian.filepath, encoding="ISO-8859-1"), delimiter=";"
+        )
 
     def parse_record(self, row) -> Optional[DirectoryInfo]:
         info = DirectoryInfo(
             directory_slug=self.source_slug,
-            issnp=row['Print ISSN'],
-            issne=row['Online ISSN'],
-            country=parse_country(row['Country of publication']),
-            name=clean_str(row.get('International title')),
-            langs=[l for l in [parse_lang(row['Language'])] if l],
+            issnp=row["Print ISSN"],
+            issne=row["Online ISSN"],
+            country=parse_country(row["Country of publication"]),
+            name=clean_str(row.get("International title")),
+            langs=[l for l in [parse_lang(row["Language"])] if l],
         )
 
-        info.extra['norwegian'] = dict(as_of=self.config.norwegian.date)
-        if row['Level 2019']:
-            info.extra['norwegian']['level'] = int(row['Level 2019'])
+        info.extra["norwegian"] = dict(as_of=self.config.norwegian.date)
+        if row["Level 2019"]:
+            info.extra["norwegian"]["level"] = int(row["Level 2019"])
 
-        if row['Original title'] != row['International title']:
-            info.original_name = clean_str(row['Original title'])
+        if row["Original title"] != row["International title"]:
+            info.original_name = clean_str(row["Original title"])
 
-            identifier=row['NSD tidsskrift_id'],
-            publisher=row['Publisher'],
+            identifier = (row["NSD tidsskrift_id"],)
+            publisher = (row["Publisher"],)
 
-        url = HomepageUrl.from_url(row['URL'])
+        url = HomepageUrl.from_url(row["URL"])
         if url:
             info.homepage_urls.append(url)
 

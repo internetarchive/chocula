@@ -1,4 +1,3 @@
-
 from typing import Iterable, Optional
 import csv
 
@@ -23,14 +22,14 @@ class CrossrefLoader(DirectoryLoader):
     def parse_record(self, record) -> Optional[DirectoryInfo]:
         info = DirectoryInfo(
             directory_slug=self.source_slug,
-            issne=record['eissn'],
-            issnp=record['pissn'],
-            custom_id=record.get('doi').strip() or None,
-            name=clean_str(record.get('JournalTitle')),
-            publisher=clean_str(record.get('Publisher')),
+            issne=record["eissn"],
+            issnp=record["pissn"],
+            custom_id=record.get("doi").strip() or None,
+            name=clean_str(record.get("JournalTitle")),
+            publisher=clean_str(record.get("Publisher")),
         )
 
-        if record['additionalIssns']:
-            info.raw_issn = record['additionalIssns'][0]
+        if record["additionalIssns"]:
+            info.raw_issn = record["additionalIssns"][0]
 
         return info

@@ -48,8 +48,13 @@ import sys
 import csv
 import argparse
 
-from chocula import ChoculaDatabase, ChoculaConfig, IssnDatabase,\
-    ALL_CHOCULA_DIR_CLASSES, ALL_CHOCULA_KBART_CLASSES
+from chocula import (
+    ChoculaDatabase,
+    ChoculaConfig,
+    IssnDatabase,
+    ALL_CHOCULA_DIR_CLASSES,
+    ALL_CHOCULA_KBART_CLASSES,
+)
 
 
 def run_everything(config, database):
@@ -70,6 +75,7 @@ def run_everything(config, database):
     database.summarize()
     print("### Done with everything!")
 
+
 def run_directory(config, database, source):
     for cls in ALL_CHOCULA_DIR_CLASSES:
         if cls.source_slug == source:
@@ -78,6 +84,7 @@ def run_directory(config, database, source):
             print(counts)
             return
     raise NotImplementedError(f"unknown source: {source}")
+
 
 def run_kbart(config, database, source):
     for cls in ALL_CHOCULA_KBART_CLASSES:
@@ -88,63 +95,65 @@ def run_kbart(config, database, source):
             return
     raise NotImplementedError(f"unknown source: {source}")
 
+
 def run_load(config, database, source):
-    if source == 'fatcat_stats':
+    if source == "fatcat_stats":
         print(database.load_fatcat_stats(config))
-    elif source == 'fatcat_containers':
+    elif source == "fatcat_containers":
         print(database.load_fatcat_containers(config))
-    elif source == 'homepage_status':
+    elif source == "homepage_status":
         print(database.load_homepage_status(config))
     else:
         raise NotImplementedError(f"unknown source: {source}")
 
+
 def main():
     parser = argparse.ArgumentParser(
-        prog="python -m chocula",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        prog="python -m chocula", formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     subparsers = parser.add_subparsers()
 
-    parser.add_argument("--db-file",
-        help="sqlite database file",
-        default='chocula.sqlite',
-        type=str)
+    parser.add_argument(
+        "--db-file", help="sqlite database file", default="chocula.sqlite", type=str
+    )
 
-    sub = subparsers.add_parser('everything',
-        help="run all the commands")
-    sub.set_defaults(func='everything')
+    sub = subparsers.add_parser("everything", help="run all the commands")
+    sub.set_defaults(func="everything")
 
-    sub = subparsers.add_parser('init_db',
-        help="create sqlite3 output file and tables")
-    sub.set_defaults(func='init_db')
+    sub = subparsers.add_parser("init_db", help="create sqlite3 output file and tables")
+    sub.set_defaults(func="init_db")
 
-    sub = subparsers.add_parser('summarize',
-        help="aggregate metadata from all tables into 'journals' table")
-    sub.set_defaults(func='summarize')
+    sub = subparsers.add_parser(
+        "summarize", help="aggregate metadata from all tables into 'journals' table"
+    )
+    sub.set_defaults(func="summarize")
 
-    sub = subparsers.add_parser('export',
-        help="dump JSON output")
-    sub.set_defaults(func='export')
+    sub = subparsers.add_parser("export", help="dump JSON output")
+    sub.set_defaults(func="export")
 
-    sub = subparsers.add_parser('export_fatcat',
-        help="dump JSON output in a format that can load into fatcat")
-    sub.set_defaults(func='export_fatcat')
+    sub = subparsers.add_parser(
+        "export_fatcat", help="dump JSON output in a format that can load into fatcat"
+    )
+    sub.set_defaults(func="export_fatcat")
 
-    sub = subparsers.add_parser('export_urls',
-        help="dump homepage URLs (eg, to crawl for status)")
-    sub.set_defaults(func='export_urls')
+    sub = subparsers.add_parser(
+        "export_urls", help="dump homepage URLs (eg, to crawl for status)"
+    )
+    sub.set_defaults(func="export_urls")
 
-    sub = subparsers.add_parser('directory',
-        help="index directory metadata from a given source")
+    sub = subparsers.add_parser(
+        "directory", help="index directory metadata from a given source"
+    )
     sub.add_argument("source", type=str, help="short name of source to index")
     sub.set_defaults(func=run_directory)
 
-    sub = subparsers.add_parser('load',
-        help="load metadata of a given type")
+    sub = subparsers.add_parser("load", help="load metadata of a given type")
     sub.add_argument("source", type=str, help="short name of source to index")
     sub.set_defaults(func=run_load)
 
-    sub = subparsers.add_parser('kbart',
-        help="index KBART holding metadata for a given source")
+    sub = subparsers.add_parser(
+        "kbart", help="index KBART holding metadata for a given source"
+    )
     sub.add_argument("source", type=str, help="short name of source to index")
     sub.set_defaults(func=run_kbart)
 
@@ -155,11 +164,11 @@ def main():
 
     config = ChoculaConfig.from_file()
     issn_db: Optional[IssnDatabase] = None
-    if args.func in ('everything', 'summarize', run_directory, run_kbart):
+    if args.func in ("everything", "summarize", run_directory, run_kbart):
         issn_db = IssnDatabase(config.issnl.filepath)
 
     cdb = ChoculaDatabase(args.db_file, issn_db)
-    if args.func == 'everything':
+    if args.func == "everything":
         run_everything(config, cdb)
     elif args.func in (run_directory, run_load, run_kbart):
         args.func(config, cdb, args.source)
@@ -168,6 +177,6 @@ def main():
         func = getattr(cdb, args.func)
         print(func(), file=sys.stderr)
 
-if __name__ == '__main__':
-    main()
 
+if __name__ == "__main__":
+    main()
