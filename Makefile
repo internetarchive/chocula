@@ -25,6 +25,10 @@ fmt: ## Run code formating on all source code
 test: lint ## Run all tests and lints
 	pipenv run pytest
 
+.PHONY: coverage
+coverage: ## Run all tests with coverage
+	pipenv run pytest --cov
+
 data/container_stats.json:
 	mkdir -p data
 	cat data/container_export.json | jq .issnl -r | sort -u > /tmp/container_issnl.tsv
