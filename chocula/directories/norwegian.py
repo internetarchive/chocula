@@ -64,7 +64,7 @@ class NorwegianLoader(DirectoryLoader):
             publisher=clean_str(row["Publisher"]),
             country=parse_country(row["Country of publication"]),
             name=clean_str(row.get("International title")),
-            langs=[l for l in [parse_lang(row["Language"])] if l],
+            langs=[lang for lang in [parse_lang(row["Language"])] if lang],
         )
 
         info.extra["norwegian"] = dict(as_of=self.config.norwegian.date)

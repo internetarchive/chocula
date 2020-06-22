@@ -48,7 +48,7 @@ class RoadLoader(DirectoryLoader):
             raw_issn=row["ISSN-L"],
             name=clean_str(row["Short Title"]),
             publisher=clean_str(row["Publisher"]),
-            langs=[l for l in (row["Lang1"], row["Lang2"]) if l],
+            langs=[lang for lang in (row["Lang1"], row["Lang2"]) if lang],
         )
 
         # TODO: region mapping: "Europe and North America"
