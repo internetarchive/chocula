@@ -48,6 +48,7 @@ class HomepageUrl:
             not url
             or "mailto:" in url.lower()
             or url.lower() in ("http://n/a", "http://na/", "http://na")
+            or "LOCKSS_RESOLVER" in url
         ):
             return None
         if url.startswith("www."):
@@ -681,12 +682,25 @@ class ChoculaDatabase:
                     continue
                 if "://www.ncbi.nlm.nih.gov/" in hrow["url"]:
                     continue
+                if "LOCKSS_RESOLVER" in hrow["url"]:
+                    continue
                 if "web.archive.org/web" in hrow["url"]:
                     webarchive_urls.append(hrow["url"])
                     urls.append(hrow["url"])
                     continue
-                if hrow["host"] in ("www.google.com", "books.google.com"):
+                if hrow["host"] in (
+                    "www.google.com",
+                    "books.google.com",
+                    "www.loc.gov",
+                    "search.ebscohost.com",
+                    "bibpurl.oclc.org",
+                    "catalog.hathitrust.org",
+                    "www.thefreelibrary.com",
+                    "goo.gl",
+                    "dx.doi.org",
+                ):
                     # individual books or google searches, not journal/conference homepages
+                    # LOC scanned newspapers
                     continue
                 if "/oai/request" in hrow["url"]:
                     # OAI-PMH endpoints, not homepages
