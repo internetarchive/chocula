@@ -132,3 +132,14 @@ filename = "container_stats.json"
 date = "2020-05-05"
 filename = "manual_longtail_homepages.tsv"
 mirror_url = "https://archive.org/download/chocula-manual-hompages"
+
+[issn_meta]
+# see notes/issn_meta.md
+date = "2020-03-18"
+filename = "issn_meta.filtered.json"
+mirror_url = "https://archive.org/download/issn_public_data_20200318"
+
+[zdb_fize]
+date = "2020-05-30"
+filename = "zdb_fize_homepage_available.json"
+mirror_url = "https://archive.org/download/issn_homepage_candidates_20200530"
