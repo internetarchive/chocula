@@ -11,6 +11,7 @@ from chocula.directories.sim import SimLoader
 from chocula.directories.scielo import ScieloLoader
 from chocula.directories.szczepanski import SzczepanskiLoader
 from chocula.directories.wikidata import WikidataLoader
+from chocula.directories.manual_homepages import ManualHomepageLoader
 
 ALL_CHOCULA_DIR_CLASSES = [
     CrossrefLoader,
@@ -26,4 +27,5 @@ ALL_CHOCULA_DIR_CLASSES = [
     WikidataLoader,
     SimLoader,
     ScieloLoader,
+    ManualHomepageLoader,
 ]
