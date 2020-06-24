@@ -1,7 +1,7 @@
 from typing import Iterable, Optional
 import csv
 
-from chocula.util import clean_str
+from chocula.util import clean_str, parse_lang
 from chocula.common import DirectoryLoader
 from chocula.database import DirectoryInfo, HomepageUrl
 
@@ -48,7 +48,11 @@ class RoadLoader(DirectoryLoader):
             raw_issn=row["ISSN-L"],
             name=clean_str(row["Short Title"]),
             publisher=clean_str(row["Publisher"]),
-            langs=[lang for lang in (row["Lang1"], row["Lang2"]) if lang],
+            langs=[
+                lang
+                for lang in [parse_lang(s) for s in (row["Lang1"], row["Lang2"])]
+                if lang
+            ],
         )
 
         # TODO: region mapping: "Europe and North America"
