@@ -168,3 +168,8 @@ filename = "awol-index-top-issn.json"
 original_url = "https://isaw.nyu.edu/publications/awol-index/"
 mirror_url = "https://archive.org/download/awol-index-json"
 
+[mag]
+date = "2020-01-23"
+original_url = "https://docs.microsoft.com/en-us/academic-services/graph/"
+filename = "mag-journals.txt"
+mirror_url = "https://archive.org/download/mag-2020-01-23"

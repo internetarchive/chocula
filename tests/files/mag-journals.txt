@@ -1,0 +1,25 @@
+465895	12312	eureka	Eureka	1342-5641		http://www.archim.org.uk/eureka/	1106	168	2016-06-24
+1137746	11759	the artist and journal of home culture	The Artist and Journal of Home Culture	2151-4879			518	8675	2016-06-24
+2978343	15234	cumberland law review	Cumberland Law Review	0360-8298		http://www.cumberlandlawreview.com/	47	44	2016-06-24
+3010151	14881	comparative medicine east and west	Comparative Medicine East and West	0147-2917			19	122	2016-06-24
+3164724	9968	physiological measurement	Physiological Measurement	0967-3334			3276	69046	2016-06-24
+17807283	9520	theoretical population biology	Theoretical Population Biology	0040-5809		http://www.journals.elsevier.com/theoretical-population-biology/	2478	107627	2016-06-24
+18204665	9332	international journal of multiphase flow	International Journal of Multiphase Flow	0301-9322			4818	124251	2016-06-24
+27908409	11407	acta veterinaria hungarica	Acta Veterinaria Hungarica	0236-6290			1727	11463	2016-06-24
+40275224	12875	revista latinoamericana de quimica	Revista Latinoamericana de Química	0370-5943		http://www.relaquim.com/	557	815	2016-06-24
+42124886	9771	scandinavian journal of rheumatology	Scandinavian Journal of Rheumatology	0300-9742			4499	77427	2016-06-24
+2739456633	13593	derim	Derim	2149-2182			308	98	2017-07-31
+2764395831	13860	the naham management journal	The NAHAM management journal	1057-3526			229	25	2017-10-27
+49789000	9765	fatigue & fracture of engineering materials & structures	Fatigue & Fracture of Engineering Materials & Structures	1460-2695			3983	65247	2016-06-24
+2736806674	12364	sequencia estudos juridicos e politicos	Sequência: Estudos Juridicos e Politicos	0101-9562			949	240	2017-07-31
+2764944378	13733	journal of sport psychology in action	Journal of sport psychology in action	2152-0712			220	956	2017-10-27
+2789086	13552	japanese dental science review	Japanese Dental Science Review	1882-7616			212	1672	2016-06-24
+26559856	15149	obesity and weight management	Obesity and Weight Management	1948-6553			55	119	2016-06-24
+2755455544	11243	sangre	Sangre	0036-4355			3038	2091	2017-09-25
+2764925653	12051	applied journal of general practice	Applied Journal of General Practice				1465	29	2017-10-27
+28565804	11453	moscow mathematical journal	Moscow Mathematical Journal	1609-3321		http://www.ams.org/distribution/mmj/	668	8844	2016-06-24
+26007720	14383	journal of geriatric drug therapy	Journal of Geriatric Drug Therapy	8756-4629			99	247	2016-06-24
+117080907	11805	journal of the korean society for library and information science	Journal of The Korean Society for Library and Information Science				1631	1458	2016-06-24
+62893890	12653	journal of environmental engineering and landscape management	Journal of Environmental Engineering and Landscape Management	1648-6897			526	3649	2016-06-24
+2764717979	14185	journal of basic research in medical sciences	Journal of Basic Research in Medical Sciences				170	56	2017-10-27
+2739194844	12343	pakistan armed forces medical journal	Pakistan Armed Forces Medical Journal	0030-9648			1088	90	2017-07-31

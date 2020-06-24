@@ -18,26 +18,29 @@ from chocula.directories.vanished_inactive import VanishedInactiveLoader
 from chocula.directories.issn_meta import IssnMetaLoader
 from chocula.directories.australian_era import AustralianEraLoader
 from chocula.directories.awol import AwolLoader
+from chocula.directories.mag import MagLoader
 
+# sort order roughly results in metadata prioritization
 ALL_CHOCULA_DIR_CLASSES = [
-    CrossrefLoader,
+    IssnMetaLoader,
+    ManualHomepageLoader,
+    ScieloLoader,
     DoajLoader,
+    CrossrefLoader,
     EntrezLoader,
     EzbLoader,
     GoldOALoader,
     NorwegianLoader,
+    AustralianEraLoader,
+    SzczepanskiLoader,
+    WikidataLoader,
+    AwolLoader,
+    VanishedDisapearedLoader,
+    VanishedInactiveLoader,
     OpenAPCLoader,
     RoadLoader,
     SherpaRomeoLoader,
-    SzczepanskiLoader,
-    WikidataLoader,
     SimLoader,
-    ScieloLoader,
-    ManualHomepageLoader,
     ZdbFizeLoader,
-    VanishedDisapearedLoader,
-    VanishedInactiveLoader,
-    IssnMetaLoader,
-    AustralianEraLoader,
-    AwolLoader,
+    MagLoader,
 ]
