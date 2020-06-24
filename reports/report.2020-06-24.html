@@ -1,0 +1,1172 @@
+<!--
+This template can be "executed" to generate an HTML report page using the
+`sqlite-notebook` tool.
+-->
+
+<h1>Chocula Journal Aggregate Stats</h1>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>datetime('now')</th>
+</tr></thead>
+<tr>
+  <td>2020-06-24 06:07:59</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT datetime('now');</pre>
+<br></code></div><div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>seq</th>
+  <th>name</th>
+  <th>file</th>
+</tr></thead>
+<tr>
+  <td>0</td>
+  <td>main</td>
+  <td>/home/bnewbold/code/chocula/chocula.sqlite</td>
+</tr>
+</table><pre><b>QUERY:</b> PRAGMA database_list;</pre>
+<br></code></div><h2>Overview</h2>
+<p>Top publishers by journal count:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>publisher</th>
+  <th>COUNT(*)</th>
+</tr></thead>
+<tr>
+  <td></td>
+  <td>50438</td>
+</tr>
+<tr>
+  <td>Elsevier</td>
+  <td>4896</td>
+</tr>
+<tr>
+  <td>Springer</td>
+  <td>3180</td>
+</tr>
+<tr>
+  <td>Taylor & Francis</td>
+  <td>3048</td>
+</tr>
+<tr>
+  <td>John Wiley & Sons, Inc</td>
+  <td>2322</td>
+</tr>
+<tr>
+  <td>SAGE Publications</td>
+  <td>1441</td>
+</tr>
+<tr>
+  <td>J-STAGE</td>
+  <td>1405</td>
+</tr>
+<tr>
+  <td>Peter Lang International Academic Publishers</td>
+  <td>1356</td>
+</tr>
+<tr>
+  <td>SciELO</td>
+  <td>1187</td>
+</tr>
+<tr>
+  <td>Informa UK (Taylor & Francis)</td>
+  <td>737</td>
+</tr>
+<tr>
+  <td>Springer-Verlag</td>
+  <td>706</td>
+</tr>
+<tr>
+  <td>Cambridge University Press</td>
+  <td>598</td>
+</tr>
+<tr>
+  <td>Walter de Gruyter GmbH</td>
+  <td>554</td>
+</tr>
+<tr>
+  <td>Georg Thieme Verlag KG</td>
+  <td>515</td>
+</tr>
+<tr>
+  <td>OMICS Publishing Group</td>
+  <td>497</td>
+</tr>
+<tr>
+  <td>IEEE, Inc</td>
+  <td>482</td>
+</tr>
+<tr>
+  <td>JSTOR</td>
+  <td>471</td>
+</tr>
+<tr>
+  <td>Medknow Publications</td>
+  <td>463</td>
+</tr>
+<tr>
+  <td>Oxford University Press</td>
+  <td>461</td>
+</tr>
+<tr>
+  <td>Hindawi</td>
+  <td>456</td>
+</tr>
+<tr>
+  <td>Bentham Science</td>
+  <td>445</td>
+</tr>
+<tr>
+  <td>De Gruyter Open Sp. z o.o.</td>
+  <td>440</td>
+</tr>
+<tr>
+  <td>Wolters Kluwer Health</td>
+  <td>427</td>
+</tr>
+<tr>
+  <td>CAIRN</td>
+  <td>416</td>
+</tr>
+<tr>
+  <td>Inderscience</td>
+  <td>396</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT publisher, COUNT(*)
+FROM journal
+GROUP BY publisher
+ORDER BY COUNT(*) DESC
+LIMIT 25;</pre>
+<br></code></div><p>Top countries by number of journals:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>country</th>
+  <th>COUNT(*)</th>
+</tr></thead>
+<tr>
+  <td>us</td>
+  <td>31063</td>
+</tr>
+<tr>
+  <td></td>
+  <td>11775</td>
+</tr>
+<tr>
+  <td>id</td>
+  <td>10203</td>
+</tr>
+<tr>
+  <td>de</td>
+  <td>8221</td>
+</tr>
+<tr>
+  <td>in</td>
+  <td>7489</td>
+</tr>
+<tr>
+  <td>gb</td>
+  <td>7357</td>
+</tr>
+<tr>
+  <td>fr</td>
+  <td>6947</td>
+</tr>
+<tr>
+  <td>uk</td>
+  <td>5989</td>
+</tr>
+<tr>
+  <td>nl</td>
+  <td>5579</td>
+</tr>
+<tr>
+  <td>br</td>
+  <td>4779</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  country,
+COUNT(*)
+FROM journal
+GROUP BY country
+ORDER BY COUNT(*) DESC
+LIMIT 10;</pre>
+<br></code></div><p>.. by number of papers:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>country</th>
+  <th>COUNT(*)</th>
+  <th>SUM(release_count)</th>
+</tr></thead>
+<tr>
+  <td>us</td>
+  <td>31063</td>
+  <td>32178939</td>
+</tr>
+<tr>
+  <td>gb</td>
+  <td>7357</td>
+  <td>13514834</td>
+</tr>
+<tr>
+  <td>nl</td>
+  <td>5579</td>
+  <td>10994203</td>
+</tr>
+<tr>
+  <td>de</td>
+  <td>8221</td>
+  <td>7537722</td>
+</tr>
+<tr>
+  <td>jp</td>
+  <td>3924</td>
+  <td>5534859</td>
+</tr>
+<tr>
+  <td>uk</td>
+  <td>5989</td>
+  <td>4689013</td>
+</tr>
+<tr>
+  <td>fr</td>
+  <td>6947</td>
+  <td>2205320</td>
+</tr>
+<tr>
+  <td>ch</td>
+  <td>2184</td>
+  <td>1956771</td>
+</tr>
+<tr>
+  <td>ru</td>
+  <td>3321</td>
+  <td>1437805</td>
+</tr>
+<tr>
+  <td>in</td>
+  <td>7489</td>
+  <td>1193631</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  country,
+COUNT(*),
+SUM(release_count)
+FROM journal
+GROUP BY country
+ORDER BY SUM(release_count) DESC
+LIMIT 10;</pre>
+<br></code></div><p>Top languages by number of journals:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>lang</th>
+  <th>COUNT(*)</th>
+</tr></thead>
+<tr>
+  <td></td>
+  <td>119385</td>
+</tr>
+<tr>
+  <td>en</td>
+  <td>33483</td>
+</tr>
+<tr>
+  <td>fr</td>
+  <td>2545</td>
+</tr>
+<tr>
+  <td>es</td>
+  <td>1980</td>
+</tr>
+<tr>
+  <td>pt</td>
+  <td>1253</td>
+</tr>
+<tr>
+  <td>id</td>
+  <td>807</td>
+</tr>
+<tr>
+  <td>fa</td>
+  <td>705</td>
+</tr>
+<tr>
+  <td>de</td>
+  <td>687</td>
+</tr>
+<tr>
+  <td>ja</td>
+  <td>627</td>
+</tr>
+<tr>
+  <td>ru</td>
+  <td>454</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  lang,
+COUNT(*)
+FROM journal
+GROUP BY lang
+ORDER BY COUNT(*) DESC
+LIMIT 10;</pre>
+<br></code></div><p>... by number of papers:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>lang</th>
+  <th>COUNT(*)</th>
+  <th>SUM(release_count)</th>
+</tr></thead>
+<tr>
+  <td>en</td>
+  <td>33483</td>
+  <td>52106736</td>
+</tr>
+<tr>
+  <td></td>
+  <td>119385</td>
+  <td>39633327</td>
+</tr>
+<tr>
+  <td>de</td>
+  <td>687</td>
+  <td>1080227</td>
+</tr>
+<tr>
+  <td>ja</td>
+  <td>627</td>
+  <td>701062</td>
+</tr>
+<tr>
+  <td>fr</td>
+  <td>2545</td>
+  <td>459624</td>
+</tr>
+<tr>
+  <td>es</td>
+  <td>1980</td>
+  <td>326190</td>
+</tr>
+<tr>
+  <td>pt</td>
+  <td>1253</td>
+  <td>259440</td>
+</tr>
+<tr>
+  <td>ru</td>
+  <td>454</td>
+  <td>216062</td>
+</tr>
+<tr>
+  <td>it</td>
+  <td>365</td>
+  <td>107777</td>
+</tr>
+<tr>
+  <td>id</td>
+  <td>807</td>
+  <td>63140</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  lang,
+COUNT(*),
+SUM(release_count)
+FROM journal
+GROUP BY lang
+ORDER BY SUM(release_count) DESC
+LIMIT 10;</pre>
+<br></code></div><h2>Fatcat Fulltext Coverage</h2>
+<p>Fulltext coverage by publisher type:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>publisher_type</th>
+  <th>AVG(ia_frac)</th>
+  <th>AVG(preserved_frac)</th>
+  <th>journal_count</th>
+  <th>paper_count</th>
+</tr></thead>
+<tr>
+  <td>big5</td>
+  <td>0.20383140988711096</td>
+  <td>0.7478923363774996</td>
+  <td>14341</td>
+  <td>38968407</td>
+</tr>
+<tr>
+  <td>society</td>
+  <td>0.38285716584323315</td>
+  <td>0.5255948097434624</td>
+  <td>11594</td>
+  <td>17479369</td>
+</tr>
+<tr>
+  <td></td>
+  <td>0.2892933315187726</td>
+  <td>0.39489655868508394</td>
+  <td>76449</td>
+  <td>17433767</td>
+</tr>
+<tr>
+  <td>unipress</td>
+  <td>0.5291521159229248</td>
+  <td>0.7156133857743203</td>
+  <td>8156</td>
+  <td>5979807</td>
+</tr>
+<tr>
+  <td>commercial</td>
+  <td>0.33223411266240366</td>
+  <td>0.679294424296642</td>
+  <td>5900</td>
+  <td>5783703</td>
+</tr>
+<tr>
+  <td>longtail</td>
+  <td>0.7021171169141004</td>
+  <td>0.7512778812541995</td>
+  <td>42817</td>
+  <td>5541048</td>
+</tr>
+<tr>
+  <td>repository</td>
+  <td>0.12411437397202797</td>
+  <td>0.24122655404137083</td>
+  <td>765</td>
+  <td>1032655</td>
+</tr>
+<tr>
+  <td>scielo</td>
+  <td>0.8234053698608026</td>
+  <td>0.8532657517834494</td>
+  <td>1588</td>
+  <td>931427</td>
+</tr>
+<tr>
+  <td>other</td>
+  <td>0.17819330003908534</td>
+  <td>0.6325501923587422</td>
+  <td>961</td>
+  <td>847590</td>
+</tr>
+<tr>
+  <td>archive</td>
+  <td>0.3274660229123176</td>
+  <td>0.9870091603652298</td>
+  <td>545</td>
+  <td>733596</td>
+</tr>
+<tr>
+  <td>oa</td>
+  <td>0.7703412508161128</td>
+  <td>0.8051562963022213</td>
+  <td>1854</td>
+  <td>665337</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  publisher_type,
+AVG(ia_frac),
+AVG(preserved_frac),
+COUNT(*) AS journal_count,
+SUM(release_count) AS paper_count
+FROM journal
+GROUP BY publisher_type
+ORDER BY SUM(release_count) DESC;</pre>
+<br></code></div><p>Top publishers with very little coverage:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>publisher</th>
+  <th>journal_count</th>
+  <th>AVG(ia_frac)</th>
+</tr></thead>
+<tr>
+  <td></td>
+  <td>9604</td>
+  <td>0.0017576670094484276</td>
+</tr>
+<tr>
+  <td>Elsevier</td>
+  <td>1894</td>
+  <td>0.01719793308556602</td>
+</tr>
+<tr>
+  <td>Taylor & Francis</td>
+  <td>1034</td>
+  <td>0.026333463256277043</td>
+</tr>
+<tr>
+  <td>J-STAGE</td>
+  <td>1000</td>
+  <td>0.008786577145385244</td>
+</tr>
+<tr>
+  <td>John Wiley & Sons, Inc</td>
+  <td>758</td>
+  <td>0.021752551474386456</td>
+</tr>
+<tr>
+  <td>Informa UK (Taylor & Francis)</td>
+  <td>583</td>
+  <td>0.010076744435949143</td>
+</tr>
+<tr>
+  <td>SAGE Publications</td>
+  <td>566</td>
+  <td>0.018548379050446432</td>
+</tr>
+<tr>
+  <td>Springer-Verlag</td>
+  <td>381</td>
+  <td>0.015239356601104427</td>
+</tr>
+<tr>
+  <td>Springer</td>
+  <td>352</td>
+  <td>0.025469114384971014</td>
+</tr>
+<tr>
+  <td>JSTOR</td>
+  <td>271</td>
+  <td>0.01053436333975769</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  publisher,
+COUNT(*) AS journal_count,
+AVG(ia_frac)
+FROM journal
+WHERE ia_frac < 0.05
+GROUP BY publisher
+ORDER BY journal_count DESC
+LIMIT 10;</pre>
+<br></code></div><p>Amount of fulltext by SHERPA/ROMEO journal color::</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>sherpa_color</th>
+  <th>SUM(ia_count)</th>
+</tr></thead>
+<tr>
+  <td></td>
+  <td>8179318</td>
+</tr>
+<tr>
+  <td>blue</td>
+  <td>1068696</td>
+</tr>
+<tr>
+  <td>green</td>
+  <td>10279336</td>
+</tr>
+<tr>
+  <td>white</td>
+  <td>731881</td>
+</tr>
+<tr>
+  <td>yellow</td>
+  <td>2489843</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  sherpa_color,
+SUM(ia_count)
+FROM journal
+GROUP BY sherpa_color;</pre>
+<br></code></div><h2>Journal Homepages</h2>
+<p>Homepage URL counts:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>unique_urls</th>
+  <th>journals_with_hompages</th>
+</tr></thead>
+<tr>
+  <td>188481</td>
+  <td>118838</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT COUNT(DISTINCT surt) as unique_urls, COUNT(DISTINCT issnl) as journals_with_hompages FROM homepage;</pre>
+<br></code></div><p>Journals with the most homepage URLs:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>issnl</th>
+  <th>COUNT(*)</th>
+</tr></thead>
+<tr>
+  <td>0036-6439</td>
+  <td>21</td>
+</tr>
+<tr>
+  <td>1487-0614</td>
+  <td>16</td>
+</tr>
+<tr>
+  <td>2375-0383</td>
+  <td>16</td>
+</tr>
+<tr>
+  <td>2374-4030</td>
+  <td>15</td>
+</tr>
+<tr>
+  <td>0097-6326</td>
+  <td>14</td>
+</tr>
+<tr>
+  <td>0749-405X</td>
+  <td>13</td>
+</tr>
+<tr>
+  <td>1521-9097</td>
+  <td>13</td>
+</tr>
+<tr>
+  <td>0009-7004</td>
+  <td>12</td>
+</tr>
+<tr>
+  <td>0030-7076</td>
+  <td>12</td>
+</tr>
+<tr>
+  <td>0717-554X</td>
+  <td>12</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  issnl,
+COUNT(*)
+FROM homepage
+GROUP BY issnl
+ORDER BY COUNT(*) DESC
+LIMIT 10;</pre>
+<br></code></div><p>Top/redundant URLs and SURTs:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>surt</th>
+  <th>COUNT(*)</th>
+</tr></thead>
+<tr>
+  <td>com,indianjournals)/</td>
+  <td>80</td>
+</tr>
+<tr>
+  <td>com,hindawi)/</td>
+  <td>71</td>
+</tr>
+<tr>
+  <td>au,com,informit,search)/search;res=apaft</td>
+  <td>64</td>
+</tr>
+<tr>
+  <td>com,umi)/pqdauto</td>
+  <td>51</td>
+</tr>
+<tr>
+  <td>org,rsc,pubs)/en/ebooks</td>
+  <td>50</td>
+</tr>
+<tr>
+  <td>com,umi)/proquest</td>
+  <td>48</td>
+</tr>
+<tr>
+  <td>org,ieee,ieeexplore)/xplore/conferences.jsp</td>
+  <td>40</td>
+</tr>
+<tr>
+  <td>org,omicsonline)/</td>
+  <td>37</td>
+</tr>
+<tr>
+  <td>com,idealibrary)/</td>
+  <td>36</td>
+</tr>
+<tr>
+  <td>com,wiley,interscience)/</td>
+  <td>31</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  surt,
+COUNT(*)
+FROM homepage
+GROUP BY surt
+ORDER BY COUNT(*) DESC
+LIMIT 10;</pre>
+<br></code></div><p>What is the deal with all those "benjamins" URLs?</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>publisher</th>
+  <th>name</th>
+</tr></thead>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>NOWELE</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Studia Uralo-Altaica</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Language Problems and Language Planning</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Lingvisticæ investigationes</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Linguistics of the TIbeto-Burman Area</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Pragmatics & Cognition</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Terminology</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Written Language & Literacy</td>
+</tr>
+<tr>
+  <td></td>
+  <td>FORUM: Revue internationale d?interprétation et de traduction / International Journal of Interpretation and Translation</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>English Text Construction</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Constructions and Frames</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Pragmatics and Society</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Translation and Interpreting Studies</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Language and Dialogue</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Metaphor in Language, Cognition, and Communication</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Hamburg Studies on Linguistic Diversity</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Translation Spaces</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Studies in Arabic Linguistics</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Journal of Immersion and Content-Based Language Education (JICB)</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Children's Literature, Culture, and Cognition</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Journal of Language Aggression and Conflict</td>
+</tr>
+<tr>
+  <td></td>
+  <td>FILLM Studies in Languages and Literatures</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Advances in Historical Sociolinguistics</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Linguistic Landscape</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>International Journal of Learner Corpus Research</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Journal of Second Language Pronunciation</td>
+</tr>
+<tr>
+  <td></td>
+  <td>ITL - International Journal of Applied Linguistics</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Cognitive Individual Differences in Second Language Processing and Acquisition</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>FORUM</td>
+</tr>
+<tr>
+  <td>John Benjamins Publishing Company</td>
+  <td>Studies in Germanic Linguistics</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  publisher,
+name
+FROM journal
+LEFT JOIN homepage ON journal.issnl = homepage.issnl
+WHERE homepage.surt = 'com,benjamins)/';</pre>
+<br></code></div><p>Domains that block us:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>domain</th>
+  <th>journal_homepages</th>
+  <th>SUM(blocked)</th>
+</tr></thead>
+<tr>
+  <td>jstor.org</td>
+  <td>7669</td>
+  <td>6575</td>
+</tr>
+<tr>
+  <td>wiley.com</td>
+  <td>4285</td>
+  <td>229</td>
+</tr>
+<tr>
+  <td>brill.nl</td>
+  <td>234</td>
+  <td>161</td>
+</tr>
+<tr>
+  <td>bentham.org</td>
+  <td>152</td>
+  <td>150</td>
+</tr>
+<tr>
+  <td>annualreviews.org</td>
+  <td>174</td>
+  <td>103</td>
+</tr>
+<tr>
+  <td>euppublishing.com</td>
+  <td>62</td>
+  <td>54</td>
+</tr>
+<tr>
+  <td>hogrefe.com</td>
+  <td>72</td>
+  <td>51</td>
+</tr>
+<tr>
+  <td>icevirtuallibrary.com</td>
+  <td>46</td>
+  <td>37</td>
+</tr>
+<tr>
+  <td>uem.br</td>
+  <td>49</td>
+  <td>36</td>
+</tr>
+<tr>
+  <td>brepolsonline.net</td>
+  <td>47</td>
+  <td>34</td>
+</tr>
+<tr>
+  <td>futuremedicine.com</td>
+  <td>40</td>
+  <td>31</td>
+</tr>
+<tr>
+  <td>siam.org</td>
+  <td>67</td>
+  <td>23</td>
+</tr>
+<tr>
+  <td>vr-elibrary.de</td>
+  <td>24</td>
+  <td>17</td>
+</tr>
+<tr>
+  <td>liverpooluniversitypress.co.uk</td>
+  <td>26</td>
+  <td>15</td>
+</tr>
+<tr>
+  <td>rodopi.nl</td>
+  <td>20</td>
+  <td>15</td>
+</tr>
+<tr>
+  <td>nrcresearchpress.com</td>
+  <td>18</td>
+  <td>14</td>
+</tr>
+<tr>
+  <td>aiaa.org</td>
+  <td>34</td>
+  <td>10</td>
+</tr>
+<tr>
+  <td>guilfordjournals.com</td>
+  <td>14</td>
+  <td>10</td>
+</tr>
+<tr>
+  <td>ingentaconnect.com</td>
+  <td>417</td>
+  <td>9</td>
+</tr>
+<tr>
+  <td>univie.ac.at</td>
+  <td>54</td>
+  <td>9</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  domain,
+COUNT(*) as journal_homepages,
+SUM(blocked)
+FROM homepage
+GROUP BY domain
+ORDER BY SUM(blocked) DESC
+LIMIT 20;</pre>
+<br></code></div><p>Top duplicated domains:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>url</th>
+  <th>COUNT(*)</th>
+</tr></thead>
+<tr>
+  <td><a href="http://www.indianjournals.com/">http://www.indianjournals.com/</a></td>
+  <td>73</td>
+</tr>
+<tr>
+  <td><a href="http://www.hindawi.com/">http://www.hindawi.com/</a></td>
+  <td>70</td>
+</tr>
+<tr>
+  <td><a href="http://search.informit.com.au/search;res=APAFT">http://search.informit.com.au/search;res=APAFT</a></td>
+  <td>60</td>
+</tr>
+<tr>
+  <td><a href="http://www.umi.com/proquest">http://www.umi.com/proquest</a></td>
+  <td>46</td>
+</tr>
+<tr>
+  <td><a href="http://www.umi.com/pqdauto/">http://www.umi.com/pqdauto/</a></td>
+  <td>45</td>
+</tr>
+<tr>
+  <td><a href="http://ieeexplore.ieee.org/Xplore/conferences.jsp">http://ieeexplore.ieee.org/Xplore/conferences.jsp</a></td>
+  <td>40</td>
+</tr>
+<tr>
+  <td><a href="http://omicsonline.org/">http://omicsonline.org/</a></td>
+  <td>36</td>
+</tr>
+<tr>
+  <td><a href="http://www.idealibrary.com/">http://www.idealibrary.com/</a></td>
+  <td>36</td>
+</tr>
+<tr>
+  <td><a href="http://ieeexplore.ieee.org/xpl/conferences.jsp">http://ieeexplore.ieee.org/xpl/conferences.jsp</a></td>
+  <td>24</td>
+</tr>
+<tr>
+  <td><a href="http://www.metapress.com/">http://www.metapress.com/</a></td>
+  <td>24</td>
+</tr>
+<tr>
+  <td><a href="http://www.randspublications.org/">http://www.randspublications.org/</a></td>
+  <td>22</td>
+</tr>
+<tr>
+  <td><a href="http://www.studia.ubbcluj.ro/serii/index_en.html">http://www.studia.ubbcluj.ro/serii/index_en.html</a></td>
+  <td>22</td>
+</tr>
+<tr>
+  <td><a href="http://find.galegroup.com/ips/publicationSearch.do">http://find.galegroup.com/ips/publicationSearch.do</a></td>
+  <td>21</td>
+</tr>
+<tr>
+  <td><a href="http://jurnal.unimed.ac.id/">http://jurnal.unimed.ac.id/</a></td>
+  <td>21</td>
+</tr>
+<tr>
+  <td><a href="http://www.bioinfo.in/journals.php">http://www.bioinfo.in/journals.php</a></td>
+  <td>20</td>
+</tr>
+<tr>
+  <td><a href="http://www.interscience.wiley.com/">http://www.interscience.wiley.com/</a></td>
+  <td>20</td>
+</tr>
+<tr>
+  <td><a href="http://www.commongroundpublishing.com/">http://www.commongroundpublishing.com/</a></td>
+  <td>19</td>
+</tr>
+<tr>
+  <td><a href="http://www.haworthpress.com/">http://www.haworthpress.com/</a></td>
+  <td>19</td>
+</tr>
+<tr>
+  <td><a href="http://www.heinonline.org/">http://www.heinonline.org/</a></td>
+  <td>19</td>
+</tr>
+<tr>
+  <td><a href="http://www.infosci-journals.com/">http://www.infosci-journals.com/</a></td>
+  <td>19</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  url,
+COUNT(*)
+FROM homepage
+GROUP BY url
+ORDER BY COUNT(*) DESC
+LIMIT 20;</pre>
+<br></code></div><p>Number of journals with a homepage that points to web.archive.org or archive.org:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>COUNT(DISTINCT issnl)</th>
+</tr></thead>
+<tr>
+  <td>1453</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT COUNT(DISTINCT issnl)
+FROM homepage
+WHERE domain = 'archive.org';</pre>
+<br></code></div><p>Top publishers that have journals in wayback:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>publisher</th>
+  <th>COUNT(*)</th>
+</tr></thead>
+<tr>
+  <td></td>
+  <td>653</td>
+</tr>
+<tr>
+  <td>EDP Sciences</td>
+  <td>23</td>
+</tr>
+<tr>
+  <td>CAIRN</td>
+  <td>18</td>
+</tr>
+<tr>
+  <td>OpenEdition</td>
+  <td>18</td>
+</tr>
+<tr>
+  <td>Elsevier</td>
+  <td>6</td>
+</tr>
+<tr>
+  <td>Springer</td>
+  <td>6</td>
+</tr>
+<tr>
+  <td>PERSEE Program</td>
+  <td>5</td>
+</tr>
+<tr>
+  <td>Peer Community In</td>
+  <td>5</td>
+</tr>
+<tr>
+  <td>Institut de recherche et d'histoire des textes (France)</td>
+  <td>4</td>
+</tr>
+<tr>
+  <td>San Lucas Medical</td>
+  <td>4</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  publisher,
+COUNT(*)
+FROM journal
+LEFT JOIN homepage ON journal.issnl = homepage.issnl
+WHERE homepage.domain = 'archive.org'
+GROUP BY journal.publisher
+ORDER BY COUNT(*) DESC
+LIMIT 10;</pre>
+<br></code></div><p>Top publishers by number of journals missing a homepage:</p>
+<div style="margin: 1em 3em 1em 3em; "><code><table>
+  <thead><tr>
+  <th>publisher</th>
+  <th>COUNT(*)</th>
+</tr></thead>
+<tr>
+  <td></td>
+  <td>21472</td>
+</tr>
+<tr>
+  <td>Peter Lang International Academic Publishers</td>
+  <td>1270</td>
+</tr>
+<tr>
+  <td>Elsevier</td>
+  <td>866</td>
+</tr>
+<tr>
+  <td>J-STAGE</td>
+  <td>863</td>
+</tr>
+<tr>
+  <td>Egypts Presidential Specialized Council for Education and Scientific Research</td>
+  <td>340</td>
+</tr>
+<tr>
+  <td>Georg Thieme Verlag KG</td>
+  <td>288</td>
+</tr>
+<tr>
+  <td>Al Manhal FZ, LLC</td>
+  <td>217</td>
+</tr>
+<tr>
+  <td>Informa UK (Taylor & Francis)</td>
+  <td>202</td>
+</tr>
+<tr>
+  <td>Springer-Verlag</td>
+  <td>156</td>
+</tr>
+<tr>
+  <td>ELSEVIER LTD</td>
+  <td>145</td>
+</tr>
+<tr>
+  <td>Inderscience</td>
+  <td>122</td>
+</tr>
+<tr>
+  <td>African Journals Online</td>
+  <td>121</td>
+</tr>
+<tr>
+  <td>Diva Enterprises Private Limited</td>
+  <td>119</td>
+</tr>
+<tr>
+  <td>PERSEE Program</td>
+  <td>118</td>
+</tr>
+<tr>
+  <td>Sabinet</td>
+  <td>109</td>
+</tr>
+<tr>
+  <td>SAGE Publications</td>
+  <td>103</td>
+</tr>
+<tr>
+  <td>Brill</td>
+  <td>99</td>
+</tr>
+<tr>
+  <td>Superintendent of Government Documents</td>
+  <td>99</td>
+</tr>
+<tr>
+  <td>Taylor & Francis</td>
+  <td>98</td>
+</tr>
+<tr>
+  <td>Bentham Science</td>
+  <td>94</td>
+</tr>
+</table><pre><b>QUERY:</b> SELECT  publisher,
+COUNT(*)
+FROM journal
+WHERE any_homepage=0
+GROUP BY publisher
+ORDER BY COUNT(*) DESC
+LIMIT 20;</pre>
+<br></code></div>
