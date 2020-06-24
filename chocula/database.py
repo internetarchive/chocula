@@ -715,6 +715,7 @@ class ChoculaDatabase:
                     "dx.doi.org",
                     "firstsearch.oclc.org",
                     "www.umi.com",
+                    "umi.com",
                     "search.informit.com.au",
                     "search.ebscohost.com",
                 ):
