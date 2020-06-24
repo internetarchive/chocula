@@ -49,6 +49,11 @@ class HomepageUrl:
             or "mailto:" in url.lower()
             or url.lower() in ("http://n/a", "http://na/", "http://na")
             or "LOCKSS_RESOLVER" in url
+            or "$result.AccessURL" in url
+            or "://firstsearch.oclc.org" in url
+            or "://bibpurl.oclc.org" in url
+            or "://books.google.com" in url
+            or "://search.ebscohost.com" in url
         ):
             return None
         if url.startswith("www."):
@@ -703,6 +708,10 @@ class ChoculaDatabase:
                     "www.thefreelibrary.com",
                     "goo.gl",
                     "dx.doi.org",
+                    "firstsearch.oclc.org",
+                    "www.umi.com",
+                    "search.informit.com.au",
+                    "search.ebscohost.com",
                 ):
                     # individual books or google searches, not journal/conference homepages
                     # LOC scanned newspapers
