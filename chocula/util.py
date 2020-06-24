@@ -1,5 +1,5 @@
 import sys
-from typing import Optional
+from typing import Optional, List
 
 import ftfy
 import pycountry
@@ -120,43 +120,96 @@ OTHER_PUBLISHERS = [
 ]
 
 
-def parse_lang(s):
+def parse_lang(s: str) -> Optional[str]:
     if not s or s in ("Not applicable", "Multiple languages", "Unknown"):
         return None
+    s = s.strip().split(',')[0].split()[0]
     try:
-        if len(s) == 2:
-            lang = pycountry.languages.get(alpha2=s.lower())
-        elif len(s) == 3:
-            lang = pycountry.languages.get(alpha3=s.lower())
-        else:
-            lang = pycountry.languages.get(name=s)
-        return lang.alpha2.lower()
-    except KeyError:
+        lang = pycountry.languages.lookup(s)
+        if lang.alpha_3 in ('mul', 'mis'):
+            return None
+        return lang.alpha_2.lower()
+    except LookupError:
+        #print(f"unknown lang: {s}", file=sys.stderr)
         return None
     except AttributeError:
+        print(f"partial lang for s={s}: {lang}", file=sys.stderr)
         return None
 
+def test_parse_lang():
+    assert parse_lang('') is None
+    assert parse_lang('asdf blah') is None
+    assert parse_lang('en') == 'en'
+    assert parse_lang('EN') == 'en'
+    assert parse_lang('ENG') == 'en'
+    assert parse_lang('English') == 'en'
+    assert parse_lang('Portuguese') == 'pt'
 
-def parse_country(s):
+def parse_country(s: str) -> Optional[str]:
     if not s or s in ("Unknown"):
         return None
+
+    s = s.strip()
+    if s.lower() in ("usa", "new york (state)", "washington (state)"):
+        return 'us'
+    if s.lower() in ("russia (federation)", "russia"):
+        return 'ru'
+    if s == "Québec (Province)":
+        s = 'Canada'
+    if s == "China (Republic : 1949- )":
+        return "tw"
+    if s == "Brunei":
+        return "bn"
+    if s.startswith("Congo "):
+        s = "Congo"
+    if s.lower() == "iran":
+        return 'ir'
+    if s.lower() == "bermuda islands":
+        return 'bm'
+    if s.lower() == "burma":
+        s = 'myanmar'
+    if s.lower() in ("korea (south)", "south korea"):
+        return 'kr'
+    if s.lower() in ("england", "scotland", "wales"):
+        return 'uk'
+    s = s.replace(' (Republic)', '').replace(" (Federation)", '')
+
     try:
-        if len(s) == 2:
-            country = pycountry.countries.get(alpha2=s.lower())
-        else:
-            country = pycountry.countries.get(name=s)
-    except KeyError:
-        return None
+        country = pycountry.countries.lookup(s)
+    except LookupError:
+        country = None
+
     if country:
         return country.alpha_2.lower()
+    try:
+        sub = pycountry.subdivisions.lookup(s)
+    except LookupError:
+        sub = None
+
+    s = s.replace(' (State)', '').replace(" (Province)", '')
+    if sub:
+        return sub.country_code.lower()
+
     else:
+        #print(f"unknown country: {s}", file=sys.stderr)
         return None
 
+def test_parse_country():
+    assert parse_country('') is None
+    assert parse_country('asdf blah') is None
+    assert parse_country('us') == 'us'
+    assert parse_country('USA') == 'us'
+    assert parse_country('United States of America') == 'us'
+    assert parse_country('united States') == 'us'
+    assert parse_country('Massachusetts') == 'us'
+    assert parse_country('Russia') == 'ru'
+    assert parse_country('Japan') == 'jp'
 
-def parse_mimetypes(val):
+
+def parse_mimetypes(val: str) -> Optional[List[str]]:
     # XXX: multiple mimetypes?
     if not val:
-        return
+        return None
     mimetype = None
     if "/" in val:
         mimetype = val
@@ -166,6 +219,11 @@ def parse_mimetypes(val):
         return None
     return [mimetype]
 
+def test_parse_mimetypes():
+    assert parse_mimetypes('') is None
+    assert parse_mimetypes('asdf blah') is None
+    assert parse_mimetypes('application/pdf') == ['application/pdf']
+    assert parse_mimetypes('PDF') == ['application/pdf']
 
 def gaps_to_spans(first, last, gaps):
     if not gaps:
@@ -291,6 +349,7 @@ def test_clean_str():
     assert clean_str(" ") is None
     assert clean_str("" "") is None
     assert clean_str(" Bloody work.") == "Bloody work"
+    assert clean_str('"Bloody work."') == "Bloody work"
 
 
 def clean_issn(s: str) -> Optional[str]:
