@@ -1,0 +1,21 @@
+
+    .mode tabs
+    .output longtail_homepage_urls.tsv
+
+    SELECT homepage.url, homepage.issnl
+    FROM homepage LEFT JOIN journal ON homepage.issnl = journal.issnl
+    WHERE homepage.terminal_status_code = 200 AND journal.is_longtail = 1 AND homepage.domain != 'archive.org' AND homepage.host NOT LIKE '%scielo%' AND homepage.domain != 'jst.go.jp' AND homepage.host != 'books.google.com' AND homepage.host != 'www.google.com' AND journal.has_dois = 0;
+
+
+## Test Queries
+
+    SELECT count(distinct homepage.issnl) FROM homepage LEFT JOIN journal ON homepage.issnl = journal.issnl WHERE homepage.terminal_status_code = 200 AND journal.is_longtail = 1;
+
+    SELECT ... FROM homepage LEFT JOIN journal ON homepage.issnl = journal.issnl WHERE homepage.terminal_status_code = 200 AND journal.is_longtail = 1;
+
+
+    SELECT homepage.domain, COUNT(*) FROM homepage LEFT JOIN journal ON homepage.issnl = journal.issnl WHERE homepage.terminal_status_code = 200 AND journal.is_longtail = 1 AND homepage.domain != 'archive.org' AND homepage.host NOT LIKE '%scielo%' AND homepage.domain != 'jst.go.jp' AND homepage.host != 'books.google.com' AND homepage.host != 'www.google.com' AND journal.has_dois = 0
+    GROUP BY homepage.domain ORDER BY COUNT(*) DESC LIMIT 20;
+
+    SELECT homepage.suffix , COUNT(*) FROM homepage LEFT JOIN journal ON homepage.issnl = journal.issnl WHERE homepage.terminal_status_code = 200 AND journal.is_longtail = 1 AND homepage.domain != 'archive.org'
+    GROUP BY homepage.suffix ORDER BY COUNT(*) DESC LIMIT 20;
