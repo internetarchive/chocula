@@ -346,6 +346,9 @@ def clean_str(s: Optional[str]) -> Optional[str]:
     # non-sorting
     s.replace("\u02dc", "")
     s.replace("\u0153", "")
+    # there is a very samll chance this will filter out valid strings
+    if s.lower() in ("null", "n/a", "unknown"):
+        return None
     return s or None
 
 
