@@ -139,7 +139,6 @@ class DirectoryInfo:
         for k in (
             "issne",
             "issnp",
-            "name",
             "publisher",
             "abbrev",
             "platform",
@@ -495,7 +494,6 @@ class ChoculaDatabase:
                     extra = json.loads(irow["extra"])
                     for k in (
                         "country",
-                        "lang",
                         "issne",
                         "issnp",
                         "publisher",
@@ -503,6 +501,8 @@ class ChoculaDatabase:
                     ):
                         if not out.get(k) and extra.get(k):
                             out[k] = extra[k]
+                    if not out.get("lang") and extra.get("langs") and extra["langs"][0]:
+                        out["lang"] = extra["langs"][0]
                 if irow["slug"] in ("doaj", "road", "szczepanski", "gold_oa"):
                     out["is_oa"] = True
                 if irow["slug"] == "ezb":
