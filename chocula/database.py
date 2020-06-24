@@ -503,6 +503,7 @@ class ChoculaDatabase:
                         "issnp",
                         "publisher",
                         "platform",
+                        "original_name",
                     ):
                         if not out.get(k) and extra.get(k):
                             out[k] = extra[k]
@@ -589,6 +590,9 @@ class ChoculaDatabase:
                 out["publisher_type"] = "longtail"
                 out["is_longtail"] = True
 
+            if out.get("lang"):
+                assert len(out["lang"]) == 2
+
             cur.execute(
                 "INSERT OR REPLACE INTO journal (issnl, issne, issnp, wikidata_qid, fatcat_ident, name, publisher, country, lang, is_oa, sherpa_color, is_longtail, is_active, publisher_type, has_dois, any_homepage, any_live_homepage, any_gwb_homepage, known_issnl, valid_issnl, release_count, ia_count, ia_frac, kbart_count, kbart_frac, preserved_count, preserved_frac) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (
@@ -598,6 +602,7 @@ class ChoculaDatabase:
                     out.get("wikidata_qid"),
                     out.get("fatcat_ident"),
                     out.get("name"),
+                    # out.get("original_name"),
                     out.get("publisher"),
                     out.get("country"),
                     out.get("lang"),
