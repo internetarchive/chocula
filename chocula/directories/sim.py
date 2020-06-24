@@ -67,7 +67,7 @@ class SimLoader(DirectoryLoader):
             publisher=clean_str(row["Publisher"]),
             raw_issn=row["ISSN"][:9],
             custom_id=row.get("NA Pub Cat ID").strip() or None,
-            langs=[parse_lang(row["Pub Language"])],
+            langs=[lang for lang in [parse_lang(row["Pub Language"])] if lang],
             extra=extra,
         )
         return info

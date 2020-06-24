@@ -51,7 +51,7 @@ class VanishedDisapearedLoader(DirectoryLoader):
             issne=clean_issn(record["E-ISSN"]),
             name=clean_str(record["Journal Name"]),
             publisher=clean_str(record["Publisher"]),
-            langs=[parse_lang(record["Language(s)"])],
+            langs=[lang for lang in [parse_lang(record["Language(s)"])] if lang],
             country=parse_country(record["Country"]),
         )
         homepage = HomepageUrl.from_url(record["Internet Archive Link"])

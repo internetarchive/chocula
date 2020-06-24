@@ -1,7 +1,7 @@
 from typing import Iterable, Optional
 import json
 
-from chocula.util import clean_str, clean_issn
+from chocula.util import clean_str, clean_issn, parse_lang
 from chocula.common import DirectoryLoader
 from chocula.database import DirectoryInfo, HomepageUrl
 
@@ -35,7 +35,9 @@ class ScieloLoader(DirectoryLoader):
             publisher=clean_str((record.get("publisher_name") or [""])[0]),
             abbrev=clean_str(record["abbreviated_iso_title"]),
             platform="scielo",
-            langs=list(filter(lambda s: len(s) == 2, record["languages"])),
+            langs=[
+                lang for lang in [parse_lang(s) for s in record["languages"]] if lang
+            ],
             country=country,
             extra=extra,
         )

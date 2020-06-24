@@ -44,7 +44,7 @@ class VanishedInactiveLoader(DirectoryLoader):
             issne=clean_issn(record["EISSN"]),
             name=clean_str(record["Title"]),
             publisher=clean_str(record["Publisher"]),
-            langs=[parse_lang(record["Language"])],
+            langs=[lang for lang in [parse_lang(record["Language"])] if lang],
             country=parse_country(record["Country"]),
         )
         return info
