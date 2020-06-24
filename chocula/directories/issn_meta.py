@@ -43,7 +43,10 @@ class IssnMetaLoader(DirectoryLoader):
             if el["@type"] == "http://id.loc.gov/ontologies/bibframe/IssnL":
                 info.issnl = clean_issn(el["value"])
             if "mainTitle" in el:
-                info.name = clean_str(el["mainTitle"])
+                if type(el["mainTitle"]) == list:
+                    info.name = clean_str(el["mainTitle"][0])
+                else:
+                    info.name = clean_str(el["mainTitle"])
                 if el.get("format") == "vocabularies/medium#Print":
                     info.issnp = clean_issn(el["issn"])
                 elif el.get("format") == "vocabularies/medium#Electronic":
