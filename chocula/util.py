@@ -279,6 +279,10 @@ def clean_str(s: Optional[str]) -> Optional[str]:
     if not s:
         return None
     s = unquote(ftfy.fix_text(s))
+    # these unicode characters are used by, eg, ISSN portal to mare prefixes as
+    # non-sorting
+    s.replace("\u02dc", "")
+    s.replace("\u0153", "")
     return s or None
 
 
