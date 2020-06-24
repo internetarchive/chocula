@@ -32,12 +32,15 @@ class IssnMetaLoader(DirectoryLoader):
         info = DirectoryInfo(directory_slug=self.source_slug,)
         # format is an array of metadata elements
         for el in row:
-            if (
-                "value" in el
-                and el["@id"].startswith("http://id.loc.gov/vocabulary/countries")
-                and len(el["@id"].split("/")[-1]) == 2
+            if "label" in el and el["@id"].startswith(
+                "http://id.loc.gov/vocabulary/countries"
             ):
-                info.country = parse_country(el["value"])
+                value = el["label"]
+                if "(State)" in value:
+                    value = ""
+                if value == "Russia (Federation)":
+                    value = "Russia"
+                info.country = parse_country(el["label"])
             if not "@type" in el:
                 continue
             if el["@type"] == "http://id.loc.gov/ontologies/bibframe/IssnL":
