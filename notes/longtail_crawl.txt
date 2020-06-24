@@ -1,18 +1,53 @@
 
+## 2020 Crawl Query
+
     .mode tabs
     .output longtail_homepage_urls.tsv
 
     SELECT homepage.url, homepage.issnl
-    FROM homepage LEFT JOIN journal ON homepage.issnl = journal.issnl
-    WHERE homepage.terminal_status_code = 200 AND journal.is_longtail = 1 AND homepage.domain != 'archive.org' AND homepage.host NOT LIKE '%scielo%' AND homepage.domain != 'jst.go.jp' AND homepage.host != 'books.google.com' AND homepage.host != 'www.google.com' AND journal.has_dois = 0;
+    FROM homepage
+    LEFT JOIN journal ON homepage.issnl = journal.issnl
+    WHERE
+        (homepage.terminal_status_code = 200 or homepage.blocked or homepage.terminal_status_code is null)
+        AND homepage.domain != 'archive.org'
+        AND homepage.host NOT LIKE '%scielo%'
+        AND homepage.domain != 'jst.go.jp'
+        AND homepage.host != 'books.google.com'
+        AND homepage.host != 'www.google.com'
+        AND homepage.domain != 'oclc.org'
+        AND homepage.host != 'www.ncbi.nlm.nih.gov'
+        AND homepage.domain != 'umi.com'
+        AND homepage.domain != 'doi.org'
+        AND homepage.host != 'www.thefreelibrary.com'
+        AND (journal.is_longtail = 1
+            OR journal.publisher_type = 'society'
+            OR journal.publisher_type = 'unipress' 
+            OR journal.publisher_type IS NULL)
+        AND (journal.has_dois = 0 or journal.release_count < 20);
 
+## Older 2019 Crawl Query
+
+    .mode tabs
+    .output longtail_homepage_urls.tsv
+
+    SELECT homepage.url, homepage.issnl
+    FROM homepage
+    LEFT JOIN journal ON homepage.issnl = journal.issnl
+    WHERE
+        homepage.terminal_status_code = 200
+        AND journal.is_longtail = 1
+        AND homepage.domain != 'archive.org'
+        AND homepage.host NOT LIKE '%scielo%'
+        AND homepage.domain != 'jst.go.jp'
+        AND homepage.host != 'books.google.com'
+        AND homepage.host != 'www.google.com'
+        AND journal.has_dois = 0;
 
 ## Test Queries
 
     SELECT count(distinct homepage.issnl) FROM homepage LEFT JOIN journal ON homepage.issnl = journal.issnl WHERE homepage.terminal_status_code = 200 AND journal.is_longtail = 1;
 
     SELECT ... FROM homepage LEFT JOIN journal ON homepage.issnl = journal.issnl WHERE homepage.terminal_status_code = 200 AND journal.is_longtail = 1;
-
 
     SELECT homepage.domain, COUNT(*) FROM homepage LEFT JOIN journal ON homepage.issnl = journal.issnl WHERE homepage.terminal_status_code = 200 AND journal.is_longtail = 1 AND homepage.domain != 'archive.org' AND homepage.host NOT LIKE '%scielo%' AND homepage.domain != 'jst.go.jp' AND homepage.host != 'books.google.com' AND homepage.host != 'www.google.com' AND journal.has_dois = 0
     GROUP BY homepage.domain ORDER BY COUNT(*) DESC LIMIT 20;
