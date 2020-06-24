@@ -27,3 +27,16 @@ def test_all(config, database):
         counts = loader.index_file(database)
         assert counts["total"] >= 20
         assert counts["inserted"] > 5
+
+    for cls in ALL_CHOCULA_KBART_CLASSES:
+        loader = cls(config)
+        counts = loader.index_file(database)
+        assert counts["total"] >= 10
+        assert counts["inserted"] >= 1
+
+    # TODO: database.load_fatcat_containers(config)
+    # TODO: database.load_fatcat_stats(config)
+    # TODO: database.load_homepage_status(config)
+    database.summarize()
+    database.export_fatcat()
+    database.export_urls()
