@@ -1,41 +1,34 @@
 
 priorities:
 - coverage stats, particularly for longtail
-- "still in print" flag
+- `is_active` coverage
 - clean out invalid ISSN-L from fatcat
 - don't list dead URLs in fatcat
+- SIM missing/bad ISSNs
+    Counter({'total': 14860, 'inserted': 11421, 'missing-issn': 2863, 'no-match': 555, 'duplicate': 21})
+
 
 ## Sources
 
-- PKP OJS index
-    => mostly redundant with DOAJ?
-- dblp conferences/series
-    => no container-only metadata dump available?
-- MAG
-- vanished journals
-    => https://github.com/njahn82/vanished_journals
-    => https://isaw.nyu.edu/publications/awol-index/
-- sherpa/romeo refactor (no moreo updates)
-- entrez refactor (no moreo updates)
 - unpaywall journal-level classification
     => ask for journal-level dump or do munging
-- SERP homepage munging
-- repositories (?)
 - jurn matches
-- datacite metadata (?)
-    => via munging
-- currated quality lists (eg, national libraries)
-    => https://www.arc.gov.au/excellence-research-australia
 - public scopus list (?)
 - scrape/munge public clarivate dumps
+- repositories (?)
+- datacite metadata (?)
+    => via munging
+- dblp conferences/series
+    => no container-only metadata dump available?
+- SERP homepage munging
+- currated quality lists (eg, national libraries)
 - "GOLD" importer (for scopus/WoS)
-- ISSN metadata from portal.issn.org
-    scraping is done
-    only for ISSN-Ls from existing table
-    https://portal.issn.org/resource/ISSN/1561-7645?format=json
-    would require a good deal of munging (eg, MARC region -> ISO) (?)
+- PKP OJS index
+    => mostly redundant with DOAJ?
 
 improvements:
+- sherpa/romeo refactor (no moreo updates)
+- entrez refactor (no moreo updates)
 - entrez: "NLM Unique Id"
 - JURN: finish 
 - crossref: empty string identifiers?
@@ -54,6 +47,7 @@ improvements:
 
 ## Schema
 
+- `original_name`
 - `platform` column in database
 - `container_type` column in database
     => munge this in various ways
