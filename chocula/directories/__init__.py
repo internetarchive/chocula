@@ -12,6 +12,12 @@ from chocula.directories.scielo import ScieloLoader
 from chocula.directories.szczepanski import SzczepanskiLoader
 from chocula.directories.wikidata import WikidataLoader
 from chocula.directories.manual_homepages import ManualHomepageLoader
+from chocula.directories.zdb_fize import ZdbFizeLoader
+from chocula.directories.vanished_disapeared import VanishedDisapearedLoader
+from chocula.directories.vanished_inactive import VanishedInactiveLoader
+from chocula.directories.issn_meta import IssnMetaLoader
+from chocula.directories.australian_era import AustralianEraLoader
+from chocula.directories.awol import AwolLoader
 
 ALL_CHOCULA_DIR_CLASSES = [
     CrossrefLoader,
@@ -28,4 +34,10 @@ ALL_CHOCULA_DIR_CLASSES = [
     SimLoader,
     ScieloLoader,
     ManualHomepageLoader,
+    ZdbFizeLoader,
+    VanishedDisapearedLoader,
+    VanishedInactiveLoader,
+    IssnMetaLoader,
+    AustralianEraLoader,
+    AwolLoader,
 ]

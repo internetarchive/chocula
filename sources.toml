@@ -143,3 +143,28 @@ mirror_url = "https://archive.org/download/issn_public_data_20200318"
 date = "2020-05-30"
 filename = "zdb_fize_homepage_available.json"
 mirror_url = "https://archive.org/download/issn_homepage_candidates_20200530"
+
+[vanished_disapeared]
+date = "2020-04-02"
+filename = "vanished_journals_disapeared.csv"
+original_url = "https://github.com/njahn82/vanished_journals"
+mirror_url = "https://archive.org/download/vanished-journals-metadata"
+
+[vanished_inactive]
+date = "2020-04-02"
+filename = "vanished_journals_inactive.csv"
+original_url = "https://github.com/njahn82/vanished_journals"
+mirror_url = "https://archive.org/download/vanished-journals-metadata"
+
+[australian_era]
+date = "2018"
+filename = "era_2018_journal_list.csv"
+original_url = "https://www.arc.gov.au/excellence-research-australia/era-2018-journal-list"
+mirror_url = "https://archive.org/download/era-2018-journal-list"
+
+[awol]
+date = "2015-10-27"
+filename = "awol-index-top-issn.json"
+original_url = "https://isaw.nyu.edu/publications/awol-index/"
+mirror_url = "https://archive.org/download/awol-index-json"
+
