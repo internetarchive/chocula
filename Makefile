@@ -103,12 +103,12 @@ update-sources: data/$(TODAY)/kbart_JSTOR.txt data/$(TODAY)/kbart_CLOCKSS.txt da
 
 data/$(TODAY)/homepage_status.json:
 	pipenv run python -m chocula export_urls | shuf | pv -l > /tmp/chocula_urls.tsv
-	pipenv run parallel -j10 --bar --pipepart -a /tmp/chocula_urls.tsv ./check_issn_urls.py > /tmp/homepage_status.json
+	pipenv run parallel -j10 --pipepart --line-buffer -a /tmp/chocula_urls.tsv ./check_issn_urls.py | pv -l > /tmp/homepage_status.json
 	mv /tmp/url_status.json $@
 
 data/$(TODAY)/container_stats.json: data/container_export.json
 	cat data/container_export.json | jq .issnl -r | sort -u > /tmp/container_issnl.tsv
-	cat /tmp/container_issnl.tsv | parallel -j10 curl -s 'https://fatcat.wiki/container/issnl/{}/stats.json' | jq -c . > /tmp/container_stats.json
+	cat /tmp/container_issnl.tsv | parallel -j10 curl --fail -s 'https://fatcat.wiki/container/issnl/{}/stats.json' | jq -c . | pv -l > /tmp/container_stats.json
 	cp /tmp/container_stats.json $@
 
 .PHONY: upload-sources
