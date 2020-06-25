@@ -12,14 +12,14 @@ class MagLoader(DirectoryLoader):
 
         1	JournalId	long	PRIMARY KEY
         2	Rank	uint	See FAQ
-        3	NormalizedName	string	
-        4	DisplayName	string	
-        5	Issn	string	
-        6	Publisher	string	
-        7	Webpage	string	
-        8	PaperCount	long	
+        3	NormalizedName	string
+        4	DisplayName	string
+        5	Issn	string
+        6	Publisher	string
+        7	Webpage	string
+        8	PaperCount	long
         9	PaperFamilyCount	long	See FAQ
-        10	CitationCount	long	
+        10	CitationCount	long
         11	CreatedDate	DateTime
 
     """
