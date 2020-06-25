@@ -70,7 +70,7 @@ def sniff_blocked(resp):
     block, etc.
     TODO: unimplemented
     """
-    if resp.status_code in (403, 420):
+    if resp.status_code in (403, 420, 429):
         return True
     # JSTOR does this
     if (
@@ -123,7 +123,7 @@ def check_url(issnl, url):
     try:
         resp = requests.get(
             url,
-            timeout=30.0,
+            timeout=15.0,
             headers={
                 "User-Agent": "ia_bot/0.0 (python requests) journal-live-check; contact:info@archive.org"
             },
