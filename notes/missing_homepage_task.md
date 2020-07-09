@@ -82,3 +82,6 @@ Dump to TSV:
         AND valid_issnl=1;
 
 NOTE: this is a partial list, as of 2020-05-05 about 4600 rows, 
+
+After the first round of manual homepage identification, as of 2020-07-08 there
+are only 264 journals remaining selected by the above query.
