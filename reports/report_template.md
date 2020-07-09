@@ -1,15 +1,16 @@
 
-<!--
-This template can be "executed" to generate an HTML report page using the
-`sqlite-notebook` tool.
--->
+# Fatcat "Chocula" Journal Metadata Summary
 
-# Chocula Journal Aggregate Stats
-
+This report is auto-generated from a sqlite database file, which should be available/included.
 
 ```sql
 SELECT datetime('now');
 ```
+
+Note that pretty much all of the fatcat release stats are on a *release*, not
+*work* basis, so there may be over-counting. Also, as of July 2019 there were
+over 1.5 million OA longtail releases which are *not* linked to a container
+(journal).
 
 ```sql
 PRAGMA database_list;
@@ -116,6 +117,18 @@ Homepage URL counts:
 
 ```sql
 SELECT COUNT(DISTINCT surt) as unique_urls, COUNT(DISTINCT issnl) as journals_with_hompages FROM homepage;
+```
+
+Journal counts by homepage status:
+
+```sql
+SELECT any_homepage, any_live_homepage, any_gwb_homepage, COUNT(*), ROUND(1.0 * COUNT(*) / (SELECT COUNT(*) FROM journal), 2) AS frac FROM journal GROUP BY any_homepage, any_live_homepage, any_gwb_homepage;
+```
+
+Number of unique journals that have a homepage pointing to wayback or archive.org:
+
+```sql
+SELECT COUNT(DISTINCT issnl) FROM homepage WHERE domain = 'archive.org';
 ```
 
 Journals with the most homepage URLs:
