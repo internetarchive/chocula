@@ -684,7 +684,10 @@ class ChoculaDatabase:
             )
 
             extra = dict(
-                issnp=row["issnp"], issne=row["issne"], country=row["country"],
+                issnp=row["issnp"],
+                issne=row["issne"],
+                country=row["country"],
+                publisher_type=row["publisher_type"],
             )
             if row["lang"]:
                 extra["languages"] = [
@@ -786,24 +789,40 @@ class ChoculaDatabase:
                 "SELECT * FROM directory WHERE issnl = ?;", [row["issnl"]]
             )
             for drow in cur:
+                dextra = dict()
+                if drow["extra"]:
+                    dextra = json.loads(drow["extra"])
                 if drow["slug"] == "ezb":
-                    ezb = json.loads(drow["extra"])
                     extra["ezb"] = dict(
-                        ezb_id=drow["identifier"], color=ezb["ezb_color"]
+                        ezb_id=drow["identifier"], color=dextra["ezb_color"]
                     )
                 elif drow["slug"] == "szczepanski":
-                    extra["szczepanski"] = drow["extra"]
+                    extra["szczepanski"] = dict(as_of=dextra["as_of"])
+                elif drow["slug"] == "norwegian":
+                    extra["norwegian"] = dict(as_of=dextra["as_of"], level=dextra.get("level"))
                 elif drow["slug"] == "doaj":
-                    extra["doaj"] = json.loads(drow["extra"])
+                    extra["doaj"] = dict(as_of=dextra["as_of"])
+                    for k in ("seal", "default_license", "crawl_permission", "archive", "mimetypes"):
+                        if dextra.get(k) is not None:
+                            extra["doaj"][k] = dextra[k]
                 elif drow["slug"] == "scielo":
-                    extra["scielo"] = json.loads(drow["extra"])
+                    extra["scielo"] = dict()
+                    for k in ("collection", "status"):
+                        if dextra.get(k) is not None:
+                            extra["scielo"][k] = dextra[k]
                 elif drow["slug"] == "sim":
                     extra["ia"] = extra.get("ia", {})
-                    extra["ia"]["sim"] = json.loads(drow["extra"])
-                    extra["ia"]["sim"]["sim_pubid"] = drow["identifier"]
+                    extra["ia"]["sim"] = dict(sim_pubid=drow["identifier"])
+                    for k in ("year_spans", "pub_type", "peer_reviewed", "scholarly_peer_reviewed"):
+                        if dextra.get(k) is not None:
+                            extra["ia"]["sim"][k] = dextra[k]
                 elif drow["slug"] in ("lockss", "clockss", "portico", "jstor"):
                     extra["kbart"] = extra.get("kbart", {})
-                    extra["kbart"][drow["slug"]] = json.loads(drow["extra"])
+                    extra["kbart"][drow["slug"]] = dict(year_spans=dextra['year_spans'])
+                if dextra.get('abbrev'):
+                    extra['abbrev'] = dextra['abbrev']
+                if dextra.get('platform'):
+                    extra['platform'] = dextra['platform']
 
             out["extra"] = extra
             print(json.dumps(out))
