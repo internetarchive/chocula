@@ -1,4 +1,4 @@
-from typing import Iterable, Optional, Dict, Any
+from typing import Iterable, Optional
 import csv
 
 from chocula.util import (
@@ -98,27 +98,26 @@ class DoajLoader(DirectoryLoader):
         if lang:
             info.langs.append(lang)
 
-        extra: Dict[str, Any] = dict(doaj=dict())
-        extra["mimetypes"] = parse_mimetypes(row["Full text formats"])
-        extra["doaj"]["as_of"] = self.config.snapshot.date
+        info.extra["mimetypes"] = parse_mimetypes(row["Full text formats"])
+        info.extra["as_of"] = self.config.snapshot.date
         if row["DOAJ Seal"]:
-            extra["doaj"]["seal"] = {"no": False, "yes": True}[row["DOAJ Seal"].lower()]
+            info.extra["seal"] = {"no": False, "yes": True}[row["DOAJ Seal"].lower()]
 
         if row["Digital archiving policy or program(s)"]:
-            extra["archive"] = [
+            info.extra["archive"] = [
                 a.strip()
                 for a in row["Digital archiving policy or program(s)"].split(",")
                 if a.strip()
             ]
         elif row["Archiving: national library"]:
-            extra["archive"] = ["national-library"]
+            info.extra["archive"] = ["national-library"]
 
         crawl_permission = row["Journal full-text crawl permission"]
         if crawl_permission:
-            extra["crawl-permission"] = dict(Yes=True, No=False)[crawl_permission]
+            info.extra["crawl_permission"] = dict(Yes=True, No=False)[crawl_permission]
         default_license = row["Journal license"]
         if default_license and default_license.startswith("CC"):
-            extra["default_license"] = default_license.replace("CC ", "CC-").strip()
+            info.extra["default_license"] = default_license.replace("CC ", "CC-").strip()
 
         url = row["Journal URL"]
         if url:
