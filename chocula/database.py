@@ -53,7 +53,10 @@ class HomepageUrl:
             or "://firstsearch.oclc.org" in url
             or "://bibpurl.oclc.org" in url
             or "://books.google.com" in url
+            or "://translate.google.com" in url
             or "://search.ebscohost.com" in url
+            or "://search.proquest.com" in url
+            or "://gateway.proquest.com" in url
         ):
             return None
         if url.startswith("www."):
@@ -533,6 +536,11 @@ class ChoculaDatabase:
                     out["any_live_homepage"] = True
                 if hrow["gwb_url_success_dt"] or hrow["gwb_terminal_url_success_dt"]:
                     out["any_gwb_homepage"] = True
+                if not out.get("platform"):
+                    if hrow["domain"] == "wordpress.com":
+                        out["platform"] = "wordpress"
+                    elif hrow["domain"] == "hypotheses.org":
+                        out["platform"] = "hypotheses"
 
             if out.get("wikidata_qid"):
                 assert out["wikidata_qid"].startswith("Q")
@@ -571,6 +579,8 @@ class ChoculaDatabase:
                 or "association" in pl
                 or "academy of " in pl
                 or "institute of" in pl
+                or "ieee" in pl
+                or "ieee" in out.get("name", "")
             ):
                 out["publisher_type"] = "society"
             elif publisher in UNI_PRESS_PUBLISHERS or "university " in pl:
@@ -702,6 +712,13 @@ class ChoculaDatabase:
                 if hrow["host"] in (
                     "www.google.com",
                     "books.google.com",
+                    "translate.google.com",
+                    "drive.google.com",
+                    "mail.google.com",
+                    "play.google.com",
+                    "news.google.com",
+                    "docs.google.com",
+                    "goo.gl",
                     "www.loc.gov",
                     "search.ebscohost.com",
                     "bibpurl.oclc.org",
@@ -714,6 +731,18 @@ class ChoculaDatabase:
                     "umi.com",
                     "search.informit.com.au",
                     "search.ebscohost.com",
+                    "search.proquest.com",
+                    "gateway.proquest.com",
+                    "purl.access.gpo.gov",
+                    "arxiv.org",
+                    "pubmedcentral.nih.gov",
+                    "ncbi.nlm.nih.gov",
+                    "heinonline.org",
+                    "www.heinonline.org",
+                    "crcnetbase.com",
+                    "nla.gov.au",
+                    "purl.nla.gov.au",
+                    "www.bibliothek.uni-regensburg.de",
                 ):
                     # individual books or google searches, not journal/conference homepages
                     # LOC scanned newspapers
