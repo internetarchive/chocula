@@ -33,12 +33,12 @@ class SzczepanskiLoader(DirectoryLoader):
             publisher=clean_str(row.get("ed")),
         )
 
-        info.extra["szczepanski"] = dict(as_of=self.config.szczepanski.date)
+        info.extra["as_of"] = self.config.szczepanski.date
         if row.get("extra"):
-            info.extra["szczepanski"]["notes"] = row.get("extra")
+            info.extra["notes"] = row.get("extra")
         for k in ("other_titles", "year_spans", "ed"):
             if row.get(k):
-                info.extra["szczepanski"][k] = row[k]
+                info.extra[k] = row[k]
 
         url = HomepageUrl.from_url(row.get("url"))
         if url:

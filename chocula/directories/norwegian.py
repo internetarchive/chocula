@@ -67,9 +67,9 @@ class NorwegianLoader(DirectoryLoader):
             langs=[lang for lang in [parse_lang(row["Language"])] if lang],
         )
 
-        info.extra["norwegian"] = dict(as_of=self.config.norwegian.date)
+        info.extra["as_of"] = self.config.norwegian.date
         if row["Level 2019"]:
-            info.extra["norwegian"]["level"] = int(row["Level 2019"])
+            info.extra["level"] = int(row["Level 2019"])
 
         if row["Original title"] != row["International title"]:
             info.original_name = clean_str(row["Original title"])

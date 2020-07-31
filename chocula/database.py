@@ -511,15 +511,11 @@ class ChoculaDatabase:
                         out["lang"] = extra["langs"][0]
                 if irow["slug"] in ("doaj", "road", "szczepanski", "gold_oa"):
                     out["is_oa"] = True
-                if irow["slug"] == "ezb":
-                    ezb_extra = json.loads(irow["extra"])
-                    if ezb_extra["ezb_color"] == "green":
-                        out["is_oa"] = True
                 if irow["slug"] == "sherpa_romeo":
                     extra = json.loads(irow["extra"])
-                    if extra.get("sherpa_romeo"):
-                        out["sherpa_color"] = extra["sherpa_romeo"]["color"]
-                        if extra["sherpa_romeo"].get("color") == "green":
+                    if extra.get("color"):
+                        out["sherpa_color"] = extra["color"]
+                        if extra["color"] == "green":
                             out["is_oa"] = True
 
             # filter out "NA" ISSNs

@@ -58,6 +58,6 @@ class SherpaRomeoLoader(DirectoryLoader):
         )
 
         if row["RoMEO colour"]:
-            info.extra["sherpa_romeo"] = dict(color=row["RoMEO colour"])
+            info.extra["color"] = row["RoMEO colour"]
 
         return info
