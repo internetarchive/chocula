@@ -3,7 +3,7 @@ Chocula: Scholary Journal Metadata Munging
 ==========================================
 
 <div align="center">
-<img src="extra/count_chocola.jpg">
+<img src="extra/count_chocula.jpg">
 </div>
 
 **Chocula** is a python tool for parsing and merging journal-level metadata
