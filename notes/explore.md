@@ -1,4 +1,17 @@
 
+## 2020-08-31
+
+How big of a difference in preservation coverage stats does the inclusion of
+PKP PLN numbers result in?
+
+    select count(*), sum(journal.release_count), sum(journal.preserved_count) from journal join directory on journal.issnl = directory.issnl where directory.slug = 'pkp_pln';
+
+    count(*)    sum(journal.release_count)  sum(journal.preserved_count)
+    ----------  --------------------------  ----------------------------
+    1356        343333                      283984                      
+
+So about 60k releases.
+
 ## 2020-06-23
 
 Where do back ISSN-Ls come from? Answer: exiting fatcat metadata.
