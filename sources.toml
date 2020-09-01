@@ -79,8 +79,13 @@ original_url = "http://api.portico.org/kbart/Portico_Holding_KBart.txt"
 
 [jstor]
 # JSTOR_Global_AllArchiveTitles_2019-12-21.txt
+# https://support.jstor.org/hc/en-us/articles/115007466248-JSTOR-title-lists
 filename = "kbart_JSTOR.txt"
-original_url = "https://support.jstor.org/hc/en-us/articles/115007466248-JSTOR-title-lists"
+original_url = "https://www.jstor.org/kbart/collections/all-archive-titles?contentType=journals"
+
+[pkp_pln]
+filename = "onix_pkp_pln.csv"
+original_url = "http://pkp.sfu.ca/files/pkppn/onix.csv"
 
 [szczepanski]
 date = '2018'
