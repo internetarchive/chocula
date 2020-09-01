@@ -40,6 +40,7 @@ Commands:
         clockss
         lockss
         portico
+        pkp_pln
 
 See TODO.md for more work-in-progress
 """

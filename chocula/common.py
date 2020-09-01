@@ -170,3 +170,49 @@ class KbartLoader:
         cur.close()
         db.db.commit()
         return counts
+
+
+class OnixCsvLoader(KbartLoader):
+    """
+    Similar to the KBART loader class, but for ONIX CSV files instead of KBART
+    formated TSV.
+
+    CSV columns:
+    - ISSN
+    - Title
+    - Publisher
+    - Url
+    - Vol
+    - No
+    - Published
+    - Deposited
+    """
+
+    def open_file(self) -> Iterable:
+        f = open(self.file_path(), "r")
+        # skip first line of PKP PLN Onix file, which is a "generated date" header
+        if self.source_slug == "pkp_pln":
+            next(f)
+        return csv.DictReader(f)
+
+    def parse_record(self, row: dict, issn_db: IssnDatabase) -> Optional[KbartRecord]:
+
+        raw_issn = clean_issn(row["ISSN"])
+        issnl = issn_db.issn2issnl(raw_issn or "")
+        start_year = int(row["Published"][:4])
+        start_volume = clean_str(row["Vol"])
+        record = KbartRecord(
+            issnl=issnl,
+            issne=None,
+            issnp=None,
+            embargo=None,
+            title=clean_str(row["Title"]),
+            publisher=clean_str(row["Publisher"]),
+            url=HomepageUrl.from_url(row["Url"]),
+            start_year=start_year,
+            end_year=start_year,
+            start_volume=start_volume,
+            end_volume=start_volume,
+            year_spans=[],
+        )
+        return record

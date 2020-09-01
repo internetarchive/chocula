@@ -1,4 +1,4 @@
-from chocula.common import KbartLoader
+from chocula.common import KbartLoader, OnixCsvLoader
 
 
 class ClockssKbartLoader(KbartLoader):
@@ -33,9 +33,18 @@ class JstorKbartLoader(KbartLoader):
         return self.config.jstor.filepath
 
 
+class PkpPlnOnixLoader(OnixCsvLoader):
+
+    source_slug = "pkp_pln"
+
+    def file_path(self) -> str:
+        return self.config.pkp_pln.filepath
+
+
 ALL_CHOCULA_KBART_CLASSES = [
     ClockssKbartLoader,
     LockssKbartLoader,
     PorticoKbartLoader,
     JstorKbartLoader,
+    PkpPlnOnixLoader,
 ]
