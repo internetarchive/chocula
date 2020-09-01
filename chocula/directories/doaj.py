@@ -117,7 +117,9 @@ class DoajLoader(DirectoryLoader):
             info.extra["crawl_permission"] = dict(Yes=True, No=False)[crawl_permission]
         default_license = row["Journal license"]
         if default_license and default_license.startswith("CC"):
-            info.extra["default_license"] = default_license.replace("CC ", "CC-").strip()
+            info.extra["default_license"] = default_license.replace(
+                "CC ", "CC-"
+            ).strip()
 
         url = row["Journal URL"]
         if url:

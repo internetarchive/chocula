@@ -13,9 +13,9 @@ from chocula.database import DirectoryInfo
 def truthy(raw: Optional[str]) -> Optional[bool]:
     if not raw:
         return None
-    if raw.lower() == 'y':
+    if raw.lower() == "y":
         return True
-    if raw.lower() == 'n':
+    if raw.lower() == "n":
         return False
     return None
 
@@ -67,7 +67,9 @@ class SimLoader(DirectoryLoader):
             extra["gaps"] = gaps
         if first_year and last_year:
             extra["year_spans"] = gaps_to_spans(first_year, last_year, gaps)
-        extra["scholarly_peer_reviewed"] = truthy(clean_str(row["Scholarly / Peer-\nReviewed"]))
+        extra["scholarly_peer_reviewed"] = truthy(
+            clean_str(row["Scholarly / Peer-\nReviewed"])
+        )
         extra["peer_reviewed"] = truthy(clean_str(row["Peer-\nReviewed"]))
         extra["pub_type"] = clean_str(row["Pub Type"])
 

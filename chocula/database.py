@@ -799,10 +799,18 @@ class ChoculaDatabase:
                 elif drow["slug"] == "szczepanski":
                     extra["szczepanski"] = dict(as_of=dextra["as_of"])
                 elif drow["slug"] == "norwegian":
-                    extra["norwegian"] = dict(as_of=dextra["as_of"], level=dextra.get("level"))
+                    extra["norwegian"] = dict(
+                        as_of=dextra["as_of"], level=dextra.get("level")
+                    )
                 elif drow["slug"] == "doaj":
                     extra["doaj"] = dict(as_of=dextra["as_of"])
-                    for k in ("seal", "default_license", "crawl_permission", "archive", "mimetypes"):
+                    for k in (
+                        "seal",
+                        "default_license",
+                        "crawl_permission",
+                        "archive",
+                        "mimetypes",
+                    ):
                         if dextra.get(k) is not None:
                             extra["doaj"][k] = dextra[k]
                 elif drow["slug"] == "scielo":
@@ -813,16 +821,21 @@ class ChoculaDatabase:
                 elif drow["slug"] == "sim":
                     extra["ia"] = extra.get("ia", {})
                     extra["ia"]["sim"] = dict(sim_pubid=drow["identifier"])
-                    for k in ("year_spans", "pub_type", "peer_reviewed", "scholarly_peer_reviewed"):
+                    for k in (
+                        "year_spans",
+                        "pub_type",
+                        "peer_reviewed",
+                        "scholarly_peer_reviewed",
+                    ):
                         if dextra.get(k) is not None:
                             extra["ia"]["sim"][k] = dextra[k]
                 elif drow["slug"] in ("lockss", "clockss", "portico", "jstor"):
                     extra["kbart"] = extra.get("kbart", {})
-                    extra["kbart"][drow["slug"]] = dict(year_spans=dextra['year_spans'])
-                if dextra.get('abbrev'):
-                    extra['abbrev'] = dextra['abbrev']
-                if dextra.get('platform'):
-                    extra['platform'] = dextra['platform']
+                    extra["kbart"][drow["slug"]] = dict(year_spans=dextra["year_spans"])
+                if dextra.get("abbrev"):
+                    extra["abbrev"] = dextra["abbrev"]
+                if dextra.get("platform"):
+                    extra["platform"] = dextra["platform"]
 
             out["extra"] = extra
             print(json.dumps(out))
