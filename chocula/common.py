@@ -216,3 +216,90 @@ class OnixCsvLoader(KbartLoader):
             year_spans=[],
         )
         return record
+
+
+class HathifilesLoader(KbartLoader):
+    """
+    Similar to the KBART loader class, but for Hathifiles bulk format.
+
+    Relavent TSV columns ("one-indexed", not zero-indexed):
+
+    - 2 access (allow=bright, deny=dark)
+    - 5 description
+    - 10 issn ("multiple values separated by comma")
+    - 12 title (if translated, separated by equals or slash)
+    - 13 imprint (publisher and year; often "publisher, year")
+    - 17 rights_date_used (year; 9999=unknown)
+    - 19 lang (MARC format)
+    """
+
+    def open_file(self) -> Iterable:
+        return csv.DictReader(
+            open(self.file_path(), "r"),
+            delimiter="\t",
+            fieldnames=[
+                "htid",
+                "access",
+                "rights",
+                "ht_bib_key",
+                "description",
+                "source",
+                "source_bib_num",
+                "oclc_num",
+                "isbn",
+                "issn",
+                "lccn",
+                "title",
+                "imprint",
+                "rights_reason_code",
+                "rights_timestamp",
+                "us_gov_doc_flag",
+                "rights_date_used",
+                "pub_place",
+                "lang",
+                "bib_fmt",
+                "collection_code",
+                "content_provider_code",
+                "responsible_entity_code",
+                "digitization_agent_code",
+                "access_profile_code",
+                "author",
+            ],
+        )
+
+    def parse_record(self, row: dict, issn_db: IssnDatabase) -> Optional[KbartRecord]:
+
+        # unpack fields
+        # access = dict(allow="bright", deny="dark")[row['access']]
+        raw_issn = clean_issn(row["issn"].split(",")[0])
+        imprint = clean_str(row["imprint"])
+        raw_date = row["rights_date_used"].strip()
+
+        issnl = issn_db.issn2issnl(raw_issn or "")
+
+        rights_date: Optional[int] = None
+        if raw_date.isdigit():
+            rights_date = int(raw_date)
+        start_year: Optional[int] = rights_date
+        if start_year == 9999:
+            start_year = None
+
+        publisher: Optional[str] = None
+        if imprint:
+            publisher = imprint.split(".")[0].split(",")[0].split("[")[0].strip()
+
+        record = KbartRecord(
+            issnl=issnl,
+            issne=None,
+            issnp=None,
+            embargo=None,
+            title=clean_str(row["title"]),
+            publisher=publisher,
+            url=None,
+            start_year=start_year,
+            end_year=start_year,
+            start_volume=None,
+            end_volume=None,
+            year_spans=[],
+        )
+        return record

@@ -41,6 +41,7 @@ Commands:
         lockss
         portico
         pkp_pln
+        hathitrust
 
 See TODO.md for more work-in-progress
 """

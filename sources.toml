@@ -87,6 +87,12 @@ original_url = "https://www.jstor.org/kbart/collections/all-archive-titles?conte
 filename = "onix_pkp_pln.csv"
 original_url = "http://pkp.sfu.ca/files/pkppn/onix.csv"
 
+[hathitrust]
+# see notes/hathitrust.md
+date = "2020-08-01"
+filename = "hathi_serials.tsv"
+original_url = "https://www.hathitrust.org/hathifiles"
+
 [szczepanski]
 date = '2018'
 # Jan-Szczepanski-Open-Access-Journals-2018_0.fixed.json

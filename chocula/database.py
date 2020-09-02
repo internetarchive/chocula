@@ -829,7 +829,14 @@ class ChoculaDatabase:
                     ):
                         if dextra.get(k) is not None:
                             extra["ia"]["sim"][k] = dextra[k]
-                elif drow["slug"] in ("lockss", "clockss", "portico", "jstor", "pkp_pln"):
+                elif drow["slug"] in (
+                    "lockss",
+                    "clockss",
+                    "portico",
+                    "jstor",
+                    "pkp_pln",
+                    "hathitrust",
+                ):
                     extra["kbart"] = extra.get("kbart", {})
                     extra["kbart"][drow["slug"]] = dict(year_spans=dextra["year_spans"])
                 if dextra.get("abbrev"):
