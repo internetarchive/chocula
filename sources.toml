@@ -1,7 +1,7 @@
 
 [snapshot]
-date = "2020-07-31"
-ia_item = "chocula-sources-snapshot-2020-07-31"
+date = "2020-09-01"
+ia_item = "chocula-sources-snapshot-2020-09-01"
 
 [issnl]
 filename = "ISSN-to-ISSN-L.txt"
@@ -89,7 +89,7 @@ original_url = "http://pkp.sfu.ca/files/pkppn/onix.csv"
 
 [hathitrust]
 # see notes/hathitrust.md
-date = "2020-08-01"
+date = "2020-09-01"
 filename = "hathi_serials.tsv"
 original_url = "https://www.hathitrust.org/hathifiles"
 
@@ -128,7 +128,7 @@ filename = "sim_master_title_metadata.csv"
 mirror_url = "https://archive.org/download/SerialsOnMicrofilmCollection/MASTER%20TITLE_METADATA_LIST_20171019.xlsx"
 
 [fatcat_containers]
-date = "2020-05-26"
+date = "2020-08-05"
 filename = "container_export.json"
 
 [homepage_status]
