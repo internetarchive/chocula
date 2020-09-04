@@ -1,4 +1,5 @@
 
+
 priorities:
 - coverage stats, particularly for longtail
 - `is_active` coverage
@@ -10,9 +11,22 @@ priorities:
 
 ## Sources
 
-- unpaywall journal-level classification
+- preservation coverage
+    x  hathitrust (huge!)
+        https://www.hathitrust.org/hathifiles_description
+    x  PKP PLN (ONIX)
+        https://pkp.sfu.ca/pkp-pn/
+        http://pkp.sfu.ca/files/pkppn/onix.csv
+    => Scholars Portal (canada)
+        received ONIX XML, hoping for KBART format
+    => Cariniana
+    => National Digital Preservation Program, China
+    => Library of Congress
+- additional hathitrust (many more ISSNs/journals)
+- unpaywall journal-level classification (OA color)
     => ask for journal-level dump or do munging
 - jurn matches
+    => somebody on github did an openrefine match
 - public scopus list (?)
 - scrape/munge public clarivate dumps
 - repositories (?)

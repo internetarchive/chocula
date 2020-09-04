@@ -12,6 +12,17 @@ PKP PLN numbers result in?
 
 So about 60k releases.
 
+How about Hathitrust?
+
+    select count(*), sum(journal.release_count), sum(journal.preserved_count) from journal join directory on journal.issnl = directory.issnl where directory.slug = 'hathitrust';
+
+    count(*)    sum(journal.release_count)  sum(journal.preserved_count)
+    ----------  --------------------------  ----------------------------
+    26628       48160184                    36905342
+
+Much larger potential impact, of 11+ million releases, though unclear how many
+are acutally in the hathitrust archives.
+
 ## 2020-06-23
 
 Where do back ISSN-Ls come from? Answer: exiting fatcat metadata.
