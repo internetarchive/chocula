@@ -19,31 +19,28 @@ class VanishedDisapearedLoader(DirectoryLoader):
         - E-ISSN
         - URL
         - Publisher
-        - blank
+        - <blank>
         - Language(s)
         - Country
         - society_affiliation
         - other_sci_affiliation
-        - Discipline
         - Discipline Group
         - Start Year
         - End Year
         - Last Year Online
         - Actively Publishing
         - Internet Archive Link
-        - Verified
-        - Comments
-        - The Keepers (archived)
-        - Archive Link
-        - Mikael (1 = agree with Lisa)
     """
 
     source_slug = "vanished_disapeared"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.vanished_disapeared.filepath))
+        return csv.DictReader(open(self.config.vanished_disapeared.filepath), delimiter=";")
 
     def parse_record(self, record) -> Optional[DirectoryInfo]:
+
+        if not record["Journal Name"]:
+            return None
 
         info = DirectoryInfo(
             directory_slug=self.source_slug,
@@ -55,9 +52,6 @@ class VanishedDisapearedLoader(DirectoryLoader):
             country=parse_country(record["Country"]),
         )
         homepage = HomepageUrl.from_url(record["Internet Archive Link"])
-        if homepage:
-            info.homepage_urls.append(homepage)
-        homepage = HomepageUrl.from_url(record["Archive Link"])
         if homepage:
             info.homepage_urls.append(homepage)
         return info

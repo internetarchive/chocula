@@ -156,13 +156,13 @@ filename = "zdb_fize_homepage_available.json"
 mirror_url = "https://archive.org/download/issn_homepage_candidates_20200530"
 
 [vanished_disapeared]
-date = "2020-04-02"
+date = "2020-09-03"
 filename = "vanished_journals_disapeared.csv"
 original_url = "https://github.com/njahn82/vanished_journals"
 mirror_url = "https://archive.org/download/vanished-journals-metadata"
 
 [vanished_inactive]
-date = "2020-04-02"
+date = "2020-09-03"
 filename = "vanished_journals_inactive.csv"
 original_url = "https://github.com/njahn82/vanished_journals"
 mirror_url = "https://archive.org/download/vanished-journals-metadata"
