@@ -362,6 +362,7 @@ def test_clean_str():
 
 def clean_issn(s: str) -> Optional[str]:
     s = s.strip().upper()
+    s = s.replace(' ', '')
     if len(s) == 8:
         s = s[:4] + "-" + s[4:]
     if len(s) != 9 or s[4] != "-":
@@ -373,3 +374,4 @@ def test_clean_issn():
     assert clean_issn("1234-5678") == "1234-5678"
     assert clean_issn(" 12345678") == "1234-5678"
     assert clean_issn("123445678") == None
+    assert clean_issn("2249 - 8257") == "2249-8257"
