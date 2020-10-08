@@ -142,7 +142,7 @@ filename = "container_stats.json"
 [manual_homepages]
 date = "2020-05-05"
 filename = "manual_longtail_homepages.tsv"
-mirror_url = "https://archive.org/download/chocula-manual-hompages"
+mirror_url = "https://archive.org/download/chocula-manual-homepages"
 
 [issn_meta]
 # see notes/issn_meta.md
