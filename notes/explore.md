@@ -1,4 +1,26 @@
 
+## 2020-10-08
+
+How about preservation coverage from Scholar's Portal and Cariniana?
+
+
+    sqlite> select count(*), sum(journal.release_count), sum(journal.preserved_count) from journal join directory on journal.issnl = directory.issnl where directory.slug = 'cariniana';
+
+    count(*)    sum(journal.release_count)  sum(journal.preserved_count)
+    ----------  --------------------------  ----------------------------
+    777         165832                      145352                      
+
+Just 20k releases (or less).
+
+
+    sqlite> select count(*), sum(journal.release_count), sum(journal.preserved_count) from journal join directory on journal.issnl = directory.issnl where directory.slug = 'scholarsportal';
+
+    count(*)    sum(journal.release_count)  sum(journal.preserved_count)
+    ----------  --------------------------  ----------------------------
+    16973       45111605                    40182992                    
+
+Almost 5 million releases, potentially huge.
+
 ## 2020-08-31
 
 How big of a difference in preservation coverage stats does the inclusion of
