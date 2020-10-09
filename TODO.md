@@ -11,15 +11,14 @@ priorities:
 
 ## Sources
 
+- government lists
+    => india: University Grants Commission (UGC-CARE, group I)
+        https://ugccare.unipune.ac.in/apps1/home/index
+    => indonesia list?
+    => ERIH PLUS
+        https://dbh.nsd.uib.no/publiseringskanaler/erihplus/
+    => "CORE" (australia? not core.ac.uk)
 - preservation coverage
-    x  hathitrust (huge!)
-        https://www.hathitrust.org/hathifiles_description
-    x  PKP PLN (ONIX)
-        https://pkp.sfu.ca/pkp-pn/
-        http://pkp.sfu.ca/files/pkppn/onix.csv
-    => Scholars Portal (canada)
-        received ONIX XML, hoping for KBART format
-    => Cariniana
     => National Digital Preservation Program, China
     => Library of Congress
 - additional hathitrust (many more ISSNs/journals)
