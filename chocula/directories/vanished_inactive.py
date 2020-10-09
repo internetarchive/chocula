@@ -27,7 +27,8 @@ class VanishedInactiveLoader(DirectoryLoader):
     def parse_record(self, record) -> Optional[DirectoryInfo]:
 
         # HACK
-        record["Title"] = record["\ufeffTitle"]
+        if "\ufeffTitle" in record:
+            record["Title"] = record["\ufeffTitle"]
         if not record["Title"]:
             return None
 
