@@ -148,6 +148,9 @@ class KbartLoader:
                 else:
                     new_spans = [[record.start_year, record.end_year]]
                 record.year_spans = merge_spans(old_spans, new_spans)
+            elif record.year_spans:
+                old_spans = existing.year_spans or []
+                record.year_spans = merge_spans(old_spans, record.year_spans)
             kbart_dict[record.issnl] = record
 
         counts["unique-issnl"] = len(kbart_dict)
@@ -214,6 +217,54 @@ class OnixCsvLoader(KbartLoader):
             start_volume=start_volume,
             end_volume=start_volume,
             year_spans=[],
+        )
+        return record
+
+
+class CarinianaCsvLoader(KbartLoader):
+    """
+    Similar to the KBART loader class, but for custom CSV files instead of
+    KBART formated TSV.
+
+    CSV columns:
+      - Region
+      - Knowledge Area
+      - Publisher
+      - Title
+      - ISSN
+      - eISSN
+      - Preserved Volumes
+      - Preserved Years
+      - In Progress Volumes
+      - In Progress Years
+
+    TODO: volumes
+    """
+
+    def open_file(self) -> Iterable:
+        return csv.DictReader(open(self.file_path(), "r"))
+
+    def parse_record(self, row: dict, issn_db: IssnDatabase) -> Optional[KbartRecord]:
+
+        raw_issn = clean_issn(row["ISSN"])
+        issne = clean_issn(row["ISSN"])
+        issnl = issn_db.issn2issnl(raw_issn or issne or "")
+        # convert list of years to a set of year spans
+        years = [int(y.strip()) for y in row["Preserved Years"].split(";") if y]
+        year_spans = merge_spans([], [[y, y] for y in years])
+        record = KbartRecord(
+            issnl=issnl,
+            issne=issne,
+            issnp=None,
+            embargo=None,
+            title=clean_str(row["Title"]),
+            publisher=clean_str(row["Publisher"]),
+            url=None,
+            start_year=None,
+            end_year=None,
+            start_volume=None,
+            end_volume=None,
+            year_spans=year_spans,
         )
         return record
 

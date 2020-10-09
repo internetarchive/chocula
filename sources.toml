@@ -93,6 +93,19 @@ date = "2020-09-01"
 filename = "hathi_serials.tsv"
 original_url = "https://www.hathitrust.org/hathifiles"
 
+[scholarsportal]
+# from correspondance
+date = "2020-08-24"
+filename = "onix_scholarsportal.csv"
+mirror_url = "https://archive.org/download/scholarsportal-keepers-onix-xml-20200824"
+
+[cariniana]
+# https://cariniana.ibict.br/index.php/preservacao-de-publicacoes-digitais/periodicos-eletronicos
+date = "2017-12-01"
+filename = "cariniana.csv"
+original_url = "https://cariniana.ibict.br/images/Periodicos_2016/Lista_Dezembro_2017.xls"
+mirror_url = "https://archive.org/download/cariniana-journal-holdings"
+
 [szczepanski]
 date = '2018'
 # Jan-Szczepanski-Open-Access-Journals-2018_0.fixed.json

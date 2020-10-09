@@ -837,6 +837,8 @@ class ChoculaDatabase:
                     "jstor",
                     "pkp_pln",
                     "hathitrust",
+                    "scholarsportal",
+                    "cariniana",
                 ):
                     extra["kbart"] = extra.get("kbart", {})
                     extra["kbart"][drow["slug"]] = dict(year_spans=dextra["year_spans"])

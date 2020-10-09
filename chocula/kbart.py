@@ -1,4 +1,4 @@
-from chocula.common import KbartLoader, OnixCsvLoader, HathifilesLoader
+from chocula.common import KbartLoader, OnixCsvLoader, CarinianaCsvLoader, HathifilesLoader
 
 
 class ClockssKbartLoader(KbartLoader):
@@ -41,6 +41,22 @@ class PkpPlnOnixLoader(OnixCsvLoader):
         return self.config.pkp_pln.filepath
 
 
+class CarinianaLoader(CarinianaCsvLoader):
+
+    source_slug = "cariniana"
+
+    def file_path(self) -> str:
+        return self.config.cariniana.filepath
+
+
+class ScholarsportalOnixLoader(OnixCsvLoader):
+
+    source_slug = "scholarsportal"
+
+    def file_path(self) -> str:
+        return self.config.scholarsportal.filepath
+
+
 class HathitrustLoader(HathifilesLoader):
 
     source_slug = "hathitrust"
@@ -55,5 +71,7 @@ ALL_CHOCULA_KBART_CLASSES = [
     PorticoKbartLoader,
     JstorKbartLoader,
     PkpPlnOnixLoader,
+    CarinianaLoader,
+    ScholarsportalOnixLoader,
     HathitrustLoader,
 ]
