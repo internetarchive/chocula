@@ -84,7 +84,7 @@ data/$(TODAY)/ISSN-to-ISSN-L.txt:
 	unzip -p /tmp/issnltables.$(TODAY).zip "*.ISSN-to-ISSN-L.txt" > $@.wip
 	mv $@.wip $@
 
-data/$(TODAY)/entrez.csv:
+data/$(TODAY)/entrez.txt:
 	wget -c "ftp://ftp.ncbi.nlm.nih.gov/pubmed/J_Entrez.txt" -O $@.wip
 	mv $@.wip $@
 
@@ -101,7 +101,7 @@ data/$(TODAY)/onix_pkp_pln.csv:
 	mv $@.wip $@
 
 .PHONY: update-sources
-update-sources: data/$(TODAY)/kbart_JSTOR.txt data/$(TODAY)/kbart_CLOCKSS.txt data/$(TODAY)/kbart_CLOCKSS-triggered.txt data/$(TODAY)/kbart_LOCKSS.txt data/$(TODAY)/kbart_Portico.txt data/$(TODAY)/ISSN-to-ISSN-L.txt data/$(TODAY)/entrez.csv data/$(TODAY)/doaj.csv data/$(TODAY)/crossref_titles.csv data/$(TODAY)/onix_pkp_pln.csv  ## Download new versions of updatable sources
+update-sources: data/$(TODAY)/kbart_JSTOR.txt data/$(TODAY)/kbart_CLOCKSS.txt data/$(TODAY)/kbart_CLOCKSS-triggered.txt data/$(TODAY)/kbart_LOCKSS.txt data/$(TODAY)/kbart_Portico.txt data/$(TODAY)/ISSN-to-ISSN-L.txt data/$(TODAY)/entrez.txt data/$(TODAY)/doaj.csv data/$(TODAY)/crossref_titles.csv data/$(TODAY)/onix_pkp_pln.csv  ## Download new versions of updatable sources
 	@echo
 	@echo "Successfully updated for date (UTC): $(TODAY)"
 
