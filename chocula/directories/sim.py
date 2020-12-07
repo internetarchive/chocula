@@ -59,6 +59,9 @@ class SimLoader(DirectoryLoader):
         last_year = row["Last Volume"]
         if last_year:
             last_year = int(last_year)
+            # should be no SIM content after this year
+            if last_year > 2017:
+                last_year = 2017
             extra["last_year"] = last_year
         else:
             last_year = None
