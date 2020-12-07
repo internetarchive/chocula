@@ -1,7 +1,7 @@
 
 [snapshot]
-date = "2020-10-08"
-ia_item = "chocula-sources-snapshot-2020-10-08"
+date = "2020-11-19"
+ia_item = "chocula-sources-snapshot-2020-11-19"
 
 [issnl]
 filename = "ISSN-to-ISSN-L.txt"
@@ -120,8 +120,8 @@ mirror_url = "https://archive.org/download/ezb_snapshot_2019-07-11"
 filename = "gold_oa.csv"
 
 [wikidata]
-date = "2020-06-03"
-# wikidata_journals_sparql.2019-12-20.tsv
+date = "2020-11-19"
+# wikidata_journals_sparql.2020-11-19.tsv
 filename = "wikidata_journals.tsv"
 # SPARQL: https://archive.org/download/wikidata-journal-metadata/wikidata.sparql
 mirror_url = "https://archive.org/download/wikidata-journal-metadata"
@@ -141,7 +141,7 @@ filename = "sim_master_title_metadata.csv"
 mirror_url = "https://archive.org/download/SerialsOnMicrofilmCollection/MASTER%20TITLE_METADATA_LIST_20171019.xlsx"
 
 [fatcat_containers]
-date = "2020-08-05"
+date = "2020-10-09"
 filename = "container_export.json"
 
 [homepage_status]
@@ -149,7 +149,7 @@ date = "2020-06-25"
 filename = "homepage_status.json"
 
 [fatcat_stats]
-date = "2020-06-25"
+date = "2020-11-19"
 filename = "container_stats.json"
 
 [manual_homepages]
