@@ -1,4 +1,10 @@
 
+x wikidata update
+x SIM max-year limit
+- handle no-issn dblp containers (?)
+- new DOAJ csv schema
+- ROAD update
+- include vanished status as a flag/tag ("status"?)
 
 priorities:
 - coverage stats, particularly for longtail
@@ -7,10 +13,24 @@ priorities:
 - don't list dead URLs in fatcat
 - SIM missing/bad ISSNs
     Counter({'total': 14860, 'inserted': 11421, 'missing-issn': 2863, 'no-match': 555, 'duplicate': 21})
+- publisher KBART
+    springer: http://adminportal.springernature.com/metadata/kbart
+    taylor&francis: https://www.tandfonline.com/page/title-lists
+        also "ceased" list
+    elsevier: https://www.elsevier.com/solutions/sciencedirect/content/journal-title-lists
+    sage: https://us.sagepub.com/en-us/nam/title-lists
+    oup: https://global.oup.com/academic/librarians/manage/kbart-files/?cc=us&lang=en&
+    https://www.annualreviews.org/page/librarians/metadata/titlelists
+    https://iopscience.iop.org/bookListInfo/title-lists
+    https://support.gale.com/tlist/products/
+        https://titlelist.gale.com/titlelist/
+    IEEE: https://ieeexplore.ieee.org/Xplorehelp/administrators-and-librarians/title-lists#kbart-phase-ii-compliant-title-lists
+    ACM: https://dl.acm.org/about/content
 
 
 ## Sources
 
+- EBSCO title lists: https://www.ebsco.com/title-lists
 - government lists
     => india: University Grants Commission (UGC-CARE, group I)
         https://ugccare.unipune.ac.in/apps1/home/index
