@@ -22,7 +22,7 @@ fmt: ## Run code formating on all source code
 	pipenv run black *.py chocula/ tests/
 
 .PHONY: test
-test: lint ## Run all tests and lints
+test: lint ## Run all tests
 	pipenv run pytest
 
 .PHONY: coverage
