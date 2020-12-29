@@ -12,9 +12,6 @@ pycountry = "*"
 python-stdnum = "*"
 toml = "*"
 
-# Future?
-#datasette = "*"
-
 [dev-packages]
 pytest = "*"
 pytest-cov = "*"
@@ -27,4 +24,4 @@ flake8-annotations = "*"
 black = "==19.10b0"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"

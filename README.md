@@ -13,9 +13,9 @@ catalog of published papers.
 
 ## Quickstart
 
-You need `python3.7`, `pipenv`, and `sqlite3` installed. Commands are run via
-`make`. If you don't have `python3.7` installed system-wide, try installing
-`pyenv`.
+You need `python3.8`, `pipenv`, and `sqlite3` installed. Commands are run via
+`make`. If you don't have `python3.8` installed system-wide, try installing
+with `pyenv`.
 
 Set up dependencies and fetch source metadata:
 
