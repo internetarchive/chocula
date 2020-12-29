@@ -8,7 +8,7 @@ ftfy = "*"
 urlcanon = "*"
 surt = "*"
 tldextract = "*"
-pycountry = "*"
+pycountry = "==19.8.18"
 python-stdnum = "*"
 toml = "*"
 
