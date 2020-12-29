@@ -85,3 +85,16 @@ NOTE: this is a partial list, as of 2020-05-05 about 4600 rows,
 
 After the first round of manual homepage identification, as of 2020-07-08 there
 are only 264 journals remaining selected by the above query.
+
+## 2020-10-13 Update
+
+    .headers on
+    .mode tabs
+    .output chocula_missing_hompages.2020-10-13.tsv
+
+    SELECT issnl, issnp, issne, name, publisher, country, lang, release_count, has_dois
+    FROM journal
+    WHERE
+        any_homepage=0
+        AND name IS NOT NULL
+        AND valid_issnl=1;
