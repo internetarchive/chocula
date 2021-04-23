@@ -1,7 +1,7 @@
 
 [snapshot]
-date = "2020-11-19"
-ia_item = "chocula-sources-snapshot-2020-11-19"
+date = "2021-04-22"
+ia_item = "chocula-sources-snapshot-2021-04-22"
 
 [issnl]
 filename = "ISSN-to-ISSN-L.txt"
@@ -51,8 +51,8 @@ mirror_url = "https://archive.org/download/moreo.info-2018-12-20/romeo-policies.
 #original_url = "http://www.sherpa.ac.uk/downloads/journal-title-issn-urls.php"
 
 [norwegian]
-# 2019-12-21 Norwegian Register for Scientific Journals and Series.csv
-date = "2019-12-21"
+# 2021-04-22 Norwegian Register for Scientific Journals and Series.csv
+date = "2021-04-22"
 filename = "norwegian_register.csv"
 original_url = "https://dbh.nsd.uib.no/publiseringskanaler/AlltidFerskListe"
 mirror_url = "https://archive.org/download/norwegian_register_journals"
@@ -120,7 +120,7 @@ mirror_url = "https://archive.org/download/ezb_snapshot_2019-07-11"
 filename = "gold_oa.csv"
 
 [wikidata]
-date = "2020-11-19"
+date = "2021-04-22"
 # wikidata_journals_sparql.2020-11-19.tsv
 filename = "wikidata_journals.tsv"
 # SPARQL: https://archive.org/download/wikidata-journal-metadata/wikidata.sparql
@@ -141,7 +141,7 @@ filename = "sim_master_title_metadata.csv"
 mirror_url = "https://archive.org/download/SerialsOnMicrofilmCollection/MASTER%20TITLE_METADATA_LIST_20171019.xlsx"
 
 [fatcat_containers]
-date = "2020-10-09"
+date = "2021-03-08"
 filename = "container_export.json"
 
 [homepage_status]
