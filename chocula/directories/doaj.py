@@ -96,9 +96,7 @@ class DoajLoader(DirectoryLoader):
 
         if row["Preservation Services"]:
             info.extra["archive"] = [
-                a.strip()
-                for a in row["Preservation Services"].split(",")
-                if a.strip()
+                a.strip() for a in row["Preservation Services"].split(",") if a.strip()
             ]
         elif row["Preservation Service: national library"]:
             info.extra["archive"] = ["national-library"]

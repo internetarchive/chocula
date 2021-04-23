@@ -362,7 +362,7 @@ def test_clean_str():
 
 def clean_issn(s: str) -> Optional[str]:
     s = s.strip().upper()
-    s = s.replace(' ', '')
+    s = s.replace(" ", "")
     if len(s) == 8:
         s = s[:4] + "-" + s[4:]
     if len(s) != 9 or s[4] != "-":

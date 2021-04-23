@@ -11,7 +11,8 @@ class ManualHomepageLoader(DirectoryLoader):
 
     def open_file(self) -> Iterable:
         return csv.DictReader(
-            open(self.config.manual_homepages.filepath), delimiter="\t",
+            open(self.config.manual_homepages.filepath),
+            delimiter="\t",
         )
 
     def parse_record(self, record) -> Optional[DirectoryInfo]:
@@ -35,7 +36,10 @@ class ManualHomepageLoader(DirectoryLoader):
         - Inactive
         """
 
-        info = DirectoryInfo(directory_slug=self.source_slug, issnl=record["issnl"],)
+        info = DirectoryInfo(
+            directory_slug=self.source_slug,
+            issnl=record["issnl"],
+        )
         url = record["Homepage URL"]
         if url is None or url.lower() == "unknown" or len(url) < 4:
             return None

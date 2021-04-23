@@ -1,4 +1,9 @@
-from chocula.common import KbartLoader, OnixCsvLoader, CarinianaCsvLoader, HathifilesLoader
+from chocula.common import (
+    KbartLoader,
+    OnixCsvLoader,
+    CarinianaCsvLoader,
+    HathifilesLoader,
+)
 
 
 class ClockssKbartLoader(KbartLoader):

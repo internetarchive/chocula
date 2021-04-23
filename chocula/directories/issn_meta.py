@@ -29,7 +29,9 @@ class IssnMetaLoader(DirectoryLoader):
 
         row = json.loads(row)
 
-        info = DirectoryInfo(directory_slug=self.source_slug,)
+        info = DirectoryInfo(
+            directory_slug=self.source_slug,
+        )
         # format is an array of metadata elements
         for el in row:
             if "label" in el and el["@id"].startswith(

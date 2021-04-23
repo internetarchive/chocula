@@ -22,7 +22,9 @@ class VanishedInactiveLoader(DirectoryLoader):
     source_slug = "vanished_inactive"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.vanished_inactive.filepath), delimiter=";")
+        return csv.DictReader(
+            open(self.config.vanished_inactive.filepath), delimiter=";"
+        )
 
     def parse_record(self, record) -> Optional[DirectoryInfo]:
 

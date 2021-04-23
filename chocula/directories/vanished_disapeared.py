@@ -35,7 +35,9 @@ class VanishedDisapearedLoader(DirectoryLoader):
     source_slug = "vanished_disapeared"
 
     def open_file(self) -> Iterable:
-        return csv.DictReader(open(self.config.vanished_disapeared.filepath), delimiter=";")
+        return csv.DictReader(
+            open(self.config.vanished_disapeared.filepath), delimiter=";"
+        )
 
     def parse_record(self, record) -> Optional[DirectoryInfo]:
 

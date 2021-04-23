@@ -435,7 +435,11 @@ class ChoculaDatabase:
         cur = self.db.cursor()
         self.db.row_factory = sqlite3.Row
         # don't include new journals if they are *only* in hathitrust KBART
-        index_issnls = list(cur.execute("SELECT DISTINCT issnl FROM directory WHERE slug != 'hathitrust'"))
+        index_issnls = list(
+            cur.execute(
+                "SELECT DISTINCT issnl FROM directory WHERE slug != 'hathitrust'"
+            )
+        )
         fatcat_issnls = list(
             cur.execute(
                 "SELECT DISTINCT issnl FROM fatcat_container WHERE issnl IS NOT null"
