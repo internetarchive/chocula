@@ -1,4 +1,8 @@
 
+KBART registry:
+- https://sites.google.com/site/kbartregistry/
+- Project Muse as a Keeper?
+
 x wikidata update
 x SIM max-year limit
 - handle no-issn dblp containers (?)
