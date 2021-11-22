@@ -29,26 +29,15 @@ test: lint ## Run all tests
 coverage: ## Run all tests with coverage
 	pipenv run pytest --cov
 
-data/container_stats.json:
-	mkdir -p data
-	cat data/container_export.json | jq .issnl -r | sort -u > /tmp/container_issnl.tsv
-	cat /tmp/container_issnl.tsv | parallel -j10 curl -s 'https://fatcat.wiki/container/issnl/{}/stats.json' | jq -c . > /tmp/container_stats.json
-	mv /tmp/container_stats.json data
-
 .PHONY: container-stats
-container-stats: data/container_stats.json
-	wc -l data/container_stats.json
+container-stats: data/$(TODAY)/container_stats.json  ## Summarize fatcat container counts
+	wc -l data/$(TODAY)/container_stats.json
 	@echo
 	@echo Done
 
-data/homepage_status.json:
-	pipenv run ./chocula.py export_urls | shuf > /tmp/chocula_urls_to_crawl.tsv
-	pipenv run parallel -j10 --bar --pipepart -a /tmp/chocula_urls_to_crawl.shuf.tsv ./check_issn_urls.py > /tmp/homepage_status.json
-	cp /tmp/homepage_status.json data/
-
 .PHONY: homepage-status
-homepage-status: data/homepage_status.json
-	wc -l data/homepage-status.json
+homepage-status: data/$(TODAY)/homepage_status.json  ## Check homepage "live"/"archive" existance for current database
+	wc -l data/$(TODAY)/homepage_status.json
 	@echo
 	@echo Done
 
@@ -111,9 +100,9 @@ data/$(TODAY)/homepage_status.json:
 	mv /tmp/url_status.json $@
 
 data/$(TODAY)/container_stats.json: data/container_export.json
-	cat data/container_export.json | jq .issnl -r | sort -u > /tmp/container_issnl.tsv
-	cat /tmp/container_issnl.tsv | parallel -j10 curl --fail -s 'https://fatcat.wiki/container/issnl/{}/stats.json' | jq -c . | pv -l > /tmp/container_stats.json
-	cp /tmp/container_stats.json $@
+	cat data/container_export.json | jq .ident -r | sort -u > /tmp/container_ident.tsv
+	cat /tmp/container_ident.tsv | parallel -j10 curl --max-time 30 --fail -s 'https://fatcat.wiki/container/{}/stats.json' | jq -c . | pv -l > /tmp/container_stats.json
+	mv /tmp/container_stats.json $@
 
 .PHONY: upload-sources
 upload-sources: update-sources ## Upload most recent update-able sources to a new IA item

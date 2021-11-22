@@ -19,6 +19,7 @@ from chocula.directories.issn_meta import IssnMetaLoader
 from chocula.directories.australian_era import AustralianEraLoader
 from chocula.directories.awol import AwolLoader
 from chocula.directories.mag import MagLoader
+from chocula.directories.openalex import OpenAlexLoader
 
 # sort order roughly results in metadata prioritization
 ALL_CHOCULA_DIR_CLASSES = [
@@ -43,4 +44,5 @@ ALL_CHOCULA_DIR_CLASSES = [
     SimLoader,
     ZdbFizeLoader,
     MagLoader,
+    OpenAlexLoader,
 ]
