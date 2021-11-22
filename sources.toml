@@ -198,3 +198,9 @@ date = "2021-06-07"
 original_url = "https://docs.microsoft.com/en-us/academic-services/graph/"
 filename = "mag-journals.txt"
 mirror_url = "https://archive.org/download/mag-2021-06-07"
+
+[openalex]
+date = "2021-11-05"
+original_url = "https://openalex.org/data-dump"
+filename = "openalex-journals.txt"
+mirror_url = "https://archive.org/download/openalex-2021-11-05"
