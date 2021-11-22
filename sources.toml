@@ -1,7 +1,7 @@
 
 [snapshot]
-date = "2021-05-29"
-ia_item = "chocula-sources-snapshot-2021-05-29"
+date = "2021-11-20"
+ia_item = "chocula-sources-snapshot-2021-11-20"
 
 [issnl]
 filename = "ISSN-to-ISSN-L.txt"
@@ -141,7 +141,7 @@ filename = "sim_master_title_metadata.csv"
 mirror_url = "https://archive.org/download/SerialsOnMicrofilmCollection/MASTER%20TITLE_METADATA_LIST_20171019.xlsx"
 
 [fatcat_containers]
-date = "2021-03-08"
+date = "2021-11-05"
 filename = "container_export.json"
 
 [homepage_status]
@@ -181,6 +181,7 @@ original_url = "https://github.com/njahn82/vanished_journals"
 mirror_url = "https://archive.org/download/vanished-journals-metadata"
 
 [australian_era]
+# next round of ERA will be in 2023
 date = "2018"
 filename = "era_2018_journal_list.csv"
 original_url = "https://www.arc.gov.au/excellence-research-australia/era-2018-journal-list"
@@ -193,7 +194,7 @@ original_url = "https://isaw.nyu.edu/publications/awol-index/"
 mirror_url = "https://archive.org/download/awol-index-json"
 
 [mag]
-date = "2020-01-23"
+date = "2021-06-07"
 original_url = "https://docs.microsoft.com/en-us/academic-services/graph/"
 filename = "mag-journals.txt"
-mirror_url = "https://archive.org/download/mag-2020-01-23"
+mirror_url = "https://archive.org/download/mag-2021-06-07"
