@@ -149,7 +149,7 @@ date = "2020-06-25"
 filename = "homepage_status.json"
 
 [fatcat_stats]
-date = "2020-11-19"
+date = "2021-11-20"
 filename = "container_stats.json"
 
 [manual_homepages]
