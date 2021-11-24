@@ -156,6 +156,10 @@ def check_url(issnl, url):
         info["error"] = "InvalidSchema"
         info["terminal_status_code"] = info["status_code"] = -1
         return info
+    except requests.exceptions.RemoteDisconnected:
+        info["error"] = "RemoteDisconnected"
+        info["terminal_status_code"] = info["status_code"] = -1
+        return info
     except UnicodeDecodeError:
         info["error"] = "UnicodeDecodeError"
         info["terminal_status_code"] = info["status_code"] = -1
