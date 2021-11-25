@@ -178,7 +178,7 @@ class KbartLoader:
 class OnixCsvLoader(KbartLoader):
     """
     Similar to the KBART loader class, but for ONIX CSV files instead of KBART
-    formated TSV.
+    formatted TSV.
 
     CSV columns:
     - ISSN
@@ -224,7 +224,7 @@ class OnixCsvLoader(KbartLoader):
 class CarinianaCsvLoader(KbartLoader):
     """
     Similar to the KBART loader class, but for custom CSV files instead of
-    KBART formated TSV.
+    KBART formatted TSV.
 
     CSV columns:
       - Region
@@ -273,7 +273,7 @@ class HathifilesLoader(KbartLoader):
     """
     Similar to the KBART loader class, but for Hathifiles bulk format.
 
-    Relavent TSV columns ("one-indexed", not zero-indexed):
+    Relevant TSV columns ("one-indexed", not zero-indexed):
 
     - 2 access (allow=bright, deny=dark)
     - 5 description

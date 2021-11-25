@@ -43,7 +43,7 @@ How about Hathitrust?
     26628       48160184                    36905342
 
 Much larger potential impact, of 11+ million releases, though unclear how many
-are acutally in the hathitrust archives.
+are acutually in the hathitrust archives.
 
 ## 2020-06-23
 

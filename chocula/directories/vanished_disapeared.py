@@ -9,7 +9,7 @@ from chocula.database import DirectoryInfo, HomepageUrl
 class VanishedDisapearedLoader(DirectoryLoader):
     """
     Journal-level metadata from the "Vanished Journals" project. This is the
-    "disapeared" dataset, with many homepage URLs in wayback (web.archive.org).
+    "disappeared" dataset, with many homepage URLs in wayback (web.archive.org).
 
     CSV headers:
         - Source
