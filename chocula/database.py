@@ -46,6 +46,8 @@ class HomepageUrl:
         """
         if (
             not url
+            or '://' not in url
+            or not url.lower().startswith('http')
             or "mailto:" in url.lower()
             or url.lower() in ("http://n/a", "http://na/", "http://na")
             or "LOCKSS_RESOLVER" in url
@@ -57,6 +59,7 @@ class HomepageUrl:
             or "://search.ebscohost.com" in url
             or "://search.proquest.com" in url
             or "://gateway.proquest.com" in url
+            or "://doaj.org" in url
         ):
             return None
         if url.startswith("www."):
