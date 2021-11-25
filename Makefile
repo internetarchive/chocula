@@ -95,9 +95,9 @@ update-sources: data/$(TODAY)/kbart_JSTOR.txt data/$(TODAY)/kbart_CLOCKSS.txt da
 	@echo "Successfully updated for date (UTC): $(TODAY)"
 
 data/$(TODAY)/homepage_status.json:
-	pipenv run python -m chocula export_urls | shuf | pv -l > /tmp/chocula_urls.tsv
+	pipenv run python -m chocula export_urls | rg -v www.jstor.org | rg -v www.tandfonline.com | rg -v www.sciencedirect.com | rg -v link.springer.com | rg -v onlinelibrary.wiley.com | rg -v dialnet.unirioja.es | rg -v www.springer.com | rg -v www.journals.elsevier.com | rg -v web.archive.org | rg -v catalog.hathitrust.org | shuf | pv -l > /tmp/chocula_urls.tsv
 	pipenv run parallel -j10 --pipepart --line-buffer -a /tmp/chocula_urls.tsv ./check_issn_urls.py | pv -l > /tmp/homepage_status.json
-	mv /tmp/url_status.json $@
+	mv /tmp/homepage_status.json $@
 
 data/$(TODAY)/container_stats.json: data/container_export.json
 	cat data/container_export.json | jq .ident -r | sort -u > /tmp/container_ident.tsv
