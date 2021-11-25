@@ -90,19 +90,23 @@ def check_gwb(url, match_type="exact"):
     if "//web.archive.org/" in url:
         return None
     # crude/bad retry loop to work around CDX API throttling
-    for i in range(5):
-        resp = requests.get(
-            "https://web.archive.org/cdx/search/cdx",
-            params={
-                "url": url,
-                "matchType": match_type,
-                "limit": -1,
-                "filter": "statuscode:200",
-            },
-        )
-        if resp.status_code == 200:
+    for i in range(2):
+        try:
+            resp = requests.get(
+                "https://web.archive.org/cdx/search/cdx",
+                params={
+                    "url": url,
+                    "matchType": match_type,
+                    "limit": -1,
+                    "filter": "statuscode:200",
+                },
+            )
+        except Exception as e:
+            # nasty blanket catch
+            return None
+        if resp.status_code not in [200, 404]:
             break
-        time.sleep(5)
+        time.sleep(0.1)
     if not resp.status_code == 200:
         sys.stderr.write("CDX ERR {}: {}\n".format(resp.status_code, url))
         # TODO: this isn't really correct, but not sure what to return/record
@@ -120,10 +124,18 @@ def check_gwb(url, match_type="exact"):
 def check_url(issnl, url):
     # print("Fetching: %s" % url)
     info = dict(issnl=issnl, url=url)
+    if "://" not in url:
+        info["error"] = "bad-url"
+        info["terminal_status_code"] = -1
+        return info
+    if not url.startswith('http'):
+        info["error"] = "url-not-http"
+        info["terminal_status_code"] = -1
+        return info
     try:
         resp = requests.get(
             url,
-            timeout=15.0,
+            timeout=(5.0, 5.0),
             headers={
                 "User-Agent": "ia_bot/0.0 (python requests) journal-live-check; contact:info@archive.org"
             },
@@ -156,12 +168,26 @@ def check_url(issnl, url):
         info["error"] = "InvalidSchema"
         info["terminal_status_code"] = info["status_code"] = -1
         return info
-    except requests.exceptions.RemoteDisconnected:
-        info["error"] = "RemoteDisconnected"
+    except ConnectionResetError:
+        info["error"] = "ConnectionResetError"
+        info["terminal_status_code"] = info["status_code"] = -1
+        return info
+    except requests.exceptions.ProtocolError:
+        info["error"] = "ProtocolError"
+        info["terminal_status_code"] = info["status_code"] = -1
+        return info
+    except requests.exceptions.InvalidURL:
+        info["error"] = "ProtocolError"
         info["terminal_status_code"] = info["status_code"] = -1
         return info
     except UnicodeDecodeError:
         info["error"] = "UnicodeDecodeError"
+        info["terminal_status_code"] = info["status_code"] = -1
+        return info
+    except Exception as e:
+        # nasty blanket catch
+        print(e, file=sys.stderr)
+        info["error"] = "other"
         info["terminal_status_code"] = info["status_code"] = -1
         return info
 
