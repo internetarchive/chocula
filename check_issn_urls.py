@@ -101,7 +101,7 @@ def check_gwb(url, match_type="exact"):
                     "filter": "statuscode:200",
                 },
             )
-        except Exception as e:
+        except Exception:
             # nasty blanket catch
             return None
         if resp.status_code not in [200, 404]:
@@ -170,10 +170,6 @@ def check_url(issnl, url):
         return info
     except ConnectionResetError:
         info["error"] = "ConnectionResetError"
-        info["terminal_status_code"] = info["status_code"] = -1
-        return info
-    except requests.exceptions.ProtocolError:
-        info["error"] = "ProtocolError"
         info["terminal_status_code"] = info["status_code"] = -1
         return info
     except requests.exceptions.InvalidURL:
