@@ -120,6 +120,18 @@ def check_gwb(url, match_type="exact"):
     else:
         return None
 
+HOST_SKIP_LIST = [
+    "www.jstor.org",
+    "www.tandfonline.com",
+    "www.sciencedirect.com",
+    "link.springer.com",
+    "onlinelibrary.wiley.com",
+    "dialnet.unirioja.es",
+    "www.springer.com",
+    "www.journals.elsevier.com",
+    "web.archive.org",
+    "catalog.hathitrust.org",
+]
 
 def check_url(issnl, url):
     # print("Fetching: %s" % url)
@@ -132,6 +144,12 @@ def check_url(issnl, url):
         info["error"] = "url-not-http"
         info["terminal_status_code"] = -1
         return info
+    for host in HOST_SKIP_LIST:
+        if f"://{host}/" in url:
+            info["error"] = "skip-host"
+            info["terminal_status_code"] = -1
+            return info
+
     try:
         resp = requests.get(
             url,
