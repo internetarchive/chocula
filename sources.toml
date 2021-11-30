@@ -1,7 +1,7 @@
 
 [snapshot]
-date = "2021-11-20"
-ia_item = "chocula-sources-snapshot-2021-11-20"
+date = "2021-11-30"
+ia_item = "chocula-sources-snapshot-2021-11-30"
 
 [issnl]
 filename = "ISSN-to-ISSN-L.txt"
@@ -141,11 +141,11 @@ filename = "sim_master_title_metadata.csv"
 mirror_url = "https://archive.org/download/SerialsOnMicrofilmCollection/MASTER%20TITLE_METADATA_LIST_20171019.xlsx"
 
 [fatcat_containers]
-date = "2021-11-05"
+date = "2021-11-30"
 filename = "container_export.json"
 
 [homepage_status]
-date = "2020-06-25"
+date = "2021-11-25"
 filename = "homepage_status.json"
 
 [fatcat_stats]
