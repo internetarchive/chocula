@@ -120,6 +120,7 @@ def check_gwb(url, match_type="exact"):
     else:
         return None
 
+
 HOST_SKIP_LIST = [
     "www.jstor.org",
     "www.tandfonline.com",
@@ -133,6 +134,7 @@ HOST_SKIP_LIST = [
     "catalog.hathitrust.org",
 ]
 
+
 def check_url(issnl, url):
     # print("Fetching: %s" % url)
     info = dict(issnl=issnl, url=url)
@@ -140,7 +142,7 @@ def check_url(issnl, url):
         info["error"] = "bad-url"
         info["terminal_status_code"] = -1
         return info
-    if not url.startswith('http'):
+    if not url.startswith("http"):
         info["error"] = "url-not-http"
         info["terminal_status_code"] = -1
         return info

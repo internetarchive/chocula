@@ -10,21 +10,21 @@ class OpenAlexLoader(DirectoryLoader):
     """
     TSV Columns (from schema docs):
 
-        1	JournalId	long	PRIMARY KEY
-        2	Rank	uint	(DEPRECATED)
-        3	NormalizedName	string
-        4	DisplayName	string
-        5	Issn	string (ISSN-L)
-        6	Issns	JSON list
-        7       IsOa    bool
-        8       IsInDoaj    bool
-        9	Publisher	string
-        10	Webpage	string
-        11	PaperCount	long
-        12	PaperFamilyCount	long	(DEPRECATED)
-        13	CitationCount	long
-        14	CreatedDate	DateTime
-        15	UpdatedDate	DateTime
+        1   JournalId    long    PRIMARY KEY
+        2   Rank    uint    (DEPRECATED)
+        3   NormalizedName    string
+        4   DisplayName    string
+        5   Issn    string (ISSN-L)
+        6   Issns    JSON list
+        7   IsOa    bool
+        8   IsInDoaj    bool
+        9   Publisher    string
+        10  Webpage    string
+        11  PaperCount    long
+        12  PaperFamilyCount    long    (DEPRECATED)
+        13  CitationCount    long
+        14  CreatedDate    DateTime
+        15  UpdatedDate    DateTime
 
     """
 
