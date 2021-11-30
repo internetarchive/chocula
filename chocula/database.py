@@ -44,12 +44,19 @@ class HomepageUrl:
         """
         Returns None if url is really bad (not a URL).
         """
+        if not url:
+            return None
+        if url.startswith("www."):
+            url = "http://" + url
+        if url.startswith("ttp://") or url.startswith("ttps://"):
+            url = "h" + url
+        url.replace("Http://", "http://")
+        url = str(urlcanon.semantic_precise(url))
         if (
             not url
-            or '://' not in url
-            or not url.lower().startswith('http')
+            or "://" not in url
+            or not url.lower().startswith("http")
             or "mailto:" in url.lower()
-            or url.lower() in ("http://n/a", "http://na/", "http://na")
             or "LOCKSS_RESOLVER" in url
             or "$result.AccessURL" in url
             or "://firstsearch.oclc.org" in url
@@ -62,21 +69,17 @@ class HomepageUrl:
             or "://doaj.org" in url
         ):
             return None
-        if url.startswith("www."):
-            url = "http://" + url
-        if url.startswith("ttp://") or url.startswith("ttps://"):
-            url = "h" + url
-        url.replace("Http://", "http://")
 
-        url = str(urlcanon.semantic_precise(url))
-        if url == "http://na/":
-            # sort of redundant with above, but some only match after canonicalization
-            return None
-        url_surt = surt.surt(url)
         tld = tldextract.extract(url)
         host = ".".join(tld)
         if host.startswith("."):
             host = host[1:]
+        if not (tld.registered_domain and tld.suffix):
+            return None
+        try:
+            url_surt = surt.surt(url)
+        except ValueError:
+            return None
         return HomepageUrl(
             url=url,
             surt=url_surt,
@@ -95,9 +98,20 @@ def test_from_url():
     assert HomepageUrl.from_url("google.com").suffix == "com"
     assert HomepageUrl.from_url("google.com").host == "google.com"
 
-    assert HomepageUrl.from_url("mailto:bnewbold@bogus.com") == None
+    assert HomepageUrl.from_url("mailto:bnewbold@bogus.com") is None
     assert HomepageUrl.from_url("thing.com").url == "http://thing.com/"
     assert HomepageUrl.from_url("Http://thing.com///").url == "http://thing.com/"
+
+    assert HomepageUrl.from_url("http://na") is None
+    assert HomepageUrl.from_url("http://n/a") is None
+    assert HomepageUrl.from_url("http:///???") is None
+    assert (
+        HomepageUrl.from_url("https://jurnal.stiemuarateweh.ac.id:443ojs/index.php/JSM")
+        is None
+    )
+    assert HomepageUrl.from_url("") is None
+    assert HomepageUrl.from_url("https://") is None
+    assert HomepageUrl.from_url("https://:80/thing.pdf") is None
 
 
 @dataclass
