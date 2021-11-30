@@ -323,9 +323,17 @@ class ChoculaDatabase:
             counts["total"] += 1
             url = row["url"]
             assert url
-            if row.get("gwb_url_success_dt") == "error":
+            if not (
+                row.get("gwb_url_success_dt")
+                and row["gwb_url_success_dt"].isdigit()
+                and len(row["gwb_url_success_dt"]) == 14
+            ):
                 row["gwb_url_success_dt"] = None
-            if row.get("gwb_terminal_url_success_dt") == "error":
+            if not (
+                row.get("gwb_terminal_url_success_dt")
+                and row["gwb_terminal_url_success_dt"]
+                and len(row["gwb_terminal_url_success_dt"]) == 14
+            ):
                 row["gwb_terminal_url_success_dt"] = None
             cur.execute(
                 "UPDATE homepage SET status_code=?, crawl_error=?, terminal_url=?, terminal_status_code=?, platform_software=?, issnl_in_body=?, blocked=?, gwb_url_success_dt=?, gwb_terminal_url_success_dt=? WHERE url=?",
@@ -724,17 +732,15 @@ class ChoculaDatabase:
                 "SELECT * FROM homepage WHERE issnl = ?;", [row["issnl"]]
             )
             for hrow in cur:
-                if "://doaj.org/" in hrow["url"] or "://www.doaj.org/" in hrow["url"]:
-                    continue
-                if "://www.ncbi.nlm.nih.gov/" in hrow["url"]:
-                    continue
                 if "LOCKSS_RESOLVER" in hrow["url"]:
                     continue
                 if "web.archive.org/web" in hrow["url"]:
                     webarchive_urls.append(hrow["url"])
-                    urls.append(hrow["url"])
                     continue
                 if hrow["host"] in (
+                    "doaj.org",
+                    "www.doaj.org",
+                    "www.ncbi.nlm.nih.gov",
                     "www.google.com",
                     "books.google.com",
                     "translate.google.com",
@@ -775,11 +781,7 @@ class ChoculaDatabase:
                 if "/oai/request" in hrow["url"]:
                     # OAI-PMH endpoints, not homepages
                     continue
-                if (
-                    not row["any_live_homepage"]
-                    and hrow["gwb_url_success_dt"]
-                    and hrow["gwb_url_success_dt"] != "error"
-                ):
+                if not row["any_live_homepage"] and hrow["gwb_url_success_dt"]:
                     webarchive_urls.append(
                         "https://web.archive.org/web/{}/{}".format(
                             hrow["gwb_url_success_dt"], hrow["url"]
