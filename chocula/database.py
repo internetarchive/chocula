@@ -338,7 +338,7 @@ class ChoculaDatabase:
             cur.execute(
                 "UPDATE homepage SET status_code=?, crawl_error=?, terminal_url=?, terminal_status_code=?, platform_software=?, issnl_in_body=?, blocked=?, gwb_url_success_dt=?, gwb_terminal_url_success_dt=? WHERE url=?",
                 (
-                    row["status_code"],
+                    row.get("status_code") or -1,
                     row.get("crawl_error"),
                     row.get("terminal_url"),
                     row.get("terminal_status_code"),
