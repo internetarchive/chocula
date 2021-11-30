@@ -1,0 +1,30 @@
+JournalId	Rank	NormalizedName	DisplayName	Issn	Issns	IsOa	IsInDoaj	Publisher	Webpage	PaperCount	PaperFamilyCount	CitationCount	CreatedDate	UpdatedDate
+235346	10343	wireless communications and mobile computing	Wireless Communications and Mobile Computing	1530-8669	["1530-8669","1530-8677"]	t	t	Hindawi Limited		3050	3050	22539	2016-06-24	2021-11-03 22:53:48.871031
+660994	10161	functional plant biology	Functional Plant Biology	1445-4416	["1445-4416","1445-4408"]	f	f		http://www.publish.csiro.au/fp	2977	2977	102540	2016-06-24	2021-11-03 22:53:48.871031
+924923	13856	graft	Graft	1522-1628	["2160-0066","1522-1628"]	f	f	Portico		196	196	636	2016-06-24	2021-11-03 22:53:48.871031
+955875	12657	medieval encounters	Medieval Encounters	1380-7854	["1380-7854","1570-0674"]	f	f	Brill		528	528	1121	2016-06-24	2021-11-03 22:53:48.871031
+1070115	9743	physics of the solid state	Physics of the Solid State	1063-7834	["1090-6460","1063-7834"]	f	f	Pleiades Publishing	http://www.maik.ru/cgi-bin/journal.pl?name=physsost&page=main	11128	11128	51802	2016-06-24	2021-11-03 22:53:48.871031
+1267573	14241	chinese birds	Chinese Birds	1674-7674	["1674-7674"]	f	f	Chinese Birds Press		132	132	900	2016-06-24	2021-11-03 22:53:48.871031
+1371495	16735	social trends	Social Trends	0306-7742	["0306-7742","2040-1620"]	f	f	Springer Nature		4	4	157	2016-06-24	2021-11-03 22:53:48.871031
+1390998	11133	political studies review	Political Studies Review	1478-9299	["1478-9299","1478-9302"]	f	f	SAGE	http://www.psa.ac.uk/members/membership-benefits/publications/political-studies-review	3475	3475	6156	2016-06-24	2021-11-03 22:53:48.871031
+1515322	14175	cholesterol	Cholesterol	2090-1283	["2090-1283","2090-1291"]	t	f	Hindawi Limited		84	84	1600	2016-06-24	2021-11-03 22:53:48.871031
+124035732	7420	anesthesiology	Anesthesiology	0003-3022	["0003-3022","1528-1175"]	f	f	Ovid Technologies (Wolters Kluwer)  - Lippincott Williams & Wilkins	http://journals.lww.com/anesthesiology/pages/default.aspx	47632	47632	935870	2016-06-24	2021-11-03 22:53:48.871031
+185297315	8983	agriculture ecosystems & environment	Agriculture, Ecosystems & Environment	0167-8809	["1873-2305","0167-8809"]	f	f	Elsevier	http://www.journals.elsevier.com/agriculture-ecosystems-and-environment/	8046	8046	335222	2016-06-24	2021-11-03 22:53:48.871031
+107659597	11241	design issues	Design Issues	0747-9360	["0747-9360","1531-4790"]	f	f	MIT Press	http://www.mitpressjournals.org/loi/desi	1107	1107	17691	2016-06-24	2021-11-03 22:53:48.871031
+182300451	9488	journal of endourology	Journal of Endourology	0892-7790	["1557-900X","0892-7790"]	f	f	Mary Ann Liebert		6893	6893	117425	2016-06-24	2021-11-03 22:53:48.871031
+2764536070	13820	enrollment and examination in hubei	Enrollment and Examination in Hubei							286	286	7	2017-10-27	
+196783408	9519	plant cell reports	Plant Cell Reports	0721-7714	["0721-7714","1432-203X"]	f	f	Springer Nature	http://www.springer.com/life+sciences/cell+biology/journal/299	6308	6308	214656	2016-06-24	2021-11-03 22:53:48.871031
+2764677298	14507	journal of community and health sciences	Journal of Community and Health Sciences	1990-9403	["1990-9403"]	t	f	University of the Western Cape Library Service		135	135	120	2017-10-27	2021-11-03 22:53:48.871031
+113237667	9743	business horizons	Business Horizons	0007-6813	["0007-6813","1873-6068"]	f	f	Elsevier		4536	4536	104913	2016-06-24	2021-11-03 22:53:48.871031
+2764463476	14443	journal of management and economics research	Journal of Management and Economics Research							146	146	121	2017-10-27	
+70396342	9406	cytokine	Cytokine	1043-4666	["1096-0023","1043-4666"]	f	f	Elsevier		9360	9360	166744	2016-06-24	2021-11-03 22:53:48.871031
+137975899	13994	reviews of human factors and ergonomics	Reviews of Human Factors and Ergonomics	1557-234X	["1557-234X","2163-3134"]	f	f	SAGE	http://www.uk.sagepub.com/journals/Journal202042/title	69	69	1982	2016-06-24	2021-11-03 22:53:48.871031
+161618848	12265	eighteenth century life	Eighteenth-century Life	0098-2601	["1086-3192","0098-2601"]	f	f	Duke University Press		682	682	1807	2016-06-24	2021-11-03 22:53:48.871031
+2764924152	14259	sugar journal	Sugar journal	0039-4734						152	152	224	2017-10-27	
+130843884	11828	drustvena istrazivanja	Drustvena Istrazivanja	1330-0288	["1848-6096","1330-0288"]	t	t	Institute of Social Sciences Ivo Pilar		1769	1769	2918	2016-06-24	2021-11-03 22:53:48.871031
+2738130794	11924	nomadas	Nómadas	0121-7550	["2539-4762","0121-7550"]	t	t	Universidad Central - Colombia		1446	1446	1788	2017-07-31	2021-11-03 22:53:48.871031
+2764652270	12573	science and technology studies	Science and technology studies	2243-4690	["2243-4690"]	t	t	Science and Technology Studies		634	634	3603	2017-10-27	2021-11-03 22:53:48.871031
+1502225	10730	expert review of neurotherapeutics	Expert Review of Neurotherapeutics	1473-7175	["1473-7175","1744-8360"]	f	f	Taylor & Francis		2632	2632	54450	2016-06-24	2021-11-03 22:53:48.871031
+27450300	12639	journal of the institute of energy	Journal of The Institute of Energy	0144-2600	["0144-2600"]	f	f	Elsevier		371	371	3014	2016-06-24	2021-11-03 22:53:48.871031
+1553775	11685	counselling psychology quarterly	Counselling Psychology Quarterly	0951-5070	["1469-3674","0951-5070"]	f	f	Taylor & Francis		1129	1129	14719	2016-06-24	2021-11-03 22:53:48.871031
+188605413	7869	carbon	Carbon	0008-6223	["0008-6223","1873-3891"]	f	f	Elsevier	http://www.elsevier.com/wps/find/journaldescription.cws_home/258/description#description	25108	25108	911559	2016-06-24	2021-11-03 22:53:48.871031
