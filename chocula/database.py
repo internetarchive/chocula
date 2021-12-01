@@ -696,6 +696,10 @@ class ChoculaDatabase:
                 counts["empty-name"] += 1
                 continue
 
+            if "UNKNOWN_TITLE" in row["name"]:
+                counts["empty-name"] += 1
+                continue
+
             if len(name) <= 2:
                 counts["short-name"] += 1
                 continue
@@ -774,6 +778,7 @@ class ChoculaDatabase:
                     "nla.gov.au",
                     "purl.nla.gov.au",
                     "www.bibliothek.uni-regensburg.de",
+                    "zdb.uni-bielefeld.de",
                 ):
                     # individual books or google searches, not journal/conference homepages
                     # LOC scanned newspapers
