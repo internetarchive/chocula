@@ -1,4 +1,4 @@
-image: debian:bullseye
+image: ubuntu:focal
 before_script:
   - apt update -qy
   - apt install -y --no-install-recommends python3-wheel python3.8 python3.8-venv python3.8-distutils python3-pytest git make pipenv
