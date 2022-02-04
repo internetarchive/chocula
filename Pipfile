@@ -18,10 +18,9 @@ pytest-cov = "*"
 mypy = "*"
 flake8 = "*"
 flake8-annotations = "*"
-
-# must lock black to an exact version because it is still "beta"
-# see: https://github.com/psf/black/issues/517
-black = "==19.10b0"
+black = "*"
+types-toml = "*"
+types-requests = "*"
 
 [requires]
 python_version = "3.8"
