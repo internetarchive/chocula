@@ -41,6 +41,10 @@ homepage-status: data/$(TODAY)/homepage_status.json  ## Check homepage "live"/"a
 	@echo
 	@echo Done
 
+.PHONY: export-fatcat
+export-fatcat: ## Output compressed JSON for fatcat journal metadata importer
+	pipenv run python -m chocula export_fatcat | gzip > chocula_fatcat_export.$(TODAY).json.gz
+
 .PHONY: fetch-sources
 fetch-sources: ## Download existing snapshot versions of all sources from archive.org
 	mkdir -p data
