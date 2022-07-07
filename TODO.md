@@ -3,6 +3,8 @@ KBART registry:
 - https://sites.google.com/site/kbartregistry/
 - Project Muse as a Keeper?
 
+why did ISSN-L list have bad single line (1300-350X)?
+
 x wikidata update
 x SIM max-year limit
 - handle no-issn dblp containers (?)

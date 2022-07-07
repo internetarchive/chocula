@@ -1,7 +1,7 @@
 
 [snapshot]
-date = "2022-03-08"
-ia_item = "chocula-sources-snapshot-2022-03-08"
+date = "2022-07-06"
+ia_item = "chocula-sources-snapshot-2022-07-06"
 
 [issnl]
 filename = "ISSN-to-ISSN-L.txt"
@@ -100,6 +100,7 @@ filename = "onix_scholarsportal.csv"
 mirror_url = "https://archive.org/download/scholarsportal-keepers-onix-xml-20200824"
 
 [cariniana]
+# TODO: http://reports-lockss.ibict.br/keepers/pln/ibictpln/
 # https://cariniana.ibict.br/index.php/preservacao-de-publicacoes-digitais/periodicos-eletronicos
 date = "2017-12-01"
 filename = "cariniana.csv"
