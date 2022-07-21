@@ -600,7 +600,7 @@ class ChoculaDatabase:
                 out["publisher_type"] = "commercial"
             elif publisher in ARCHIVE_PUBLISHERS:
                 out["publisher_type"] = "archive"
-            elif publisher in REPOSITORY_PUBLISHERS:
+            elif publisher in REPOSITORY_PUBLISHERS or "repository" in pl:
                 out["publisher_type"] = "repository"
             elif publisher in OTHER_PUBLISHERS:
                 out["publisher_type"] = "other"
@@ -614,7 +614,7 @@ class ChoculaDatabase:
                 or "ieee" in out.get("name", "")
             ):
                 out["publisher_type"] = "society"
-            elif publisher in UNI_PRESS_PUBLISHERS or "university " in pl:
+            elif publisher in UNI_PRESS_PUBLISHERS or "university " in pl or "universität" in pl:
                 out["publisher_type"] = "unipress"
             elif "scielo" in pl:
                 out["publisher_type"] = "scielo"

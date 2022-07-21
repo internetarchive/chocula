@@ -32,14 +32,19 @@ MIMETYPE_MAP = {
 
 BIG5_PUBLISHERS = [
     "Elsevier",
-    "Informa UK (Taylor & Francis)",
+    "Springer",
     "Springer-Verlag",
-    "SAGE Publications",
-    "Wiley (Blackwell Publishing)",
-    "Wiley (John Wiley & Sons)",
     "Springer (Biomed Central Ltd.)",
     "Springer Nature",
+    "Informa UK (Taylor & Francis)",
+    "Taylor & Francis",
+    "Wiley (Blackwell Publishing)",
+    "Wiley (John Wiley & Sons)",
+    "Wiley-Blackwell",
+    "SAGE Publications",
+    # Walter de Gruyter would be a potential "6th" big publisher
 ]
+
 COMMERCIAL_PUBLISHERS = [
     "Peter Lang International Academic Publishers",
     "Walter de Gruyter GmbH",
@@ -51,7 +56,6 @@ COMMERCIAL_PUBLISHERS = [
     "Bentham Science",
     "Ovid Technologies (Wolters Kluwer)  - Lippincott Williams & Wilkins",
     "Scientific Research Publishing, Inc",
-    "MDPI AG",
     "S. Karger AG",
     "Pleiades Publishing",
     "Science Publishing Group",
@@ -94,6 +98,7 @@ SOCIETY_PUBLISHERS = [
     "International Union of Crystallography",
     "Portland Press",
     "ASME International",
+    "The Optical Society",
 ]
 UNI_PRESS_PUBLISHERS = [
     "Cambridge University Press",
