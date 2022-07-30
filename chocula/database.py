@@ -206,7 +206,7 @@ class IssnDatabase:
         print("##### Loading ISSN-L map file...", file=sys.stderr)
         with open(issn_map_path, "r") as issn_map_file:
             for line in issn_map_file:
-                if line.startswith("ISSN") or len(line) == 0:
+                if line.startswith("ISSN") or len(line) == 0 or len(line.split()) < 2:
                     continue
                 (issn, issnl) = line.split()[0:2]
                 self.issn_issnl_map[issn] = issnl
