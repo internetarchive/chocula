@@ -55,6 +55,11 @@ def sniff_platform(resp):
         "hypotheses.org/": "hypothesis",
         "tandf.co.uk/": "t_and_f",
         "scielo": "scielo",
+        "jstage.jst.go.jp": "jstage",
+        "ieeexplore.ieee.org": "ieee",
+        "dx.doi.org/": "doi",
+        "catalog.hathitrust.org": "hathitrust",
+        "muse.jhu.edu": "muse",
     }
     for domain, platform in domain_map.items():
         if domain in resp.url:
@@ -132,6 +137,8 @@ HOST_SKIP_LIST = [
     "www.journals.elsevier.com",
     "web.archive.org",
     "catalog.hathitrust.org",
+    #"ieeexplore.ieee.org",
+    #"journals.sagepub.com",
 ]
 
 
