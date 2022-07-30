@@ -1,28 +1,51 @@
 
+[fatcat_containers]
+date = "2022-07-29"
+filename = "container_export.json"
+
+[homepage_status]
+date = "2021-11-25"
+filename = "homepage_status.json"
+
+[fatcat_stats]
+date = "2022-07-29"
+filename = "container_stats.json"
+
 [snapshot]
-date = "2022-07-06"
-ia_item = "chocula-sources-snapshot-2022-07-06"
+date = "2022-07-29"
+ia_item = "chocula-sources-snapshot-2022-07-29"
+
+[lockss]
+filename = "kbart_LOCKSS.txt"
+original_url = "https://reports.lockss.org/kbart/kbart_LOCKSS.txt"
+
+[clockss]
+filename = "kbart_CLOCKSS.txt"
+original_url = "https://reports.clockss.org/kbart/kbart_CLOCKSS.txt"
+
+[portico]
+#filename = 'data/Portico_Holding_KBart.txt'
+filename = "kbart_Portico.txt"
+original_url = "http://api.portico.org/kbart/Portico_Holding_KBart.txt"
+
+[jstor]
+# JSTOR_Global_AllArchiveTitles_2019-12-21.txt
+# https://support.jstor.org/hc/en-us/articles/115007466248-JSTOR-title-lists
+filename = "kbart_JSTOR.txt"
+original_url = "https://www.jstor.org/kbart/collections/all-archive-titles?contentType=journals"
+
+[pkp_pln]
+filename = "onix_pkp_pln.csv"
+original_url = "http://pkp.sfu.ca/files/pkppn/onix.csv"
 
 [issnl]
 filename = "ISSN-to-ISSN-L.txt"
 original_url = "https://www.issn.org/wp-content/uploads/2014/03/issnltables.zip"
 
-[entrez_simple]
-# transformed files from https://moreo.info, a now defunct site
-date = 2018-12-20
-filename = "entrez-journals.csv"
-mirror_url = "https://archive.org/download/moreo.info-2018-12-20/entrez-journals.csv"
-
 [entrez]
 filename = "entrez.txt"
 original_url = "ftp://ftp.ncbi.nlm.nih.gov/pubmed/J_Entrez.txt"
 mirror_url = "https://archive.org/download/ncbi-entrez-2019/J_Entrez.txt"
-
-[road]
-date = "2018-01-24"
-filename = "road.tsv"
-# Now dead: original_url = "http://road.issn.org/en/contenu/download-road-records"
-mirror_url = "https://archive.org/download/road-issn-2018/2018-01-24/export-issn.zip"
 
 [doaj]
 filename = "doaj.csv"
@@ -33,6 +56,18 @@ mirror_url = "https://archive.org/download/doaj_bulk_metadata_2019/doaj_20190124
 filename = "crossref_titles.csv"
 original_url = "https://wwwold.crossref.org/titlelist/titleFile.csv"
 mirror_url = "https://archive.org/download/crossref_doi_titles"
+
+[entrez_simple]
+# transformed files from https://moreo.info, a now defunct site
+date = 2018-12-20
+filename = "entrez-journals.csv"
+mirror_url = "https://archive.org/download/moreo.info-2018-12-20/entrez-journals.csv"
+
+[road]
+date = "2018-01-24"
+filename = "road.tsv"
+# Now dead: original_url = "http://road.issn.org/en/contenu/download-road-records"
+mirror_url = "https://archive.org/download/road-issn-2018/2018-01-24/export-issn.zip"
 
 [sherpa_romeo_journals_simple]
 date = "2018-12-20"
@@ -64,29 +99,6 @@ mirror_url = "https://archive.org/download/scielo-journal-metadata/journals.2020
 # not to be confused with scielo_journal_list.20200428.csv also floating
 # around, but has no ISSNs
 
-[lockss]
-filename = "kbart_LOCKSS.txt"
-original_url = "https://reports.lockss.org/kbart/kbart_LOCKSS.txt"
-
-[clockss]
-filename = "kbart_CLOCKSS.txt"
-original_url = "https://reports.clockss.org/kbart/kbart_CLOCKSS.txt"
-
-[portico]
-#filename = 'data/Portico_Holding_KBart.txt'
-filename = "kbart_Portico.txt"
-original_url = "http://api.portico.org/kbart/Portico_Holding_KBart.txt"
-
-[jstor]
-# JSTOR_Global_AllArchiveTitles_2019-12-21.txt
-# https://support.jstor.org/hc/en-us/articles/115007466248-JSTOR-title-lists
-filename = "kbart_JSTOR.txt"
-original_url = "https://www.jstor.org/kbart/collections/all-archive-titles?contentType=journals"
-
-[pkp_pln]
-filename = "onix_pkp_pln.csv"
-original_url = "http://pkp.sfu.ca/files/pkppn/onix.csv"
-
 [hathitrust]
 # see notes/hathitrust.md
 date = "2020-09-01"
@@ -113,6 +125,7 @@ date = '2018'
 filename = "szczepanski.json"
 
 [ezb]
+date = '2019'
 filename = "ezb_metadata.json"
 mirror_url = "https://archive.org/download/ezb_snapshot_2019-07-11"
 
@@ -140,18 +153,6 @@ filename = "sim_master_title_metadata.csv"
 # MASTER TITLE_METADATA_LIST_20171019.converted.csv
 # exported from libreoffice from .xlsx to csv
 mirror_url = "https://archive.org/download/SerialsOnMicrofilmCollection/MASTER%20TITLE_METADATA_LIST_20171019.xlsx"
-
-[fatcat_containers]
-date = "2022-02-17"
-filename = "container_export.json"
-
-[homepage_status]
-date = "2021-11-25"
-filename = "homepage_status.json"
-
-[fatcat_stats]
-date = "2022-03-08"
-filename = "container_stats.json"
 
 [manual_homepages]
 date = "2020-05-05"
