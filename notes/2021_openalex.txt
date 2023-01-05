@@ -1,0 +1,115 @@
+
+With raw_issn:
+
+    Counter({'total': 49057, 'inserted': 36959, 'missing-issn': 11749, 'no-match': 198, 'duplicate': 151})
+
+With issnl:
+
+    Counter({'total': 49057, 'inserted': 36959, 'missing-issn': 11947, 'duplicate': 151})
+
+---
+
+Running some quick initial metadata quality checks on OpenAlex Journal list.
+This is from the pre-release, dated in file names as 2021-10-11 (but announced
+in late November 2021).
+
+Looking for ISSN-L dupes:
+
+    cat openalex-journals.txt | cut -f5 | rg '\-' | sort | uniq -d | wc -l
+    # 146
+
+    cat openalex-journals.txt | cut -f5 | rg '\-' | sort | uniq -D | wc -l
+    # 293
+
+Looking for ISSN-L not in a recent dump of ISSN-Ls from issn.org:
+
+    cat openalex-journals.txt | cut -f5 | rg '\-' | sort -u > openalex-issnl.tsv
+    cat ISSN-to-ISSN-L.txt | cut -f2 | rg -v "ISSN" | rg '\-' | sort -u > issnl.tsv
+
+    comm -23 openalex-issnl.tsv issnl.tsv | wc -l
+    # 249
+
+    comm -23 openalex-issnl.tsv issnl.tsv > openalex_unknown_issnl.txt
+
+Looking for duplicate exact homepage URLs:
+
+There are a few reasons that ISSNs might not be in the public list or available
+through https://portal.issn.org (eg, sometimes there are typos which then
+become widely used; or the ISSN is partially registered). But if using the
+ISSN-L as a persistent identifier, should require it to be valid and publicly
+registered.
+
+Look for "normalized name" duplicates:
+
+    cat openalex-journals.txt | cut -f3 | sort | uniq -d | wc -l
+    14
+
+Not many, good.
+
+Look for bogus homepage URLs:
+
+    cat openalex-journals.txt | cut -f1,10 | rg -v '\t$' | rg -v '://'
+
+    JournalId       Webpage
+    2944001180      www.cjb-rcb.ca
+    2764771476      123\
+    2948018973      ores.su/en/journals/chinese-journal-of-ecology/
+    2764943583      197\
+    2946866068      www.kais99.org
+    2764846895      518\
+    2947334459      www.jasnaoe.or.jp/en/
+    2764943300      65\
+    2944560164      www.ijqf.org
+    2765015668      10\
+    2764518604      116\
+    2764649715      430\
+
+HTTP/HTTPS:
+
+    cat openalex-journals.txt | cut -f10 | rg '://' | cut -f1 -d: | sort | uniq -c
+       5483 http
+        873 https
+
+Probably a whole bunch of these could be `https://` instead of `http://`, which
+would improve end-user security/privacy by default.
+
+Top domains:
+
+    cat openalex-journals.txt | cut -f10 | rg '://' | cut -f3 -d/ | sed 's/www\.//g' | sort | uniq -c | sort -nr | head -n20
+        463 journals.elsevier.com
+        412 onlinelibrary.wiley.com
+        304 springer.com
+        286 sciencedirect.com
+        183 sagepub.com
+        183 elsevier.com
+        169 tandfonline.com
+         91 journals.cambridge.org
+         75 worldscinet.com
+         63 informahealthcare.com
+         62 apa.org
+         43 pubs.acs.org
+         43 press.jhu.edu
+         39 wiley.com
+         35 pdcnet.org
+         35 journals.uchicago.edu
+         35 journals.lww.com
+         34 degruyter.com
+         33 uk.sagepub.com
+         31 rsc.org
+
+These look pretty good! Often catalogs have a bunch of URLs that just point to
+aggregators, etc, but these seem like real hompage domains.
+
+Any wayback URLs in there?
+
+    cat openalex-journals.txt | cut -f1,10 | rg archive.org
+    172099791       http://web.archive.org/web/20090803131854/http://www.rejecta.org:80/
+    59114670        http://web.archive.org/web/http://www.multilingualarchive.com/ma/enwiki/es/botaniska_notiser
+
+The first wayback URL seems reasonable (journal is defunct, but homepage was
+captured).
+
+The second wayback URL isn't good (we don't have a capture, and URL structure
+isn't complete) and there seems to be a live-web homepage for the backcatalog:
+
+    https://journals.lub.lu.se/bn/index
